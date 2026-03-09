@@ -442,3 +442,83 @@ fn err(status: StatusCode, code: &'static str, message: impl Into<String>) -> ax
     )
         .into_response()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn sample_move() -> MoveInput {
+        MoveInput {
+            from_row: Some(6),
+            from_col: Some(4),
+            to_row: 5,
+            to_col: 4,
+            piece_code: "FU".to_string(),
+            promote: false,
+            drop_piece_code: None,
+            captured_piece_code: None,
+            notation: Some("7f7e".to_string()),
+        }
+    }
+
+    #[test]
+    fn engine_config_defaults_are_applied() {
+        let cfg = build_engine_config(EngineConfigInput::default()).expect("default config should be valid");
+        assert_eq!(cfg.max_depth, 3);
+        assert_eq!(cfg.max_nodes, 20_000);
+        assert_eq!(cfg.time_limit_ms, 300);
+        assert!(cfg.always_legal_move);
+        assert!(cfg.mate_avoidance);
+    }
+
+    #[test]
+    fn engine_config_rejects_invalid_values() {
+        let cfg = EngineConfigInput {
+            max_depth: Some(0),
+            ..EngineConfigInput::default()
+        };
+        assert!(build_engine_config(cfg).is_err());
+    }
+
+    #[test]
+    fn engine_config_rejects_false_safety_flags() {
+        let cfg = EngineConfigInput {
+            always_legal_move: Some(false),
+            ..EngineConfigInput::default()
+        };
+        assert!(build_engine_config(cfg).is_err());
+    }
+
+    #[test]
+    fn coordinate_validation_accepts_normal_move() {
+        assert!(is_board_coordinate_valid(&sample_move()));
+    }
+
+    #[test]
+    fn coordinate_validation_rejects_inconsistent_drop() {
+        let mut mv = sample_move();
+        mv.drop_piece_code = Some("FU".to_string());
+        assert!(!is_board_coordinate_valid(&mv));
+    }
+
+    #[test]
+    fn select_move_is_deterministic_when_no_randomness() {
+        let cfg = EngineConfig {
+            random_topk: 3,
+            blunder_rate: 0.0,
+            temperature: 0.0,
+            ..EngineConfig::default()
+        };
+        let scored = vec![(2, 100), (1, 90), (0, 80)];
+        let mut rng = StdRng::seed_from_u64(42);
+        let idx = select_move_index(&scored, 100, &cfg, &mut rng);
+        assert_eq!(idx, 2);
+    }
+
+    #[test]
+    fn seed_is_stable_for_same_input() {
+        let a = make_seed("game-1", 12);
+        let b = make_seed("game-1", 12);
+        assert_eq!(a, b);
+    }
+}
