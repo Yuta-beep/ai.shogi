@@ -8,7 +8,7 @@ use std::hash::{Hash, Hasher};
 use std::net::SocketAddr;
 use std::time::Instant;
 use thiserror::Error;
-use tracing::info;
+use tracing::{info, warn};
 
 #[derive(Debug, Deserialize)]
 struct EngineMoveRequest {
@@ -146,8 +146,11 @@ enum ConfigError {
 
 #[tokio::main]
 async fn main() {
+    let env_filter = tracing_subscriber::EnvFilter::try_from_default_env()
+        .unwrap_or_else(|_| tracing_subscriber::EnvFilter::new("info,ai_request=info"));
+
     tracing_subscriber::fmt()
-        .with_env_filter(tracing_subscriber::EnvFilter::from_default_env())
+        .with_env_filter(env_filter)
         .init();
 
     let app = Router::new()
@@ -170,9 +173,28 @@ async fn health() -> impl IntoResponse {
 }
 
 async fn post_ai_move(Json(payload): Json<EngineMoveRequest>) -> impl IntoResponse {
+    info!(
+        target: "ai_request",
+        game_id = %payload.game_id,
+        move_no = payload.move_no,
+        side_to_move = %payload.position.side_to_move,
+        has_legal_moves = !payload.position.legal_moves.is_empty(),
+        has_sfen = payload.position.sfen.is_some(),
+        "received /v1/ai/move"
+    );
+
     let cfg = match build_engine_config(payload.engine_config) {
         Ok(cfg) => cfg,
-        Err(e) => return err(StatusCode::BAD_REQUEST, "INVALID_ENGINE_CONFIG", e.to_string()),
+        Err(e) => {
+            warn!(
+                target: "ai_request",
+                game_id = %payload.game_id,
+                move_no = payload.move_no,
+                error = %e,
+                "invalid engine config"
+            );
+            return err(StatusCode::BAD_REQUEST, "INVALID_ENGINE_CONFIG", e.to_string());
+        }
     };
     let rules = parse_runtime_rules(&payload.position.board_state);
 
@@ -211,6 +233,12 @@ async fn post_ai_move(Json(payload): Json<EngineMoveRequest>) -> impl IntoRespon
                 (moves, scores)
             }
             Err(_) => {
+                warn!(
+                    target: "ai_request",
+                    game_id = %payload.game_id,
+                    move_no = payload.move_no,
+                    "invalid position: legal_moves empty and SFEN parse failed"
+                );
                 return err(
                     StatusCode::BAD_REQUEST,
                     "INVALID_POSITION",
@@ -219,6 +247,12 @@ async fn post_ai_move(Json(payload): Json<EngineMoveRequest>) -> impl IntoRespon
             }
         }
     } else {
+        warn!(
+            target: "ai_request",
+            game_id = %payload.game_id,
+            move_no = payload.move_no,
+            "invalid position: legal_moves empty and sfen missing"
+        );
         return err(
             StatusCode::BAD_REQUEST,
             "INVALID_POSITION",
@@ -227,6 +261,12 @@ async fn post_ai_move(Json(payload): Json<EngineMoveRequest>) -> impl IntoRespon
     };
 
     if normalized_moves.is_empty() || scored.is_empty() {
+        warn!(
+            target: "ai_request",
+            game_id = %payload.game_id,
+            move_no = payload.move_no,
+            "no legal moves available"
+        );
         return err(StatusCode::BAD_REQUEST, "INVALID_POSITION", "no legal move available");
     }
 
@@ -239,6 +279,20 @@ async fn post_ai_move(Json(payload): Json<EngineMoveRequest>) -> impl IntoRespon
     if searched_nodes == 0 {
         searched_nodes = scored.len().min(cfg.max_nodes as usize) as u64;
     }
+
+    info!(
+        target: "ai_request",
+        game_id = %payload.game_id,
+        move_no = payload.move_no,
+        selected_piece = %selected_move.piece_code,
+        to_row = selected_move.to_row,
+        to_col = selected_move.to_col,
+        eval_cp = best_score,
+        depth = reached_depth.min(cfg.max_depth),
+        nodes = searched_nodes,
+        think_ms = think_ms,
+        "completed /v1/ai/move"
+    );
 
     (
         StatusCode::OK,
