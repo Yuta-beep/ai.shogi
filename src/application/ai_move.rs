@@ -68,20 +68,13 @@ pub fn compute_ai_move(input: ComputeMoveCommand) -> Result<ComputeMoveResult, C
     let mut rng = StdRng::seed_from_u64(seed);
     let mut searched_nodes = 0_u64;
     let mut reached_depth = 1_u32;
+    let normalized_legal: Vec<EngineMove> = input
+        .legal_moves
+        .into_iter()
+        .filter(is_board_coordinate_valid)
+        .collect();
 
-    let (normalized_moves, mut scored) = if !input.legal_moves.is_empty() {
-        let moves: Vec<EngineMove> = input
-            .legal_moves
-            .into_iter()
-            .filter(is_board_coordinate_valid)
-            .collect();
-        let scores: Vec<(usize, i32)> = moves
-            .iter()
-            .enumerate()
-            .map(|(idx, mv)| (idx, evaluate_move(mv, &input.side_to_move, &cfg)))
-            .collect();
-        (moves, scores)
-    } else if let Some(sfen) = input.sfen {
+    let (normalized_moves, mut scored) = if let Some(sfen) = input.sfen {
         match SearchState::from_sfen(&sfen) {
             Ok(mut state) => {
                 state.side_to_move = if input.side_to_move == "player" {
@@ -89,18 +82,53 @@ pub fn compute_ai_move(input: ComputeMoveCommand) -> Result<ComputeMoveResult, C
                 } else {
                     Side::White
                 };
-                let (moves, scores, nodes, depth) =
+
+                let (search_moves, search_scores, nodes, depth) =
                     search_with_iterative_deepening(&state, &cfg, &rules, start);
                 searched_nodes = nodes;
                 reached_depth = depth;
-                (moves, scores)
+
+                if normalized_legal.is_empty() {
+                    (search_moves, search_scores)
+                } else {
+                    let mut constrained_scores = Vec::new();
+                    for (search_idx, score) in search_scores {
+                        let search_mv = &search_moves[search_idx];
+                        if let Some(legal_idx) = normalized_legal
+                            .iter()
+                            .position(|legal_mv| move_equals(legal_mv, search_mv))
+                        {
+                            constrained_scores.push((legal_idx, score));
+                        }
+                    }
+
+                    if constrained_scores.is_empty() {
+                        // SFEN と BFF 由来 legal_moves が噛み合わない場合は安全にフォールバック
+                        let fallback = score_moves_heuristically(
+                            &normalized_legal,
+                            &input.side_to_move,
+                            &cfg,
+                        );
+                        (normalized_legal, fallback)
+                    } else {
+                        (normalized_legal, constrained_scores)
+                    }
+                }
             }
-            Err(_) => {
+            Err(_) if normalized_legal.is_empty() => {
                 return Err(ComputeMoveError::InvalidPosition(
                     "legal_moves is empty and SFEN parse failed",
                 ));
             }
+            Err(_) => {
+                let fallback =
+                    score_moves_heuristically(&normalized_legal, &input.side_to_move, &cfg);
+                (normalized_legal, fallback)
+            }
         }
+    } else if !normalized_legal.is_empty() {
+        let fallback = score_moves_heuristically(&normalized_legal, &input.side_to_move, &cfg);
+        (normalized_legal, fallback)
     } else {
         return Err(ComputeMoveError::InvalidPosition(
             "legal_moves is empty and sfen is missing",
@@ -132,4 +160,30 @@ pub fn compute_ai_move(input: ComputeMoveCommand) -> Result<ComputeMoveResult, C
             config_applied: cfg,
         },
     })
+}
+
+fn score_moves_heuristically(moves: &[EngineMove], side_to_move: &str, cfg: &EngineConfig) -> Vec<(usize, i32)> {
+    moves
+        .iter()
+        .enumerate()
+        .map(|(idx, mv)| (idx, evaluate_move(mv, side_to_move, cfg)))
+        .collect()
+}
+
+fn move_equals(lhs: &EngineMove, rhs: &EngineMove) -> bool {
+    lhs.from_row == rhs.from_row
+        && lhs.from_col == rhs.from_col
+        && lhs.to_row == rhs.to_row
+        && lhs.to_col == rhs.to_col
+        && lhs.promote == rhs.promote
+        && opt_str_eq(lhs.drop_piece_code.as_deref(), rhs.drop_piece_code.as_deref())
+        && lhs.piece_code.eq_ignore_ascii_case(&rhs.piece_code)
+}
+
+fn opt_str_eq(lhs: Option<&str>, rhs: Option<&str>) -> bool {
+    match (lhs, rhs) {
+        (Some(a), Some(b)) => a.eq_ignore_ascii_case(b),
+        (None, None) => true,
+        _ => false,
+    }
 }

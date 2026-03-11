@@ -15,3 +15,13 @@ thiserror = "1"
 
 [dev-dependencies]
 tower = "0.5"
+
+[profile.dev]
+incremental = false
+debug = 0
+split-debuginfo = "off"
+
+[profile.test]
+incremental = false
+debug = 0
+split-debuginfo = "off"
