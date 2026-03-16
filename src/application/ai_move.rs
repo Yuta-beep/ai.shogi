@@ -1,7 +1,7 @@
 use crate::engine::{
     build_engine_config, evaluate_move, is_board_coordinate_valid, make_seed, parse_runtime_rules,
-    search_with_iterative_deepening, select_move_index, EngineConfig, EngineConfigPatch,
-    EngineMove, SearchState, Side,
+    score_move_with_skill_effects, search_with_iterative_deepening, select_move_index,
+    EngineConfig, EngineConfigPatch, EngineMove, SearchState, Side,
 };
 use rand::rngs::StdRng;
 use rand::SeedableRng;
@@ -60,7 +60,8 @@ pub fn compute_ai_move(input: ComputeMoveCommand) -> Result<ComputeMoveResult, C
     let cfg = build_engine_config(input.config_patch)
         .map_err(|e| ComputeMoveError::InvalidEngineConfig(e.to_string()))?;
 
-    let rules = parse_runtime_rules(&input.board_state);
+    let rules = parse_runtime_rules(&input.board_state)
+        .map_err(|_| ComputeMoveError::InvalidPosition("invalid board_state runtime rules"))?;
     let start = Instant::now();
     let seed = cfg
         .random_seed
@@ -68,6 +69,7 @@ pub fn compute_ai_move(input: ComputeMoveCommand) -> Result<ComputeMoveResult, C
     let mut rng = StdRng::seed_from_u64(seed);
     let mut searched_nodes = 0_u64;
     let mut reached_depth = 1_u32;
+    let mut parsed_state: Option<SearchState> = None;
     let normalized_legal: Vec<EngineMove> = input
         .legal_moves
         .into_iter()
@@ -77,11 +79,10 @@ pub fn compute_ai_move(input: ComputeMoveCommand) -> Result<ComputeMoveResult, C
     let (normalized_moves, mut scored) = if let Some(sfen) = input.sfen {
         match SearchState::from_sfen(&sfen) {
             Ok(mut state) => {
-                state.side_to_move = if input.side_to_move == "player" {
-                    Side::Black
-                } else {
-                    Side::White
-                };
+                state.side_to_move = Side::from_position_side(&input.side_to_move)
+                    .ok_or(ComputeMoveError::InvalidPosition("invalid side_to_move"))?;
+                state.hydrate_skill_state_from_board_state(&input.board_state);
+                parsed_state = Some(state.clone());
 
                 let (search_moves, search_scores, nodes, depth) =
                     search_with_iterative_deepening(&state, &cfg, &rules, start);
@@ -104,11 +105,8 @@ pub fn compute_ai_move(input: ComputeMoveCommand) -> Result<ComputeMoveResult, C
 
                     if constrained_scores.is_empty() {
                         // SFEN と BFF 由来 legal_moves が噛み合わない場合は安全にフォールバック
-                        let fallback = score_moves_heuristically(
-                            &normalized_legal,
-                            &input.side_to_move,
-                            &cfg,
-                        );
+                        let fallback =
+                            score_moves_heuristically(&normalized_legal, &input.side_to_move, &cfg);
                         (normalized_legal, fallback)
                     } else {
                         (normalized_legal, constrained_scores)
@@ -139,6 +137,12 @@ pub fn compute_ai_move(input: ComputeMoveCommand) -> Result<ComputeMoveResult, C
         return Err(ComputeMoveError::InvalidPosition("no legal move available"));
     }
 
+    if let Some(state) = parsed_state.as_ref() {
+        for (idx, score) in &mut scored {
+            *score += score_move_with_skill_effects(state, &normalized_moves[*idx], &rules, &cfg);
+        }
+    }
+
     scored.sort_by(|a, b| b.1.cmp(&a.1));
     let best_score = scored[0].1;
     let selected_idx = select_move_index(&scored, best_score, &cfg, &mut rng);
@@ -162,7 +166,11 @@ pub fn compute_ai_move(input: ComputeMoveCommand) -> Result<ComputeMoveResult, C
     })
 }
 
-fn score_moves_heuristically(moves: &[EngineMove], side_to_move: &str, cfg: &EngineConfig) -> Vec<(usize, i32)> {
+fn score_moves_heuristically(
+    moves: &[EngineMove],
+    side_to_move: &str,
+    cfg: &EngineConfig,
+) -> Vec<(usize, i32)> {
     moves
         .iter()
         .enumerate()
@@ -176,7 +184,10 @@ fn move_equals(lhs: &EngineMove, rhs: &EngineMove) -> bool {
         && lhs.to_row == rhs.to_row
         && lhs.to_col == rhs.to_col
         && lhs.promote == rhs.promote
-        && opt_str_eq(lhs.drop_piece_code.as_deref(), rhs.drop_piece_code.as_deref())
+        && opt_str_eq(
+            lhs.drop_piece_code.as_deref(),
+            rhs.drop_piece_code.as_deref(),
+        )
         && lhs.piece_code.eq_ignore_ascii_case(&rhs.piece_code)
 }
 

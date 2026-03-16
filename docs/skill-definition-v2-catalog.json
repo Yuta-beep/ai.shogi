@@ -1,0 +1,4387 @@
+{
+  "version": "skill-definition-v2-catalog",
+  "updatedAt": "2026-03-16",
+  "sourceOfTruth": [
+    {
+      "pieceChar": "滝",
+      "skillText": "移動時20%で周囲の敵駒を押し流す。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/online_battle.html::triggerWaterfallSkill"
+    },
+    {
+      "pieceChar": "虹",
+      "skillText": "縦横に1マス移動。敵の移動範囲を1ターン縦横1マスに制限する。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/online_battle.html::triggerRainbowSkill"
+    },
+    {
+      "pieceChar": "光",
+      "skillText": "壁で反射して継続移動する。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/online_battle.html::triggerReflectionSkill"
+    },
+    {
+      "pieceChar": "爆",
+      "skillText": "移動時爆発を起こして周囲8マスの全ての駒を遠ざける。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/online_battle.html::triggerBombExplosion"
+    },
+    {
+      "pieceChar": "室",
+      "skillText": "移動時30％の確率で2ターン「王」をセーフルームに移動させる。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/online_battle.html::triggerSafeRoomSkill"
+    },
+    {
+      "pieceChar": "定",
+      "skillText": "移動時次のターン相手はコスト5以下の駒しか動かせない。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/online_battle.html::triggerFixedSkill"
+    },
+    {
+      "pieceChar": "辺",
+      "skillText": "ランダムに1辺選び、3ターンその辺に隣接している全ての駒を行動不能にする。。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/online_battle.html::triggerEdgeSkill"
+    },
+    {
+      "pieceChar": "逃",
+      "skillText": "移動時その方向に1マス味方の「王」も移動させる。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/online_battle.html::triggerEscapeSkill"
+    },
+    {
+      "pieceChar": "闇",
+      "skillText": "周囲の敵駒を次の番まで闇で覆う。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_11"
+    },
+    {
+      "pieceChar": "苔",
+      "skillText": "移動時増殖する。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_23"
+    },
+    {
+      "pieceChar": "灯",
+      "skillText": "移動時20％の確率で味方の「歩」駒ひとつを「火」駒に変化させる。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_93"
+    },
+    {
+      "pieceChar": "錫",
+      "skillText": "10％の確率で周囲の敵駒を行動不能にする。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_14"
+    },
+    {
+      "pieceChar": "犇",
+      "skillText": "移動時10％の確率で周囲の空きマスに「犇」駒を召喚する。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_58"
+    },
+    {
+      "pieceChar": "あ",
+      "skillText": "周囲の敵駒を「歩」に変化させる。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_30"
+    },
+    {
+      "pieceChar": "水",
+      "skillText": "水の流れにより周囲の敵駒を押し流す。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_5"
+    },
+    {
+      "pieceChar": "波",
+      "skillText": "波の伝播により周囲の敵駒を押し流す。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_6"
+    },
+    {
+      "pieceChar": "風",
+      "skillText": "強風により周囲の敵駒を押し流す。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_22"
+    },
+    {
+      "pieceChar": "時",
+      "skillText": "時停止により周囲の敵駒を2ターン行動不能にする。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_18"
+    },
+    {
+      "pieceChar": "氷",
+      "skillText": "周囲の敵を凍らせ2ターン動けなくする。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_19"
+    },
+    {
+      "pieceChar": "心",
+      "skillText": "移動時に周囲の敵駒を1ターン行動不能にする。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_74"
+    },
+    {
+      "pieceChar": "雲",
+      "skillText": "相手の駒は取れないが味方の駒を取れる。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_25"
+    },
+    {
+      "pieceChar": "峰",
+      "skillText": "画数が10画以上の敵駒を無効化する。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/online_battle.html::triggerPeakSkill"
+    },
+    {
+      "pieceChar": "霊",
+      "skillText": "敵駒に取られても相手の持ち駒に加わらない。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_37"
+    },
+    {
+      "pieceChar": "霧",
+      "skillText": "周囲の敵駒を20％の確率で相手の持ち駒に送る。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/online_battle.html::triggerMistSkill"
+    },
+    {
+      "pieceChar": "歯",
+      "skillText": "隣接する駒が動いたらそれに連動して動く。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_43"
+    },
+    {
+      "pieceChar": "砂",
+      "skillText": "左右の「砂」駒と連携移動する。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_21"
+    },
+    {
+      "pieceChar": "舟",
+      "skillText": "移動時後方の味方駒を連れていく。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_41"
+    },
+    {
+      "pieceChar": "機",
+      "skillText": "左または右隣りの見方駒のスキルをコピーする。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_42"
+    },
+    {
+      "pieceChar": "聖",
+      "skillText": "周囲8マスにいる全ての駒のスキルと移動を無効化する。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_60"
+    },
+    {
+      "pieceChar": "盾",
+      "skillText": "前方以外の隣接する味方への攻撃を50%で無効化する。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_62"
+    },
+    {
+      "pieceChar": "穴",
+      "skillText": "取られた時、周囲のマスに4ターン侵入不可の穴を生成する。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_66"
+    },
+    {
+      "pieceChar": "朧",
+      "skillText": "盤面に「死」、「魂」駒が残っていると、敵駒からの攻撃を回避する。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_69"
+    },
+    {
+      "pieceChar": "禽",
+      "skillText": "移動時味方駒から1つ選択し2ターン無敵状態にする。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_73"
+    },
+    {
+      "pieceChar": "刀",
+      "skillText": "敵駒を取ったとき、左右にいる敵駒もまとめて取る。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_52"
+    },
+    {
+      "pieceChar": "銃",
+      "skillText": "移動方向の1、2マス先に敵駒がいる場合、まとめて取る。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_54"
+    },
+    {
+      "pieceChar": "砲",
+      "skillText": "敵駒を取るときは駒を1つまたぐ。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_1"
+    },
+    {
+      "pieceChar": "鎧",
+      "skillText": "敵駒を取れないが敵駒から取られない。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_53"
+    },
+    {
+      "pieceChar": "魂",
+      "skillText": "盤面に「魂」が残っているとき、相手は「王」を攻撃できない。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_71"
+    },
+    {
+      "pieceChar": "陽",
+      "skillText": "周囲の味方駒のスキル発動確率を30％増加させる。味方の「陰」駒が同じ行や列にいるとき敵駒に取られない。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_85"
+    },
+    {
+      "pieceChar": "陰",
+      "skillText": "周囲の敵駒を呪い状態にしてスキル発動を阻害する。味方の「陽」が同じ行や列にいるとき敵駒に取られない。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_86"
+    },
+    {
+      "pieceChar": "乙",
+      "skillText": "相手の駒を取ると、もう一度だけ移動ができる。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_76"
+    },
+    {
+      "pieceChar": "凸",
+      "skillText": "2回行動ができる。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_81"
+    },
+    {
+      "pieceChar": "炒",
+      "skillText": "敵駒を取ったらもう一度だけ移動できる。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_83"
+    },
+    {
+      "pieceChar": "煮",
+      "skillText": "敵駒を取った時盤面のランダムなマスに「火」駒を召喚する。",
+      "sourceFile": "../../SHOGI_GAME/piece_info.html",
+      "sourceFunction": "../../SHOGI_GAME/piece_info.html::skill_84"
+    }
+  ],
+  "definitions": [
+    {
+      "skillId": 65,
+      "pieceChars": ["滝"],
+      "source": {
+        "skillText": "移動時20%で周囲の敵駒を押し流す。",
+        "sourceKind": "online_battle",
+        "sourceFile": "../../SHOGI_GAME/online_battle.html",
+        "sourceFunction": "triggerWaterfallSkill"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "adjacent", "forced_move", "probabilistic"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.2
+          }
+        },
+        {
+          "order": 2,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "forced_move",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "movementRule": "push_away",
+            "directionRule": "relative",
+            "count": "all",
+            "radius": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "周囲の敵駒全体を押し流す共通 executor の代表例"
+    },
+    {
+      "skillId": 26,
+      "pieceChars": ["虹"],
+      "source": {
+        "skillText": "縦横に1マス移動。敵の移動範囲を1ターン縦横1マスに制限する。",
+        "sourceKind": "online_battle",
+        "sourceFile": "../../SHOGI_GAME/online_battle.html",
+        "sourceFunction": "triggerRainbowSkill"
+      },
+      "classification": {
+        "implementationKind": "composite",
+        "tags": ["continuous_rule", "enemy_debuff", "movement_limit"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "modify_movement",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "movementRule": "orthogonal_step_only",
+            "distance": 1
+          }
+        },
+        {
+          "order": 2,
+          "group": "piece_position",
+          "type": "modify_movement",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "movementRule": "orthogonal_step_only",
+            "distance": 1,
+            "durationTurns": 1,
+            "radius": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "自己移動ルール変更と周囲敵への一時制限を effects 配列で表す composite 例"
+    },
+    {
+      "skillId": 9,
+      "pieceChars": ["光"],
+      "source": {
+        "skillText": "壁で反射して継続移動する。",
+        "sourceKind": "online_battle",
+        "sourceFile": "../../SHOGI_GAME/online_battle.html",
+        "sourceFunction": "triggerReflectionSkill"
+      },
+      "classification": {
+        "implementationKind": "script_hook",
+        "tags": ["move_trigger", "reflection", "continuous_travel"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [],
+      "effects": [],
+      "scriptHook": "reflect_until_blocked",
+      "notes": "壁反射と継続移動は共通の forced_move では足りないため専用実装に委譲する"
+    },
+    {
+      "skillId": 11,
+      "pieceChars": ["闇"],
+      "source": {
+        "skillText": "周囲の敵駒を次の番まで闇で覆う。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_11"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "enemy_debuff", "apply_status"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "apply_status",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "statusType": "dark_blind",
+            "durationTurns": 1,
+            "radius": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "root move 評価では隣接敵の存在を見て trace と tactical bonus に反映する"
+    },
+    {
+      "skillId": 23,
+      "pieceChars": ["苔"],
+      "source": {
+        "skillText": "移動時増殖する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_23"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "summon_piece", "self_clone"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_empty_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "summon_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_empty"
+          },
+          "params": {
+            "summonPiece": "self_clone",
+            "placementRule": "first_adjacent_empty",
+            "maxCount": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "root move 評価では移動先隣接の最初の空きマスに 1 体だけ複製する"
+    },
+    {
+      "skillId": 93,
+      "pieceChars": ["灯"],
+      "source": {
+        "skillText": "移動時20％の確率で味方の「歩」駒ひとつを「火」駒に変化させる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_93"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "transform_piece", "ally_transform", "probabilistic"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.2
+          }
+        },
+        {
+          "order": 2,
+          "group": "piece_presence",
+          "type": "ally_piece_exists",
+          "params": {
+            "pieceCode": "FU"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "transform_piece",
+          "target": {
+            "group": "global",
+            "selector": "all_ally"
+          },
+          "params": {
+            "fromPieceCode": "FU",
+            "toPieceChar": "火",
+            "maxTargets": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "root move 評価では対象歩の存在確認と trace/bonus までを先に実装する"
+    },
+    {
+      "skillId": 14,
+      "pieceChars": ["錫"],
+      "source": {
+        "skillText": "10％の確率で周囲の敵駒を行動不能にする。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_14"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "enemy_debuff", "apply_status", "probabilistic"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.1
+          }
+        },
+        {
+          "order": 2,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "apply_status",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "statusType": "stun",
+            "radius": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "闇と同型の apply_status を確率条件付きで増やす sample"
+    },
+    {
+      "skillId": 58,
+      "pieceChars": ["犇"],
+      "source": {
+        "skillText": "移動時10％の確率で周囲の空きマスに「犇」駒を召喚する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_58"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "summon_piece", "self_clone", "probabilistic"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.1
+          }
+        },
+        {
+          "order": 2,
+          "group": "board_state",
+          "type": "adjacent_empty_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "summon_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_empty"
+          },
+          "params": {
+            "summonPiece": "self_clone",
+            "placementRule": "first_adjacent_empty",
+            "radius": 1,
+            "maxCount": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "苔と同型の summon_piece を確率条件付きで増やす sample"
+    },
+    {
+      "skillId": 30,
+      "pieceChars": ["あ"],
+      "source": {
+        "skillText": "周囲の敵駒を「歩」に変化させる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_30"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "enemy_transform", "transform_piece"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        },
+        {
+          "order": 2,
+          "group": "board_state",
+          "type": "target_not_king",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "transform_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "toPieceCode": "FU",
+            "radius": 1,
+            "maxTargets": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "root move 評価では隣接する王以外の敵 1 体を歩へ変換する最小実装"
+    },
+    {
+      "skillId": 5,
+      "pieceChars": ["水"],
+      "source": {
+        "skillText": "水の流れにより周囲の敵駒を押し流す。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_5"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "adjacent", "forced_move"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "forced_move",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "movementRule": "push_away",
+            "directionRule": "relative",
+            "count": "all",
+            "radius": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "滝と同型の forced_move を continuous_aura で表現する sample"
+    },
+    {
+      "skillId": 6,
+      "pieceChars": ["波"],
+      "source": {
+        "skillText": "波の伝播により周囲の敵駒を押し流す。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_6"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "adjacent", "forced_move"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "forced_move",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "movementRule": "push_away",
+            "directionRule": "relative",
+            "count": "all",
+            "radius": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "水と同型の forced_move sample"
+    },
+    {
+      "skillId": 22,
+      "pieceChars": ["風"],
+      "source": {
+        "skillText": "強風により周囲の敵駒を押し流す。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_22"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "adjacent", "forced_move"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "forced_move",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "movementRule": "push_away",
+            "directionRule": "relative",
+            "count": "all",
+            "radius": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "水/波と同型の forced_move sample"
+    },
+    {
+      "skillId": 18,
+      "pieceChars": ["時"],
+      "source": {
+        "skillText": "時停止により周囲の敵駒を2ターン行動不能にする。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_18"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "enemy_debuff", "apply_status"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "apply_status",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "statusType": "time_stop",
+            "durationTurns": 2,
+            "radius": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "闇と同型の apply_status を duration 2 へ広げる sample"
+    },
+    {
+      "skillId": 19,
+      "pieceChars": ["氷"],
+      "source": {
+        "skillText": "周囲の敵を凍らせ2ターン動けなくする。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_19"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "enemy_debuff", "apply_status"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "apply_status",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "statusType": "freeze",
+            "durationTurns": 2,
+            "radius": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "時と同型の apply_status sample"
+    },
+    {
+      "skillId": 74,
+      "pieceChars": ["心"],
+      "source": {
+        "skillText": "移動時に周囲の敵駒を1ターン行動不能にする。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_74"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "enemy_debuff", "apply_status"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "apply_status",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "statusType": "stun",
+            "durationTurns": 1,
+            "radius": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "移動トリガーの apply_status sample"
+    },
+    {
+      "skillId": 24,
+      "pieceChars": ["魚"],
+      "source": {
+        "skillText": "30%の確率で敵駒を溺れさせ行動不能にする。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_24"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "enemy_debuff", "apply_status", "probabilistic"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.3
+          }
+        },
+        {
+          "order": 2,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "apply_status",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "statusType": "drown",
+            "durationTurns": 1,
+            "radius": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "錫と同型の確率付き apply_status を別 status ラベルで増やす sample"
+    },
+    {
+      "skillId": 31,
+      "pieceChars": ["牢"],
+      "source": {
+        "skillText": "移動時敵駒を1つランダムに2ターン行動不能にする。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_31"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "enemy_debuff", "apply_status"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "apply_status",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "statusType": "stun",
+            "durationTurns": 2,
+            "radius": 1,
+            "maxTargets": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "root move 評価では隣接敵 1 体への apply_status として最小実装する sample"
+    },
+    {
+      "skillId": 72,
+      "pieceChars": ["獣"],
+      "source": {
+        "skillText": "移動時敵駒から1つ選択し2ターン行動不能にする。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_72"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "enemy_debuff", "apply_status"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "apply_status",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "statusType": "stun",
+            "durationTurns": 2,
+            "radius": 1,
+            "maxTargets": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "牢と同型の move_trigger apply_status sample"
+    },
+    {
+      "skillId": 3,
+      "pieceChars": ["炎"],
+      "source": {
+        "skillText": "10%の確率で周囲の敵駒を消滅させる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_3"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "enemy_remove", "remove_piece", "probabilistic"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.1
+          }
+        },
+        {
+          "order": 2,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_lifecycle",
+          "type": "remove_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "radius": 1,
+            "maxTargets": 1,
+            "excludePieceCodes": ["OU"]
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "隣接敵 1 体を除去する最小 remove_piece sample"
+    },
+    {
+      "skillId": 12,
+      "pieceChars": ["魔"],
+      "source": {
+        "skillText": "周囲の敵駒を10%の確率で消滅させる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_12"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "enemy_remove", "remove_piece", "probabilistic"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.1
+          }
+        },
+        {
+          "order": 2,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_lifecycle",
+          "type": "remove_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "radius": 1,
+            "maxTargets": 1,
+            "excludePieceCodes": ["OU"]
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "炎と同型の remove_piece sample"
+    },
+    {
+      "skillId": 48,
+      "pieceChars": ["辰"],
+      "source": {
+        "skillText": "移動時10%の確率で周囲8マスの敵駒を1つ消滅させる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_48"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "enemy_remove", "remove_piece", "probabilistic"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.1
+          }
+        },
+        {
+          "order": 2,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_lifecycle",
+          "type": "remove_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "radius": 1,
+            "maxTargets": 1,
+            "excludePieceCodes": ["OU"]
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "移動トリガーで remove_piece を使う sample"
+    },
+    {
+      "skillId": 76,
+      "pieceChars": ["乙"],
+      "source": {
+        "skillText": "相手の駒を取ると、もう一度だけ移動ができる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_76"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["capture_trigger", "extra_action"]
+      },
+      "trigger": {
+        "group": "event_capture",
+        "type": "after_capture"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "action_economy",
+          "type": "extra_action",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "extraActions": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "root move 評価では捕獲成功時の追加行動権を trace と score bonus に反映する"
+    },
+    {
+      "skillId": 81,
+      "pieceChars": ["凸"],
+      "source": {
+        "skillText": "2回行動ができる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_81"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "extra_action"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "action_economy",
+          "type": "extra_action",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "extraActions": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "root move 評価では常時の追加行動権を trace と score bonus に反映する"
+    },
+    {
+      "skillId": 83,
+      "pieceChars": ["炒"],
+      "source": {
+        "skillText": "敵駒を取ったらもう一度だけ移動できる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_83"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["capture_trigger", "extra_action"]
+      },
+      "trigger": {
+        "group": "event_capture",
+        "type": "after_capture"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "action_economy",
+          "type": "extra_action",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "extraActions": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "乙と同型の after_capture extra_action sample"
+    },
+    {
+      "skillId": 13,
+      "pieceChars": ["鉄"],
+      "source": {
+        "skillText": "磁力効果により周囲の敵駒を遠ざける。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_13"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "adjacent", "forced_move"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "forced_move",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "movementRule": "push_away",
+            "radius": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "水系と同じ push_away 実装へ寄せる forced_move sample"
+    },
+    {
+      "skillId": 57,
+      "pieceChars": ["轟"],
+      "source": {
+        "skillText": "轟音で移動時両隣の敵駒を押し出す。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_57"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "adjacent", "forced_move"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "forced_move",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "movementRule": "push_away",
+            "radius": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "左右限定の自然文だが root move では隣接 push_away の最小実装に寄せる sample"
+    },
+    {
+      "skillId": 68,
+      "pieceChars": ["鬼"],
+      "source": {
+        "skillText": "移動時に左右の敵駒を1マス遠ざける。敵駒を取った時、周囲のランダムな空マス1つを×マスにする。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_68"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "adjacent", "forced_move"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "forced_move",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "movementRule": "push_away",
+            "radius": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "複合スキルだが root move では移動時の forced_move だけ先行実装する sample"
+    },
+    {
+      "skillId": 35,
+      "pieceChars": ["鉱"],
+      "source": {
+        "skillText": "20%の確率で味方の「歩」を「金」「銀」「銅」に変化させる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_35"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "transform_piece", "ally_transform", "probabilistic"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.2
+          }
+        },
+        {
+          "order": 2,
+          "group": "piece_presence",
+          "type": "ally_piece_exists",
+          "params": {
+            "pieceCode": "FU"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "transform_piece",
+          "target": {
+            "group": "global",
+            "selector": "all_ally"
+          },
+          "params": {
+            "fromPieceCode": "FU",
+            "toPieceChar": "金",
+            "maxTargets": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "灯と同じ ally transform を別スキルへ広げる sample"
+    },
+    {
+      "skillId": 50,
+      "pieceChars": ["実"],
+      "source": {
+        "skillText": "敵駒を「異」駒に変化させる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_50"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "transform_piece", "enemy_transform"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        },
+        {
+          "order": 2,
+          "group": "board_state",
+          "type": "target_not_king",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "transform_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "toPieceChar": "異",
+            "maxTargets": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "非標準駒への transform は root move では trace と bonus を先に実装する sample"
+    },
+    {
+      "skillId": 89,
+      "pieceChars": ["銭"],
+      "source": {
+        "skillText": "移動時に20％の確率で「金」に変化、10％の確率で「宝」に変化する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_89"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "transform_piece", "self_transform", "probabilistic"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.2
+          }
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "transform_piece",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "toPieceChar": "金",
+            "maxTargets": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "複数候補の自己変身だが root move では最頻の 20% ルートだけ先に表現する sample"
+    },
+    {
+      "skillId": 7,
+      "pieceChars": ["木"],
+      "source": {
+        "skillText": "木の成長により周囲に「木」駒を召喚する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_7"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "summon_piece"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_empty_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "summon_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_empty"
+          },
+          "params": {
+            "summonPieceChar": "木",
+            "placementRule": "first_adjacent_empty",
+            "maxCount": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "非標準駒の召喚は root move では空きマス判定と trace/bonus のみ先行実装する"
+    },
+    {
+      "skillId": 32,
+      "pieceChars": ["嶺"],
+      "source": {
+        "skillText": "移動時20%の確率で周囲に「山」駒を出現させる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_32"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "summon_piece", "probabilistic"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.2
+          }
+        },
+        {
+          "order": 2,
+          "group": "board_state",
+          "type": "adjacent_empty_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "summon_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_empty"
+          },
+          "params": {
+            "summonPieceChar": "山",
+            "placementRule": "first_adjacent_empty",
+            "maxCount": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "木と同じ summon_piece を確率付き move trigger へ広げる sample"
+    },
+    {
+      "skillId": 36,
+      "pieceChars": ["墓"],
+      "source": {
+        "skillText": "移動時20％の確率で「霊」駒を召喚する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_36"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "summon_piece", "probabilistic"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.2
+          }
+        },
+        {
+          "order": 2,
+          "group": "board_state",
+          "type": "adjacent_empty_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "summon_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_empty"
+          },
+          "params": {
+            "summonPieceChar": "霊",
+            "placementRule": "first_adjacent_empty",
+            "maxCount": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "非標準駒召喚の別バリエーション sample"
+    },
+    {
+      "skillId": 34,
+      "pieceChars": ["岩"],
+      "source": {
+        "skillText": "移動時左右に岩の障害物を配置する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_34"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "summon_piece"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_empty_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "summon_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_empty"
+          },
+          "params": {
+            "summonPieceChar": "岩",
+            "placementRule": "first_adjacent_empty",
+            "maxCount": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "左右限定の障害物配置だが root move では最初の隣接空きマスへの召喚として最小実装する sample"
+    },
+    {
+      "skillId": 82,
+      "pieceChars": ["焼"],
+      "source": {
+        "skillText": "敵駒を取った時盤面のランダムなマスに「炎」駒を召喚する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_82"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["capture_trigger", "summon_piece"]
+      },
+      "trigger": {
+        "group": "event_capture",
+        "type": "after_capture"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_empty_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "summon_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_empty"
+          },
+          "params": {
+            "summonPieceChar": "炎",
+            "placementRule": "first_adjacent_empty",
+            "maxCount": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "ランダム盤面召喚だが root move では隣接空きマス判定と trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 84,
+      "pieceChars": ["煮"],
+      "source": {
+        "skillText": "敵駒を取った時盤面のランダムなマスに「火」駒を召喚する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_84"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["capture_trigger", "summon_piece"]
+      },
+      "trigger": {
+        "group": "event_capture",
+        "type": "after_capture"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_empty_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "summon_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_empty"
+          },
+          "params": {
+            "summonPieceChar": "火",
+            "placementRule": "first_adjacent_empty",
+            "maxCount": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "焼と同型の after_capture summon_piece sample"
+    },
+    {
+      "skillId": 28,
+      "pieceChars": ["沼"],
+      "source": {
+        "skillText": "周囲の敵駒の行動範囲を上下1マスのみにする。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_28"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "modify_movement"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "modify_movement",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "movementRule": "vertical_step_only",
+            "durationTurns": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "敵側の継続状態は持たず、root move 評価では隣接敵の存在確認と trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 79,
+      "pieceChars": ["桜"],
+      "source": {
+        "skillText": "移動後同じ行にいる味方駒の行動範囲が1マス伸びる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_79"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "modify_movement"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "modify_movement",
+          "target": {
+            "group": "line",
+            "selector": "same_row_ally"
+          },
+          "params": {
+            "movementRule": "extend_range_by_one",
+            "deltaRange": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "同列対象の本更新は行わず、root move 評価では移動後同じ行に味方がいる場合の trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 80,
+      "pieceChars": ["凹"],
+      "source": {
+        "skillText": "盤面の端まで貫通して移動する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_80"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_rule", "modify_movement"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "modify_movement",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "movementRule": "penetrate_to_edge"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "本来の貫通移動生成までは持たず、root move 評価では長距離移動時の trace/bonus だけ先に実装する sample"
+    },
+    {
+      "skillId": 2,
+      "pieceChars": ["竜"],
+      "source": {
+        "skillText": "「泉」駒によって覚醒し、「辰」に変身する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_2"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_rule", "transform_piece"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "transform_piece",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "toPieceChar": "辰"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "覚醒条件の本実装は後回しにし、root move 評価では self transform の trace/bonus を先に通す sample"
+    },
+    {
+      "skillId": 4,
+      "pieceChars": ["火"],
+      "source": {
+        "skillText": "移動時20％の確率で相手の手持ち駒を1つ燃やす。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_4"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "destroy_hand_piece", "probabilistic"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.2
+          }
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_lifecycle",
+          "type": "destroy_hand_piece",
+          "target": {
+            "group": "hand",
+            "selector": "enemy_hand_random"
+          },
+          "params": {
+            "count": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "root move 評価では相手 hand の先頭 1 枚を減らす最小実装に寄せる sample"
+    },
+    {
+      "skillId": 15,
+      "pieceChars": ["宝"],
+      "source": {
+        "skillText": "20%の確率で「金」・「銀」・「銅」駒を獲得する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_15"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_rule", "gain_piece", "probabilistic"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.2
+          }
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "gain_piece",
+          "target": {
+            "group": "hand",
+            "selector": "ally_hand_piece"
+          },
+          "params": {
+            "gainPieceCode": "KI",
+            "count": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "複数候補の獲得だが root move では最頻の金 1 枚ルートだけ先に表現する sample"
+    },
+    {
+      "skillId": 16,
+      "pieceChars": ["電"],
+      "source": {
+        "skillText": "20%の確率で敵を感電させ1ターン動けなくさせる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_16"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "apply_status", "probabilistic"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.2
+          }
+        },
+        {
+          "order": 2,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "apply_status",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "statusType": "shock",
+            "durationTurns": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "錫と同型の probability gated apply_status sample"
+    },
+    {
+      "skillId": 17,
+      "pieceChars": ["雷"],
+      "source": {
+        "skillText": "10%の確率で相手の持ち駒を消滅させる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_17"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_rule", "remove_piece", "probabilistic"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.1
+          }
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_lifecycle",
+          "type": "remove_piece",
+          "target": {
+            "group": "hand",
+            "selector": "enemy_hand_random"
+          },
+          "params": {
+            "count": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "board remove ではなく enemy hand を 1 枚減らす最小 remove_piece sample"
+    },
+    {
+      "skillId": 44,
+      "pieceChars": ["家"],
+      "source": {
+        "skillText": "「民」駒を自陣4行のランダムな場所に召喚(召喚制限は5体)。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_44"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "summon_piece"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_empty_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "summon_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_empty"
+          },
+          "params": {
+            "summonPieceChar": "民",
+            "placementRule": "first_adjacent_empty",
+            "maxCount": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "本来の自陣 4 行ランダム召喚は後回しにし、root move では隣接空きマスで trace/bonus のみ通す sample"
+    },
+    {
+      "skillId": 45,
+      "pieceChars": ["民"],
+      "source": {
+        "skillText": "「畑」があると斜め前も移動可能となる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_45"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_rule", "modify_movement"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "modify_movement",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "movementRule": "diagonal_step_only"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "畑条件の本実装は後回しにし、root move 評価では斜め 1 マス移動の trace/bonus を先に表現する sample"
+    },
+    {
+      "skillId": 46,
+      "pieceChars": ["畑"],
+      "source": {
+        "skillText": "民駒を斜め前にも移動可能にする。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_46"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_rule", "modify_movement"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "modify_movement",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "movementRule": "diagonal_step_only"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "民への波及は後回しにし、root move 評価では self の斜め 1 マス移動だけ先に表現する sample"
+    },
+    {
+      "skillId": 64,
+      "pieceChars": ["薬"],
+      "source": {
+        "skillText": "隣接する味方駒の移動範囲を1マス延長する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_64"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "modify_movement"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "modify_movement",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_ally"
+          },
+          "params": {
+            "movementRule": "extend_range_by_one"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "味方駒の移動生成更新までは持たず、root move 評価では隣接味方の存在確認と trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 75,
+      "pieceChars": ["鬱"],
+      "source": {
+        "skillText": "移動時もともといたマスを行動不能マスにする。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_75"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "apply_status"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "apply_status",
+          "target": {
+            "group": "board",
+            "selector": "origin_cell"
+          },
+          "params": {
+            "statusType": "blocked_cell",
+            "durationTurns": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "盤面 hazard の本実装は後回しにし、root move 評価では origin cell 指定の trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 21,
+      "pieceChars": ["砂"],
+      "source": {
+        "skillText": "左右の「砂」駒と連携移動する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_21"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "linked_action"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "linked_action",
+          "target": {
+            "group": "line",
+            "selector": "same_row_ally"
+          },
+          "params": {
+            "actionRule": "sand_link_move"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "左右限定の本連携は後回しにし、root move 評価では同じ行の味方存在で trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 27,
+      "pieceChars": ["毒"],
+      "source": {
+        "skillText": "通ったマスを2ターン毒マスにする。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_27"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "board_hazard"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "board_control",
+          "type": "board_hazard",
+          "target": {
+            "group": "board",
+            "selector": "origin_cell"
+          },
+          "params": {
+            "hazardType": "poison_cell",
+            "durationTurns": 2
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "盤面 hazard の本配置は後回しにし、root move 評価では origin cell 指定の trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 29,
+      "pieceChars": ["鏡"],
+      "source": {
+        "skillText": "正面の敵駒の動きをコピーする。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_29"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "copy_ability"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "meta_skill",
+          "type": "copy_ability",
+          "target": {
+            "group": "line",
+            "selector": "front_enemy"
+          },
+          "params": {
+            "copyMode": "movement_only"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "能力コピーの本体は後回しにし、root move 評価では正面敵の存在確認と trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 38,
+      "pieceChars": ["幻"],
+      "source": {
+        "skillText": "50％の確率で敵駒に取られるのを回避する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_38"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_rule", "defense_or_immunity", "probabilistic"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.5
+          }
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "defense_or_immunity",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "mode": "evade_capture"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "被捕獲回避の本判定は後回しにし、root move 評価では self 防御 trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 41,
+      "pieceChars": ["舟"],
+      "source": {
+        "skillText": "移動時後方の味方駒を連れていく。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_41"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "linked_action"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "linked_action",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_ally"
+          },
+          "params": {
+            "actionRule": "pull_ally_behind"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "後方限定の追従移動は後回しにし、root move 評価では隣接味方の存在確認と trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 42,
+      "pieceChars": ["機"],
+      "source": {
+        "skillText": "左または右隣りの見方駒のスキルをコピーする。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_42"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "copy_ability"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "meta_skill",
+          "type": "copy_ability",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_ally"
+          },
+          "params": {
+            "copyMode": "skill_only"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "左右限定のコピー元探索は後回しにし、root move 評価では隣接味方の存在確認と trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 53,
+      "pieceChars": ["鎧"],
+      "source": {
+        "skillText": "敵駒を取れないが敵駒から取られない。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_53"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_rule", "defense_or_immunity"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "defense_or_immunity",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "mode": "immune_to_capture"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "捕獲制約の本反映は後回しにし、root move 評価では self 防御 trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 61,
+      "pieceChars": ["剣"],
+      "source": {
+        "skillText": "敵の攻撃を左右の空きマスに移動して回避する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_61"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_rule", "defense_or_immunity"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_empty_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "defense_or_immunity",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "mode": "sidestep_evade"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "左右回避の本移動は後回しにし、root move 評価では隣接空きマス存在時の防御 trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 77,
+      "pieceChars": ["薔"],
+      "source": {
+        "skillText": "上下1マスを茨化して、相手が持ち駒をそのマスに置けないようにする。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_77"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "board_hazard"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_empty_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "board_control",
+          "type": "board_hazard",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_empty"
+          },
+          "params": {
+            "hazardType": "thorn_cell",
+            "durationTurns": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "本来の上下限定と打ち駒制限は後回しにし、root move 評価では隣接空きマスへの hazard trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 78,
+      "pieceChars": ["菊"],
+      "source": {
+        "skillText": "隣接する味方駒一体に復活効果を付与する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_78"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "revive"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_lifecycle",
+          "type": "revive",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_ally"
+          },
+          "params": {
+            "statusType": "revive"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "復活状態の本管理は後回しにし、root move 評価では隣接味方存在時の revive trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 25,
+      "pieceChars": ["雲"],
+      "source": {
+        "skillText": "相手の駒は取れないが味方の駒を取れる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_25"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_rule", "capture_constraint"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "capture_rule",
+          "type": "capture_constraint",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "mode": "cannot_capture_enemy"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "敵駒を取れない本来の合法手制約は後回しにし、root move 評価では self 制約 trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 33,
+      "pieceChars": ["峰"],
+      "source": {
+        "skillText": "画数が10画以上の敵駒を無効化する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "triggerPeakSkill"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_rule", "disable_piece"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "disable_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "mode": "disable_enemy_piece",
+            "filter": "high_stroke_count"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "画数10画以上の判定は後回しにし、root move 評価では隣接敵の存在確認と disable trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 37,
+      "pieceChars": ["霊"],
+      "source": {
+        "skillText": "敵駒に取られても相手の持ち駒に加わらない。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_37"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_rule", "capture_constraint"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "capture_rule",
+          "type": "capture_constraint",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "mode": "not_added_to_enemy_hand"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "被捕獲時フックの本実装は後回しにし、root move 評価では self 制約 trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 39,
+      "pieceChars": ["霧"],
+      "source": {
+        "skillText": "周囲の敵駒を20％の確率で相手の持ち駒に送る。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "triggerMistSkill"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "send_to_hand", "probabilistic"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.2
+          }
+        },
+        {
+          "order": 2,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_lifecycle",
+          "type": "send_to_hand",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "handOwner": "target_owner"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "本来の周囲対象選択は後回しにし、root move 評価では隣接敵1体を相手手駒へ戻す最小 executor で sample 化する"
+    },
+    {
+      "skillId": 43,
+      "pieceChars": ["歯"],
+      "source": {
+        "skillText": "隣接する駒が動いたらそれに連動して動く。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_43"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "linked_action"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "linked_action",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_ally"
+          },
+          "params": {
+            "actionRule": "follow_adjacent_ally"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "本来の他駒移動トリガーは後回しにし、root move 評価では隣接味方存在時の linked_action trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 60,
+      "pieceChars": ["聖"],
+      "source": {
+        "skillText": "周囲8マスにいる全ての駒のスキルと移動を無効化する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_60"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "disable_piece"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "disable_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "mode": "disable_adjacent_pieces"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "本来の周囲全駒への広域無効化は後回しにし、root move 評価では隣接敵存在時の disable trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 62,
+      "pieceChars": ["盾"],
+      "source": {
+        "skillText": "前方以外の隣接する味方への攻撃を50%で無効化する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_62"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "disable_piece", "probabilistic"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.5
+          }
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "disable_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_ally"
+          },
+          "params": {
+            "mode": "guard_adjacent_ally"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "前方除外の向き判定は後回しにし、root move 評価では確率付きの隣接味方 guard trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 66,
+      "pieceChars": ["穴"],
+      "source": {
+        "skillText": "取られた時、周囲のマスに4ターン侵入不可の穴を生成する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_66"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["after_capture", "board_hazard"]
+      },
+      "trigger": {
+        "group": "event_capture",
+        "type": "after_capture"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_empty_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "board_control",
+          "type": "board_hazard",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_empty"
+          },
+          "params": {
+            "hazardType": "pit_cell",
+            "durationTurns": 4
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "本来の被捕獲時トリガーは自駒側で扱う必要があるが、root move 評価では after_capture で隣接空きマスへの hazard trace/bonus を先行実装する sample"
+    },
+    {
+      "skillId": 69,
+      "pieceChars": ["朧"],
+      "source": {
+        "skillText": "盤面に「死」、「魂」駒が残っていると、敵駒からの攻撃を回避する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_69"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_rule", "defense_or_immunity"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "defense_or_immunity",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "mode": "evade_enemy_attack"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "盤面上の「死」「魂」依存判定は後回しにし、root move 評価では self 防御 trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 73,
+      "pieceChars": ["禽"],
+      "source": {
+        "skillText": "移動時味方駒から1つ選択し2ターン無敵状態にする。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_73"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "defense_or_immunity"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "defense_or_immunity",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_ally"
+          },
+          "params": {
+            "mode": "grant_invulnerability",
+            "durationTurns": 2
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "任意の味方選択は後回しにし、root move 評価では隣接味方存在時の defense trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 70,
+      "pieceChars": ["死"],
+      "source": {
+        "skillText": "味方の駒を取った敵駒に5ターン後に消滅する呪いをかける。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_70"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_rule", "remove_piece"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_lifecycle",
+          "type": "remove_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "mode": "delayed_curse_remove",
+            "delayTurns": 5
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "本来の被捕獲履歴と遅延消滅は後回しにし、root move 評価では隣接敵 1 体への remove trace/bonus を先行実装する sample"
+    },
+    {
+      "skillId": 71,
+      "pieceChars": ["魂"],
+      "source": {
+        "skillText": "盤面に「魂」が残っているとき、相手は「王」を攻撃できない。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_71"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_rule", "defense_or_immunity"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "defense_or_immunity",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "mode": "protect_king_aura"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "盤面上の魂と王防御の本判定は後回しにし、root move 評価では self 防御 trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 86,
+      "pieceChars": ["陰"],
+      "source": {
+        "skillText": "周囲の敵駒を呪い状態にしてスキル発動を阻害する。味方の「陽」が同じ行や列にいるとき敵駒に取られない。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_86"
+      },
+      "classification": {
+        "implementationKind": "composite",
+        "tags": ["continuous_aura", "seal_skill", "defense_or_immunity"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "seal_skill",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "statusType": "cursed"
+          }
+        },
+        {
+          "order": 2,
+          "group": "piece_state",
+          "type": "defense_or_immunity",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "mode": "immune_to_capture"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "陽依存の同一行列条件と seal_skill 本体は後回しにし、root move 評価では composite 内の self defense trace/bonus を先行実装する sample"
+    },
+    {
+      "skillId": 87,
+      "pieceChars": ["牛"],
+      "source": {
+        "skillText": "後ろに移動した分前に行けるマスが増える。移動途中の駒を全て取る。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_87"
+      },
+      "classification": {
+        "implementationKind": "composite",
+        "tags": ["move_trigger", "modify_movement", "multi_capture"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "modify_movement",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "movementRule": "backward_step_only"
+          }
+        },
+        {
+          "order": 2,
+          "group": "capture_rule",
+          "type": "multi_capture",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "captureMode": "path_enemies"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "後退量ぶんの前進延長と経路上全捕獲は後回しにし、root move 評価では後方 1 マス移動時の modify_movement trace/bonus だけ先行実装する sample"
+    },
+    {
+      "skillId": 90,
+      "pieceChars": ["財"],
+      "source": {
+        "skillText": "敵駒を取ったとき、味方の「銭」駒をひとつ取った敵駒に変化させる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_90"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["capture_trigger", "transform_piece"]
+      },
+      "trigger": {
+        "group": "event_capture",
+        "type": "after_capture"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "target_not_king",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "transform_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "toPieceChar": "銭",
+            "maxTargets": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "味方の銭消費と captured enemy への変化確定は後回しにし、root move 評価では隣接非王 enemy への transform trace/bonus を先行実装する sample"
+    },
+    {
+      "skillId": 91,
+      "pieceChars": ["巨"],
+      "source": {
+        "skillText": "相手から取られない。特殊効果を受けない。移動時に移動先の2×2領域の敵駒をすべて取る。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_91"
+      },
+      "classification": {
+        "implementationKind": "composite",
+        "tags": ["continuous_rule", "defense_or_immunity", "multi_capture"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "defense_or_immunity",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "mode": "immune_to_capture"
+          }
+        },
+        {
+          "order": 2,
+          "group": "piece_state",
+          "type": "defense_or_immunity",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "mode": "immune_to_special_effects"
+          }
+        },
+        {
+          "order": 3,
+          "group": "capture_rule",
+          "type": "multi_capture",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "captureMode": "destination_2x2"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "2x2 範囲の複数捕獲は後回しにし、root move 評価では 2 つの self defense trace/bonus を先行実装する composite sample"
+    },
+    {
+      "skillId": 20,
+      "pieceChars": ["雪"],
+      "source": {
+        "skillText": "移動時20%の確率で「氷」駒を1つ獲得する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_20"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["move_trigger", "gain_piece", "probabilistic"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.2
+          }
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "gain_piece",
+          "target": {
+            "group": "hand",
+            "selector": "ally_hand_piece"
+          },
+          "params": {
+            "gainPieceChar": "氷",
+            "count": 1
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "非標準駒の hand 獲得は本管理を後回しにし、root move 評価では gain_piece の trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 51,
+      "pieceChars": ["異"],
+      "source": {
+        "skillText": "変化前の駒の能力を継承する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_51"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_rule", "transform_piece"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "transform_piece",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "inheritMode": "previous_piece_ability"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "変化前能力の本継承は後回しにし、root move 評価では self transform の trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 63,
+      "pieceChars": ["病"],
+      "source": {
+        "skillText": "取られると相手駒を感染状態にし2ターン移動不能にする。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_63"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["after_capture", "apply_status"]
+      },
+      "trigger": {
+        "group": "event_capture",
+        "type": "after_capture"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "apply_status",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "statusType": "infected_immobilized",
+            "durationTurns": 2
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "本来は取られた自駒起点のトリガーだが、root move 評価では after_capture 近似で隣接敵への apply_status trace/bonus を先行実装する sample"
+    },
+    {
+      "skillId": 67,
+      "pieceChars": ["淵"],
+      "source": {
+        "skillText": "取られた時、相手駒を淵に沈めて3ターン行動不能にする。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_67"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["after_capture", "apply_status"]
+      },
+      "trigger": {
+        "group": "event_capture",
+        "type": "after_capture"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "apply_status",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "statusType": "abyss_sink",
+            "durationTurns": 3
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "本来は取られた自駒から attacker を沈める効果だが、root move 評価では after_capture 近似で隣接敵への apply_status trace/bonus を先行実装する sample"
+    },
+    {
+      "skillId": 40,
+      "pieceChars": ["月"],
+      "source": {
+        "skillText": "ターンごとに移動能力が変化する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_40"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["turn_start", "modify_movement"]
+      },
+      "trigger": {
+        "group": "event_turn",
+        "type": "turn_start"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "modify_movement",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "movementRule": "cyclic_pattern_change"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "ターン境界の本更新は後回しにし、root move 評価では turn_start を即時近似して modify_movement の trace/bonus を先行実装する sample"
+    },
+    {
+      "skillId": 55,
+      "pieceChars": ["書"],
+      "source": {
+        "skillText": "一手前に相手が移動させた駒と同じ移動範囲になる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_55"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["turn_start", "copy_ability"]
+      },
+      "trigger": {
+        "group": "event_turn",
+        "type": "turn_start"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "meta_skill",
+          "type": "copy_ability",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "copySource": "last_enemy_moved_piece",
+            "copyMode": "movement_only"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "直前の敵移動履歴の本参照は後回しにし、root move 評価では turn_start を即時近似して self copy_ability の trace/bonus を先行実装する sample"
+    },
+    {
+      "skillId": 52,
+      "pieceChars": ["刀"],
+      "source": {
+        "skillText": "敵駒を取ったとき、左右にいる敵駒もまとめて取る。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_52"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["capture_trigger", "multi_capture"]
+      },
+      "trigger": {
+        "group": "event_capture",
+        "type": "after_capture"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "capture_rule",
+          "type": "multi_capture",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "captureMode": "adjacent_after_capture"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "本来の左右限定同時捕獲は後回しにし、root move 評価では capture 後に隣接敵を追加で除去する最小 executor で sample 化する"
+    },
+    {
+      "skillId": 54,
+      "pieceChars": ["銃"],
+      "source": {
+        "skillText": "移動方向の1、2マス先に敵駒がいる場合、まとめて取る。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_54"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_rule", "multi_capture"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "capture_rule",
+          "type": "multi_capture",
+          "target": {
+            "group": "line",
+            "selector": "front_enemy"
+          },
+          "params": {
+            "captureMode": "forward_chain"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "本来の移動方向 1-2 マス先まとめ取りは後回しにし、root move 評価では正面敵 1 体を追加除去する最小 executor で sample 化する"
+    },
+    {
+      "skillId": 1,
+      "pieceChars": ["砲"],
+      "source": {
+        "skillText": "敵駒を取るときは駒を1つまたぐ。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_1"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["capture_trigger", "capture_with_leap"]
+      },
+      "trigger": {
+        "group": "event_capture",
+        "type": "after_capture"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "capture_rule",
+          "type": "capture_with_leap",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "mode": "leap_over_one_piece"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "合法手生成での飛び越え捕獲は後回しにし、root move 評価では capture 済み手に capture_with_leap trace/bonus を先行実装する sample"
+    },
+    {
+      "skillId": 8,
+      "pieceChars": ["葉"],
+      "source": {
+        "skillText": "各敵駒ごとに10%の確率で、ランダムな方向に1マス移動させる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_8"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "forced_move", "probabilistic"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.1
+          }
+        },
+        {
+          "order": 2,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "forced_move",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "movementRule": "push_away"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "ランダム方向 1 マス移動は後回しにし、root move 評価では確率付き forced_move の既存 executor に寄せる sample"
+    },
+    {
+      "skillId": 10,
+      "pieceChars": ["星"],
+      "source": {
+        "skillText": "敵駒に取られたとき、40％の確率で自分の手持ち駒に戻る",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_10"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["after_capture", "return_to_hand", "probabilistic"]
+      },
+      "trigger": {
+        "group": "event_capture",
+        "type": "after_capture"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.4
+          }
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_lifecycle",
+          "type": "return_to_hand",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "handOwner": "self"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "本来の被捕獲復帰は後回しにし、root move 評価では after_capture 近似で return_to_hand trace/bonus を先行実装する sample"
+    },
+    {
+      "skillId": 47,
+      "pieceChars": ["泉"],
+      "source": {
+        "skillText": "味方駒を強化し敵駒から取られないようにする(5ターン持続)。味方の「竜」を覚醒させる。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_47"
+      },
+      "classification": {
+        "implementationKind": "composite",
+        "tags": ["continuous_aura", "buff", "defense_or_immunity"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "defense_or_immunity",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_ally"
+          },
+          "params": {
+            "mode": "grant_uncapturable",
+            "durationTurns": 5
+          }
+        },
+        {
+          "order": 2,
+          "group": "piece_state",
+          "type": "defense_or_immunity",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "mode": "self_guard_aura"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "竜覚醒と buff 本体は後回しにし、root move 評価では隣接味方への defense 付与のみ先行実装する composite sample"
+    },
+    {
+      "skillId": 49,
+      "pieceChars": ["K"],
+      "source": {
+        "skillText": "40%で実験体を召喚。2回取られないと消えない。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_49"
+      },
+      "classification": {
+        "implementationKind": "composite",
+        "tags": ["continuous_aura", "summon_piece", "defense_or_immunity", "probabilistic"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.4
+          }
+        },
+        {
+          "order": 2,
+          "group": "board_state",
+          "type": "adjacent_empty_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_generation",
+          "type": "summon_piece",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_empty"
+          },
+          "params": {
+            "summonPieceChar": "実",
+            "placementRule": "first_adjacent_empty",
+            "maxCount": 1
+          }
+        },
+        {
+          "order": 2,
+          "group": "piece_state",
+          "type": "defense_or_immunity",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "mode": "two_hit_survival"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "実験体の耐久管理は後回しにし、root move 評価では summon と self defense の trace/bonus を先行実装する composite sample"
+    },
+    {
+      "skillId": 56,
+      "pieceChars": ["封"],
+      "source": {
+        "skillText": "斜め4方向の敵駒のスキルを封印する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_56"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["continuous_aura", "seal_skill"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_aura"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "board_state",
+          "type": "adjacent_enemy_exists",
+          "params": {}
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "seal_skill",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_enemy"
+          },
+          "params": {
+            "statusType": "sealed"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "斜め4方向限定は後回しにし、root move 評価では隣接敵への seal_skill trace/bonus を先行実装する sample"
+    },
+    {
+      "skillId": 59,
+      "pieceChars": ["礼"],
+      "source": {
+        "skillText": "他の味方駒が取られたときに身代わりとなる。。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_59"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["after_capture", "substitute"]
+      },
+      "trigger": {
+        "group": "event_capture",
+        "type": "after_capture"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_lifecycle",
+          "type": "substitute",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "mode": "intercept_capture"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "他味方の被捕獲割り込みは後回しにし、root move 評価では substitute の trace/bonus のみ先行実装する sample"
+    },
+    {
+      "skillId": 85,
+      "pieceChars": ["陽"],
+      "source": {
+        "skillText": "周囲の味方駒のスキル発動確率を30％増加させる。味方の「陰」駒が同じ行や列にいるとき敵駒に取られない。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_85"
+      },
+      "classification": {
+        "implementationKind": "composite",
+        "tags": ["continuous_rule", "buff", "defense_or_immunity", "probabilistic"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.3
+          }
+        }
+      ],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_state",
+          "type": "defense_or_immunity",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "mode": "uncapturable_if_ally_yin_same_row_or_col"
+          }
+        },
+        {
+          "order": 2,
+          "group": "piece_state",
+          "type": "defense_or_immunity",
+          "target": {
+            "group": "adjacent",
+            "selector": "adjacent_ally"
+          },
+          "params": {
+            "mode": "adjacent_ally_proc_support"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "陽陰の同一行列条件と buff 本体は後回しにし、root move 評価では確率付き self defense の trace/bonus を先行実装する composite sample"
+    },
+    {
+      "skillId": 88,
+      "pieceChars": ["豚"],
+      "source": {
+        "skillText": "取った敵駒の移動範囲を継承する。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_88"
+      },
+      "classification": {
+        "implementationKind": "primitive",
+        "tags": ["capture_trigger", "inherit_ability"]
+      },
+      "trigger": {
+        "group": "event_capture",
+        "type": "after_capture"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "meta_skill",
+          "type": "inherit_ability",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "inheritSource": "captured_enemy_move_pattern"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "捕獲対象の移動範囲の本継承は後回しにし、root move 評価では inherit_ability trace/bonus を先行実装する sample"
+    },
+    {
+      "skillId": 92,
+      "pieceChars": ["無"],
+      "source": {
+        "skillText": "移動不可。敵駒を取れない。敵駒に取られない。",
+        "sourceKind": "piece_info",
+        "sourceFile": "../../SHOGI_GAME/piece_info.html",
+        "sourceFunction": "skill_92"
+      },
+      "classification": {
+        "implementationKind": "composite",
+        "tags": ["continuous_rule", "modify_movement", "capture_constraint", "defense_or_immunity"]
+      },
+      "trigger": {
+        "group": "continuous",
+        "type": "continuous_rule"
+      },
+      "conditions": [],
+      "effects": [
+        {
+          "order": 1,
+          "group": "piece_position",
+          "type": "modify_movement",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "movementRule": "immobile"
+          }
+        },
+        {
+          "order": 2,
+          "group": "capture_rule",
+          "type": "capture_constraint",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "mode": "cannot_capture_enemy"
+          }
+        },
+        {
+          "order": 3,
+          "group": "piece_state",
+          "type": "defense_or_immunity",
+          "target": {
+            "group": "self",
+            "selector": "self_piece"
+          },
+          "params": {
+            "mode": "immune_to_capture"
+          }
+        }
+      ],
+      "scriptHook": null,
+      "notes": "移動不可の本合法手制約は後回しにし、root move 評価では capture_constraint と defense の trace/bonus を先行実装する composite sample"
+    },
+    {
+      "skillId": 97,
+      "pieceChars": ["爆"],
+      "source": {
+        "skillText": "爆発で周囲の敵駒を吹き飛ばす破壊的な駒。",
+        "sourceKind": "online_battle",
+        "sourceFile": "../../SHOGI_GAME/online_battle.html",
+        "sourceFunction": "triggerBombExplosion"
+      },
+      "classification": {
+        "implementationKind": "script_hook",
+        "tags": ["move_trigger", "explosion", "forced_displacement"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [],
+      "effects": [],
+      "scriptHook": "bomb_explosion_push",
+      "notes": "周囲8マスへの一括押し出しは共通 forced_move に潰さず専用 hook に委譲する"
+    },
+    {
+      "skillId": 99,
+      "pieceChars": ["室"],
+      "source": {
+        "skillText": "セーフルームを用意して「王」を守る。",
+        "sourceKind": "online_battle",
+        "sourceFile": "../../SHOGI_GAME/online_battle.html",
+        "sourceFunction": "triggerSafeRoomSkill"
+      },
+      "classification": {
+        "implementationKind": "script_hook",
+        "tags": ["move_trigger", "probabilistic", "king_control"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [
+        {
+          "order": 1,
+          "group": "probability",
+          "type": "chance_roll",
+          "params": {
+            "procChance": 0.3
+          }
+        }
+      ],
+      "effects": [],
+      "scriptHook": "safe_room_king_relocation",
+      "notes": "確率判定だけ共通 condition で扱い、セーフルーム移送の本体は hook に委譲する"
+    },
+    {
+      "skillId": 100,
+      "pieceChars": ["定"],
+      "source": {
+        "skillText": "相手の戦略を固定しろ。",
+        "sourceKind": "online_battle",
+        "sourceFile": "../../SHOGI_GAME/online_battle.html",
+        "sourceFunction": "triggerFixedSkill"
+      },
+      "classification": {
+        "implementationKind": "script_hook",
+        "tags": ["move_trigger", "turn_lock", "enemy_restriction"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [],
+      "effects": [],
+      "scriptHook": "fixed_next_turn_restriction",
+      "notes": "次ターン制約の永続 state は後回しにし、root move 評価では hook trace/bonus を先行実装する"
+    },
+    {
+      "skillId": 103,
+      "pieceChars": ["辺"],
+      "source": {
+        "skillText": "盤面の辺を利用した戦略。",
+        "sourceKind": "online_battle",
+        "sourceFile": "../../SHOGI_GAME/online_battle.html",
+        "sourceFunction": "triggerEdgeSkill"
+      },
+      "classification": {
+        "implementationKind": "script_hook",
+        "tags": ["move_trigger", "edge_control", "mass_disable"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [],
+      "effects": [],
+      "scriptHook": "edge_line_imprison",
+      "notes": "ランダム辺選択と3ターン拘束 state は後回しにし、hook 成立時の trace/bonus を先行実装する"
+    },
+    {
+      "skillId": 106,
+      "pieceChars": ["逃"],
+      "source": {
+        "skillText": "移動すると味方の王も同じ方向へ逃がす緊急離脱の駒。",
+        "sourceKind": "online_battle",
+        "sourceFile": "../../SHOGI_GAME/online_battle.html",
+        "sourceFunction": "triggerEscapeSkill"
+      },
+      "classification": {
+        "implementationKind": "script_hook",
+        "tags": ["move_trigger", "king_control", "follow_move"]
+      },
+      "trigger": {
+        "group": "event_move",
+        "type": "after_move"
+      },
+      "conditions": [],
+      "effects": [],
+      "scriptHook": "escape_king_follow",
+      "notes": "味方王の同方向追従は専用 hook で処理する"
+    }
+  ]
+}

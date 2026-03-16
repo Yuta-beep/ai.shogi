@@ -195,6 +195,16 @@
 ## 8. 次ステップ（Phase3）
 
 1. スキル効果の `m_skill_effect` 直解釈（DoT/バフ/範囲効果）を探索木へ適用
+   - 構造化仕様は `docs/skill-structure-v2-design-ja.md` を参照
 2. 千日手・持将棋・入玉宣言など終局判定の追加
 3. 探索最適化（置換表・ムーブオーダリング・並列探索）
 4. 評価関数の学習/チューニング基盤の導入
+
+## 9. 関連ドキュメント
+
+- `docs/phase1-contract.md`
+- `docs/ai-algorithm-overview-ja.md`
+- `docs/skill-structure-v2-design-ja.md`
+- `docs/skill-v2-expansion-handoff-ja.md`
+- `docs/fullstack-event-authority-handoff-ja.md`
+- `docs/player-skill-authority-handoff-ja.md`

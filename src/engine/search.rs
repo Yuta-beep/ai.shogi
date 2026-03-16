@@ -110,7 +110,7 @@ fn negamax(
     best
 }
 
-fn evaluate_state(state: &SearchState, cfg: &EngineConfig, rules: &RuntimeRules) -> i32 {
+pub(crate) fn evaluate_state(state: &SearchState, cfg: &EngineConfig, rules: &RuntimeRules) -> i32 {
     let mut material = 0.0;
     let mut mobility = 0.0;
     let mut center = 0.0;
@@ -131,6 +131,10 @@ fn evaluate_state(state: &SearchState, cfg: &EngineConfig, rules: &RuntimeRules)
                     .copied()
                     .unwrap_or(0) as f64;
                 material += bonus * s;
+                material -= state.piece_status_penalty(row, col, p.side) as f64 * s;
+                material -= state.movement_modifier_penalty(row, col, p.side) as f64 * s;
+                material -= state.board_hazard_penalty(row, col, p.side) as f64 * s;
+                material += state.piece_defense_bonus(row, col, p.side) as f64 * s;
                 center += (8.0 - ((row as i32 - 4).abs() + (col as i32 - 4).abs()) as f64) * s;
             }
         }
@@ -206,9 +210,15 @@ fn gen_piece_moves(
         let mut r = row as i32 + dr;
         let mut c = col as i32 + dc;
         while (0..=8).contains(&r) && (0..=8).contains(&c) {
+            if state.has_board_hazard(r as usize, c as usize, piece.side) {
+                break;
+            }
             let tidx = r as usize * 9 + c as usize;
             if let Some(tp) = state.board[tidx] {
                 if tp.side == piece.side {
+                    break;
+                }
+                if state.capture_blocked_by_piece_defense(r as usize, c as usize, tp.side) {
                     break;
                 }
                 push_promote_variants(
@@ -228,6 +238,37 @@ fn gen_piece_moves(
             c += dc;
         }
     };
+
+    if piece_is_immobilized(state, row, col, piece.side) {
+        return;
+    }
+
+    if let Some(movement_rule) = state.movement_rule_for_piece(row, col, piece.side) {
+        match movement_rule {
+            "vertical_step_only" => {
+                push_step(-1, 0, false);
+                push_step(1, 0, false);
+                return;
+            }
+            "diagonal_step_only" => {
+                for (dr, dc) in [(-1, -1), (-1, 1), (1, -1), (1, 1)] {
+                    push_step(dr, dc, false);
+                }
+                return;
+            }
+            "orthogonal_step_only" => {
+                for (dr, dc) in [(-1, 0), (1, 0), (0, -1), (0, 1)] {
+                    push_step(dr, dc, false);
+                }
+                return;
+            }
+            "backward_step_only" => {
+                push_step(-fwd, 0, false);
+                return;
+            }
+            _ => {}
+        }
+    }
 
     if piece.promoted
         && matches!(
@@ -317,6 +358,7 @@ pub(crate) fn apply_move(state: &SearchState, mv: &GenMove) -> SearchState {
         let from_idx = fr * 9 + fc;
         let to_idx = mv.to.0 * 9 + mv.to.1;
         let mut piece = next.board[from_idx].expect("piece must exist");
+        next.move_piece_statuses((fr, fc), mv.to, piece.side);
         next.board[from_idx] = None;
         if let Some(cap) = next.board[to_idx] {
             if cap.kind != PieceKind::King {
@@ -342,7 +384,10 @@ pub(crate) fn apply_move(state: &SearchState, mv: &GenMove) -> SearchState {
                 next.hands[side_index(state.side_to_move)][hidx].saturating_sub(1);
         }
     }
+    next.finish_turn_for(state.side_to_move);
     next.side_to_move = state.side_to_move.opposite();
+    next.begin_turn_for(next.side_to_move);
+    next.prune_skill_state();
     next
 }
 
@@ -405,6 +450,9 @@ fn gen_drop_moves(state: &SearchState, out: &mut Vec<GenMove>) {
             for col in 0..9 {
                 let idx = row * 9 + col;
                 if state.board[idx].is_some() {
+                    continue;
+                }
+                if state.has_board_hazard(row, col, state.side_to_move) {
                     continue;
                 }
                 if !drop_allowed(state, kind, row, col) {
@@ -498,4 +546,13 @@ fn is_uchi_fuzume(state: &SearchState, mv: &GenMove, rules: &RuntimeRules) -> bo
     }
     let replies = generate_legal_moves(&next, rules, false);
     replies.is_empty()
+}
+
+fn piece_is_immobilized(state: &SearchState, row: usize, col: usize, side: Side) -> bool {
+    for status in ["freeze", "time_stop", "infected_immobilized", "stun"] {
+        if state.has_piece_status(row, col, side, status) {
+            return true;
+        }
+    }
+    false
 }

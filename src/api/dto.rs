@@ -11,6 +11,17 @@ pub struct EngineMoveRequest {
 }
 
 #[derive(Debug, Deserialize)]
+pub struct EngineApplyMoveRequest {
+    pub position: PositionInput,
+    pub selected_move: MoveInput,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct EngineLegalMovesRequest {
+    pub position: PositionInput,
+}
+
+#[derive(Debug, Deserialize)]
 pub struct PositionInput {
     pub side_to_move: String,
     pub turn_number: u32,
@@ -67,6 +78,27 @@ pub struct EngineConfigInput {
 pub struct EngineMoveResponse {
     pub selected_move: MoveInput,
     pub meta: EngineMeta,
+}
+
+#[derive(Debug, Serialize)]
+pub struct EngineApplyMoveResponse {
+    pub position: CanonicalPositionOutput,
+}
+
+#[derive(Debug, Serialize)]
+pub struct EngineLegalMovesResponse {
+    pub legal_moves: Vec<MoveInput>,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct CanonicalPositionOutput {
+    pub side_to_move: String,
+    pub turn_number: u32,
+    pub move_count: u32,
+    pub sfen: Option<String>,
+    pub state_hash: Option<String>,
+    pub board_state: serde_json::Value,
+    pub hands: serde_json::Value,
 }
 
 #[derive(Debug, Serialize)]
