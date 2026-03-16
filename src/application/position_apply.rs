@@ -37,9 +37,7 @@ impl ApplyMoveError {
     }
 }
 
-pub fn apply_canonical_move(
-    input: ApplyMoveCommand,
-) -> Result<ApplyMoveResult, ApplyMoveError> {
+pub fn apply_canonical_move(input: ApplyMoveCommand) -> Result<ApplyMoveResult, ApplyMoveError> {
     let rules = parse_runtime_rules(&input.position.board_state)
         .map_err(|_| ApplyMoveError::InvalidPosition("invalid board_state runtime rules"))?;
     let sfen = input
@@ -47,8 +45,8 @@ pub fn apply_canonical_move(
         .sfen
         .as_deref()
         .ok_or(ApplyMoveError::InvalidPosition("sfen is required"))?;
-    let mut state =
-        SearchState::from_sfen(sfen).map_err(|_| ApplyMoveError::InvalidPosition("invalid sfen"))?;
+    let mut state = SearchState::from_sfen(sfen)
+        .map_err(|_| ApplyMoveError::InvalidPosition("invalid sfen"))?;
     state.side_to_move = Side::from_position_side(&input.position.side_to_move)
         .ok_or(ApplyMoveError::InvalidPosition("invalid side_to_move"))?;
     state.hydrate_skill_state_from_board_state(&input.position.board_state);
@@ -104,7 +102,11 @@ fn merge_board_state(
 }
 
 fn generated_move_matches(candidate: &GenMove, selected_move: &EngineMove) -> bool {
-    let from_matches = match (candidate.from, selected_move.from_row, selected_move.from_col) {
+    let from_matches = match (
+        candidate.from,
+        selected_move.from_row,
+        selected_move.from_col,
+    ) {
         (Some((row, col)), Some(from_row), Some(from_col)) => {
             row == from_row as usize && col == from_col as usize
         }
@@ -122,6 +124,8 @@ fn generated_move_matches(candidate: &GenMove, selected_move: &EngineMove) -> bo
         && candidate
             .drop
             .map(|kind| piece_code(kind))
-            .map(|code| code.eq_ignore_ascii_case(selected_move.drop_piece_code.as_deref().unwrap_or("")))
+            .map(|code| {
+                code.eq_ignore_ascii_case(selected_move.drop_piece_code.as_deref().unwrap_or(""))
+            })
             .unwrap_or(selected_move.drop_piece_code.is_none())
 }

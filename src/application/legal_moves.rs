@@ -42,8 +42,8 @@ pub fn generate_canonical_legal_moves(
         .sfen
         .as_deref()
         .ok_or(LegalMovesError::InvalidPosition("sfen is required"))?;
-    let mut state =
-        SearchState::from_sfen(sfen).map_err(|_| LegalMovesError::InvalidPosition("invalid sfen"))?;
+    let mut state = SearchState::from_sfen(sfen)
+        .map_err(|_| LegalMovesError::InvalidPosition("invalid sfen"))?;
     state.side_to_move = Side::from_position_side(&input.position.side_to_move)
         .ok_or(LegalMovesError::InvalidPosition("invalid side_to_move"))?;
     state.hydrate_skill_state_from_board_state(&input.position.board_state);

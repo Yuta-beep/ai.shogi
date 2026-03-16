@@ -113,13 +113,16 @@ async fn apply_move_returns_canonical_next_position() {
         parsed["position"]["sfen"],
         json!("4k4/9/9/4P4/9/9/9/9/4K4 w - 2")
     );
-    assert_eq!(parsed["position"]["board_state"]["skill_state"], json!({
-        "piece_statuses": [],
-        "board_hazards": [],
-        "movement_modifiers": [],
-        "piece_defenses": [],
-        "turn_start_rules": []
-    }));
+    assert_eq!(
+        parsed["position"]["board_state"]["skill_state"],
+        json!({
+            "piece_statuses": [],
+            "board_hazards": [],
+            "movement_modifiers": [],
+            "piece_defenses": [],
+            "turn_start_rules": []
+        })
+    );
 }
 
 #[tokio::test]
@@ -167,7 +170,10 @@ async fn legal_moves_returns_skill_aware_moves_from_hydrated_state() {
 
     let body = to_bytes(response.into_body(), usize::MAX).await.unwrap();
     let parsed: serde_json::Value = serde_json::from_slice(&body).unwrap();
-    let moves = parsed["legal_moves"].as_array().cloned().unwrap_or_default();
+    let moves = parsed["legal_moves"]
+        .as_array()
+        .cloned()
+        .unwrap_or_default();
     let bishop_moves = moves
         .into_iter()
         .filter(|mv| mv["piece_code"] == "KA")

@@ -212,14 +212,19 @@ impl SearchState {
     }
 
     pub fn hydrate_skill_state_from_board_state(&mut self, board_state: &serde_json::Value) {
-        let Some(skill_state) = board_state.get("skill_state").and_then(|value| value.as_object())
+        let Some(skill_state) = board_state
+            .get("skill_state")
+            .and_then(|value| value.as_object())
         else {
             return;
         };
 
         self.skill_state = SkillState::default();
 
-        if let Some(items) = skill_state.get("piece_statuses").and_then(|value| value.as_array()) {
+        if let Some(items) = skill_state
+            .get("piece_statuses")
+            .and_then(|value| value.as_array())
+        {
             for item in items {
                 let Some((row, col, side)) = parse_row_col_side(item, "side") else {
                     continue;
@@ -233,7 +238,10 @@ impl SearchState {
             }
         }
 
-        if let Some(items) = skill_state.get("board_hazards").and_then(|value| value.as_array()) {
+        if let Some(items) = skill_state
+            .get("board_hazards")
+            .and_then(|value| value.as_array())
+        {
             for item in items {
                 let Some((row, col, side)) = parse_row_col_side(item, "affects_side") else {
                     continue;
@@ -345,7 +353,11 @@ impl SearchState {
         } else {
             "w"
         };
-        format!("{board} {side} {} {}", self.sfen_hands(), move_number.max(1))
+        format!(
+            "{board} {side} {} {}",
+            self.sfen_hands(),
+            move_number.max(1)
+        )
     }
 
     pub fn hands_to_json(&self) -> serde_json::Value {
@@ -412,11 +424,7 @@ impl SearchState {
             let enemy_count = self.hands[side_index(Side::White)][idx];
             let sfen = piece_kind_to_sfen_char(kind);
             if player_count > 0 {
-                chunks.push(format!(
-                    "{}{}",
-                    count_prefix(player_count),
-                    sfen
-                ));
+                chunks.push(format!("{}{}", count_prefix(player_count), sfen));
             }
             if enemy_count > 0 {
                 chunks.push(format!(
@@ -1002,7 +1010,9 @@ fn parse_row_col_side(item: &serde_json::Value, side_key: &str) -> Option<(usize
 }
 
 fn parse_u8(value: Option<&serde_json::Value>) -> Option<u8> {
-    value.and_then(|value| value.as_u64()).map(|value| value as u8)
+    value
+        .and_then(|value| value.as_u64())
+        .map(|value| value as u8)
 }
 
 fn piece_kind_to_sfen_char(kind: PieceKind) -> char {

@@ -228,7 +228,9 @@ fn hydrated_board_hazard_blocks_legal_move_generation() {
     state.hydrate_skill_state_from_board_state(&board_state);
     let moves = generate_legal_moves(&state, &RuntimeRules::default(), true);
 
-    assert!(!moves.iter().any(|mv| mv.from == Some((6, 4)) && mv.to == (5, 4)));
+    assert!(!moves
+        .iter()
+        .any(|mv| mv.from == Some((6, 4)) && mv.to == (5, 4)));
 }
 
 #[test]
@@ -251,14 +253,17 @@ fn hydrated_movement_modifier_changes_legal_move_shape() {
     state.hydrate_skill_state_from_board_state(&board_state);
     let moves = generate_legal_moves(&state, &RuntimeRules::default(), true);
 
-    assert!(moves.iter().any(|mv| mv.from == Some((4, 4)) && mv.to == (3, 4)));
-    assert!(!moves.iter().any(|mv| mv.from == Some((4, 4)) && mv.to == (3, 3)));
+    assert!(moves
+        .iter()
+        .any(|mv| mv.from == Some((4, 4)) && mv.to == (3, 4)));
+    assert!(!moves
+        .iter()
+        .any(|mv| mv.from == Some((4, 4)) && mv.to == (3, 3)));
 }
 
 #[test]
 fn hydrated_piece_defense_blocks_capture() {
-    let mut state =
-        SearchState::from_sfen("4k4/9/9/9/3rP4/9/9/9/4K4 w - 1").expect("must parse");
+    let mut state = SearchState::from_sfen("4k4/9/9/9/3rP4/9/9/9/4K4 w - 1").expect("must parse");
     let board_state = serde_json::json!({
         "skill_state": {
             "piece_defenses": [
@@ -276,7 +281,9 @@ fn hydrated_piece_defense_blocks_capture() {
     state.hydrate_skill_state_from_board_state(&board_state);
     let moves = generate_legal_moves(&state, &RuntimeRules::default(), true);
 
-    assert!(!moves.iter().any(|mv| mv.from == Some((4, 3)) && mv.to == (4, 4)));
+    assert!(!moves
+        .iter()
+        .any(|mv| mv.from == Some((4, 3)) && mv.to == (4, 4)));
 }
 
 #[test]
