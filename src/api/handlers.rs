@@ -1,8 +1,11 @@
 use crate::api::dto::{
-    EngineConfigOutput, EngineMeta, EngineMoveRequest, EngineMoveResponse, MoveInput,
+    EngineApplyMoveRequest, EngineApplyMoveResponse, EngineConfigOutput, EngineLegalMovesRequest,
+    EngineLegalMovesResponse, EngineMeta, EngineMoveRequest, EngineMoveResponse, MoveInput,
 };
 use crate::api::error::err;
 use crate::application::ai_move::{compute_ai_move, ComputeMoveCommand};
+use crate::application::legal_moves::{generate_canonical_legal_moves, LegalMovesCommand};
+use crate::application::position_apply::{apply_canonical_move, ApplyMoveCommand};
 use axum::{http::StatusCode, response::IntoResponse, Json};
 use tracing::{info, warn};
 
@@ -84,6 +87,41 @@ pub async fn post_ai_move(Json(payload): Json<EngineMoveRequest>) -> impl IntoRe
                 candidate_count: result.meta.candidate_count,
                 config_applied: EngineConfigOutput::from(result.meta.config_applied),
             },
+        }),
+    )
+        .into_response()
+}
+
+pub async fn post_apply_move(Json(payload): Json<EngineApplyMoveRequest>) -> impl IntoResponse {
+    let result = match apply_canonical_move(ApplyMoveCommand {
+        position: payload.position,
+        selected_move: payload.selected_move.into(),
+    }) {
+        Ok(result) => result,
+        Err(error) => return err(StatusCode::BAD_REQUEST, error.code(), error.message()),
+    };
+
+    (
+        StatusCode::OK,
+        Json(EngineApplyMoveResponse {
+            position: result.position,
+        }),
+    )
+        .into_response()
+}
+
+pub async fn post_legal_moves(Json(payload): Json<EngineLegalMovesRequest>) -> impl IntoResponse {
+    let result = match generate_canonical_legal_moves(LegalMovesCommand {
+        position: payload.position,
+    }) {
+        Ok(result) => result,
+        Err(error) => return err(StatusCode::BAD_REQUEST, error.code(), error.message()),
+    };
+
+    (
+        StatusCode::OK,
+        Json(EngineLegalMovesResponse {
+            legal_moves: result.legal_moves,
         }),
     )
         .into_response()

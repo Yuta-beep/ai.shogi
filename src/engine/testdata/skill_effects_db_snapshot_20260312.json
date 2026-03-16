@@ -1,0 +1,1995 @@
+[
+  {
+    "skill_id": 1,
+    "skill_code": "skill_57cff71eda35",
+    "skill_desc": "敵駒を取るときは駒を1つまたぐ。",
+    "effect_order": 1,
+    "effect_type": "capture_with_leap",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "on_capture_attempt",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "敵駒を取るときは駒を1つまたぐ。",
+    "params_json": {
+      "sourceSentence": "敵駒を取るときは駒を1つまたぐ。"
+    }
+  },
+  {
+    "skill_id": 2,
+    "skill_code": "skill_a14eb3915bf8",
+    "skill_desc": "「泉」駒によって覚醒し、「辰」に変身する。",
+    "effect_order": 1,
+    "effect_type": "transform_piece",
+    "target_rule": "self",
+    "trigger_timing": "on_condition_met",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "条件成立で辰に変身",
+    "params_json": {
+      "sourceSentence": "条件成立で辰に変身"
+    }
+  },
+  {
+    "skill_id": 3,
+    "skill_code": "skill_241e852d1841",
+    "skill_desc": "10%の確率で周囲の敵駒を消滅させる。",
+    "effect_order": 1,
+    "effect_type": "remove_piece",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "passive",
+    "proc_chance": 0.1000,
+    "duration_turns": null,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "10%の確率で周囲の敵駒を消滅させる",
+    "params_json": {
+      "sourceSentence": "10%の確率で周囲の敵駒を消滅させる"
+    }
+  },
+  {
+    "skill_id": 4,
+    "skill_code": "skill_873bd39173c7",
+    "skill_desc": "移動時20％の確率で相手の手持ち駒を1つ燃やす。",
+    "effect_order": 1,
+    "effect_type": "destroy_hand_piece",
+    "target_rule": "enemy_hand",
+    "trigger_timing": "on_move",
+    "proc_chance": 0.2000,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": 1,
+    "value_text": "移動時20％の確率で相手の手持ち駒を1つ燃やす。",
+    "params_json": {
+      "sourceSentence": "移動時20％の確率で相手の手持ち駒を1つ燃やす。"
+    }
+  },
+  {
+    "skill_id": 5,
+    "skill_code": "skill_e2332982ce58",
+    "skill_desc": "水の流れにより周囲の敵駒を押し流す。",
+    "effect_order": 1,
+    "effect_type": "forced_move",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "水の流れにより周囲の敵駒を押し流す",
+    "params_json": {
+      "sourceSentence": "水の流れにより周囲の敵駒を押し流す"
+    }
+  },
+  {
+    "skill_id": 6,
+    "skill_code": "skill_19507c743560",
+    "skill_desc": "波の伝播により周囲の敵駒を押し流す。",
+    "effect_order": 1,
+    "effect_type": "forced_move",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "波の伝播により周囲の敵駒を押し流す",
+    "params_json": {
+      "sourceSentence": "波の伝播により周囲の敵駒を押し流す"
+    }
+  },
+  {
+    "skill_id": 7,
+    "skill_code": "skill_483dffc20eaa",
+    "skill_desc": "木の成長により周囲に「木」駒を召喚する。",
+    "effect_order": 1,
+    "effect_type": "summon_piece",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "木の成長により周囲に「木」駒を召喚する",
+    "params_json": {
+      "sourceSentence": "木の成長により周囲に「木」駒を召喚する"
+    }
+  },
+  {
+    "skill_id": 8,
+    "skill_code": "skill_a5f4f93be687",
+    "skill_desc": "各敵駒ごとに10%の確率で、ランダムな方向に1マス移動させる。",
+    "effect_order": 1,
+    "effect_type": "forced_move",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "passive",
+    "proc_chance": 0.1000,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "各敵駒ごとに10%の確率で、ランダムな方向に1マス移動させる",
+    "params_json": {
+      "sourceSentence": "各敵駒ごとに10%の確率で、ランダムな方向に1マス移動させる"
+    }
+  },
+  {
+    "skill_id": 9,
+    "skill_code": "skill_f8ad27d5f81d",
+    "skill_desc": "壁で反射して継続移動する。",
+    "effect_order": 1,
+    "effect_type": "reflective_movement",
+    "target_rule": "self",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "壁で反射して継続移動する。",
+    "params_json": {
+      "sourceSentence": "壁で反射して継続移動する。"
+    }
+  },
+  {
+    "skill_id": 10,
+    "skill_code": "skill_7fc68569e4d8",
+    "skill_desc": "敵駒に取られたとき、40％の確率で自分の手持ち駒に戻る",
+    "effect_order": 1,
+    "effect_type": "return_to_hand",
+    "target_rule": "self",
+    "trigger_timing": "on_captured",
+    "proc_chance": 0.4000,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "敵駒に取られたとき、40％の確率で自分の手持ち駒に戻る",
+    "params_json": {
+      "sourceSentence": "敵駒に取られたとき、40％の確率で自分の手持ち駒に戻る"
+    }
+  },
+  {
+    "skill_id": 11,
+    "skill_code": "skill_0d985a517e48",
+    "skill_desc": "周囲の敵駒を次の番まで闇で覆う。",
+    "effect_order": 1,
+    "effect_type": "apply_status",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": 1,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "dark_blind",
+    "params_json": {
+      "sourceSentence": "dark_blind"
+    }
+  },
+  {
+    "skill_id": 12,
+    "skill_code": "skill_90b767e638fc",
+    "skill_desc": "周囲の敵駒を10%の確率で消滅させる。",
+    "effect_order": 1,
+    "effect_type": "remove_piece",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "passive",
+    "proc_chance": 0.1000,
+    "duration_turns": null,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "周囲の敵駒を10%の確率で消滅させる",
+    "params_json": {
+      "sourceSentence": "周囲の敵駒を10%の確率で消滅させる"
+    }
+  },
+  {
+    "skill_id": 13,
+    "skill_code": "skill_e6eba354b3c4",
+    "skill_desc": "磁力効果により周囲の敵駒を遠ざける。",
+    "effect_order": 1,
+    "effect_type": "forced_move",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "磁力効果により周囲の敵駒を遠ざける",
+    "params_json": {
+      "sourceSentence": "磁力効果により周囲の敵駒を遠ざける"
+    }
+  },
+  {
+    "skill_id": 14,
+    "skill_code": "skill_d80a6c862582",
+    "skill_desc": "10％の確率で周囲の敵駒を行動不能にする。",
+    "effect_order": 1,
+    "effect_type": "apply_status",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "passive",
+    "proc_chance": 0.1000,
+    "duration_turns": null,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "10%の確率で周囲の敵駒を行動不能にする",
+    "params_json": {
+      "sourceSentence": "10%の確率で周囲の敵駒を行動不能にする"
+    }
+  },
+  {
+    "skill_id": 15,
+    "skill_code": "skill_30a972a25786",
+    "skill_desc": "20%の確率で「金」・「銀」・「銅」駒を獲得する。",
+    "effect_order": 1,
+    "effect_type": "gain_piece",
+    "target_rule": "unspecified",
+    "trigger_timing": "passive",
+    "proc_chance": 0.2000,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "20%の確率で「金」・「銀」・「銅」駒を獲得する",
+    "params_json": {
+      "sourceSentence": "20%の確率で「金」・「銀」・「銅」駒を獲得する"
+    }
+  },
+  {
+    "skill_id": 16,
+    "skill_code": "skill_31a427266738",
+    "skill_desc": "20%の確率で敵を感電させ1ターン動けなくさせる。",
+    "effect_order": 1,
+    "effect_type": "apply_status",
+    "target_rule": "unspecified",
+    "trigger_timing": "passive",
+    "proc_chance": 0.2000,
+    "duration_turns": 1,
+    "radius": null,
+    "value_num": null,
+    "value_text": "20%の確率で敵を感電させ1ターン動けなくさせる",
+    "params_json": {
+      "sourceSentence": "20%の確率で敵を感電させ1ターン動けなくさせる"
+    }
+  },
+  {
+    "skill_id": 17,
+    "skill_code": "skill_89d8423c142a",
+    "skill_desc": "10%の確率で相手の持ち駒を消滅させる。",
+    "effect_order": 1,
+    "effect_type": "remove_piece",
+    "target_rule": "hand_piece",
+    "trigger_timing": "passive",
+    "proc_chance": 0.1000,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "10%の確率で相手の持ち駒を消滅させる",
+    "params_json": {
+      "sourceSentence": "10%の確率で相手の持ち駒を消滅させる"
+    }
+  },
+  {
+    "skill_id": 18,
+    "skill_code": "skill_7dd64e92e5a3",
+    "skill_desc": "時停止により周囲の敵駒を2ターン行動不能にする。",
+    "effect_order": 1,
+    "effect_type": "apply_status",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": 2,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "時停止により周囲の敵駒を2ターン行動不能にする",
+    "params_json": {
+      "sourceSentence": "時停止により周囲の敵駒を2ターン行動不能にする"
+    }
+  },
+  {
+    "skill_id": 19,
+    "skill_code": "skill_dbdd5a28572e",
+    "skill_desc": "周囲の敵を凍らせ2ターン動けなくする。",
+    "effect_order": 1,
+    "effect_type": "apply_status",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": 2,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "周囲の敵を凍らせ2ターン動けなくする",
+    "params_json": {
+      "sourceSentence": "周囲の敵を凍らせ2ターン動けなくする"
+    }
+  },
+  {
+    "skill_id": 20,
+    "skill_code": "skill_dad9b0bb990e",
+    "skill_desc": "移動時20%の確率で「氷」駒を1つ獲得する。",
+    "effect_order": 1,
+    "effect_type": "gain_piece",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_move",
+    "proc_chance": 0.2000,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "移動時20%の確率で「氷」駒を1つ獲得する",
+    "params_json": {
+      "sourceSentence": "移動時20%の確率で「氷」駒を1つ獲得する"
+    }
+  },
+  {
+    "skill_id": 21,
+    "skill_code": "skill_09b277277051",
+    "skill_desc": "左右の「砂」駒と連携移動する。",
+    "effect_order": 1,
+    "effect_type": "linked_action",
+    "target_rule": "ally_piece",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "sand_link_move",
+    "params_json": {
+      "sourceSentence": "sand_link_move"
+    }
+  },
+  {
+    "skill_id": 22,
+    "skill_code": "skill_89aae633c8b1",
+    "skill_desc": "強風により周囲の敵駒を押し流す。",
+    "effect_order": 1,
+    "effect_type": "forced_move",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "強風により周囲の敵駒を押し流す",
+    "params_json": {
+      "sourceSentence": "強風により周囲の敵駒を押し流す"
+    }
+  },
+  {
+    "skill_id": 23,
+    "skill_code": "skill_6d58f2d3dea6",
+    "skill_desc": "移動時増殖する。",
+    "effect_order": 1,
+    "effect_type": "summon_piece",
+    "target_rule": "board_cell",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "self_clone",
+    "params_json": {
+      "sourceSentence": "self_clone"
+    }
+  },
+  {
+    "skill_id": 24,
+    "skill_code": "skill_d87285e95090",
+    "skill_desc": "30%の確率で敵駒を溺れさせ行動不能にする。",
+    "effect_order": 1,
+    "effect_type": "apply_status",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "passive",
+    "proc_chance": 0.3000,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "30%の確率で敵駒を溺れさせ行動不能にする",
+    "params_json": {
+      "sourceSentence": "30%の確率で敵駒を溺れさせ行動不能にする"
+    }
+  },
+  {
+    "skill_id": 25,
+    "skill_code": "skill_9bc79b411b72",
+    "skill_desc": "相手の駒は取れないが味方の駒を取れる。",
+    "effect_order": 1,
+    "effect_type": "capture_constraint",
+    "target_rule": "unspecified",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "相手の駒は取れないが味方の駒を取れる",
+    "params_json": {
+      "sourceSentence": "相手の駒は取れないが味方の駒を取れる"
+    }
+  },
+  {
+    "skill_id": 26,
+    "skill_code": "skill_fe412b11a3a5",
+    "skill_desc": "縦横に1マス移動。敵の移動範囲を1ターン縦横1マスに制限する。",
+    "effect_order": 1,
+    "effect_type": "modify_movement",
+    "target_rule": "self",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": 1,
+    "radius": null,
+    "value_num": null,
+    "value_text": "orthogonal_step_1",
+    "params_json": {
+      "sourceSentence": "orthogonal_step_1"
+    }
+  },
+  {
+    "skill_id": 26,
+    "skill_code": "skill_fe412b11a3a5",
+    "skill_desc": "縦横に1マス移動。敵の移動範囲を1ターン縦横1マスに制限する。",
+    "effect_order": 2,
+    "effect_type": "modify_movement",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": 1,
+    "radius": null,
+    "value_num": null,
+    "value_text": "restrict_orthogonal_step_1",
+    "params_json": {
+      "sourceSentence": "restrict_orthogonal_step_1"
+    }
+  },
+  {
+    "skill_id": 27,
+    "skill_code": "skill_e483da3a2f11",
+    "skill_desc": "通ったマスを2ターン毒マスにする。",
+    "effect_order": 1,
+    "effect_type": "board_hazard",
+    "target_rule": "board_cell",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": 2,
+    "radius": null,
+    "value_num": null,
+    "value_text": "通ったマスを2ターン毒マスにする",
+    "params_json": {
+      "sourceSentence": "通ったマスを2ターン毒マスにする"
+    }
+  },
+  {
+    "skill_id": 28,
+    "skill_code": "skill_d87ccd3779f5",
+    "skill_desc": "周囲の敵駒の行動範囲を上下1マスのみにする。",
+    "effect_order": 1,
+    "effect_type": "modify_movement",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "restrict_vertical_step_1",
+    "params_json": {
+      "sourceSentence": "restrict_vertical_step_1"
+    }
+  },
+  {
+    "skill_id": 29,
+    "skill_code": "skill_acbc6f54e64a",
+    "skill_desc": "正面の敵駒の動きをコピーする。",
+    "effect_order": 1,
+    "effect_type": "copy_ability",
+    "target_rule": "front_enemy",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "正面の敵駒の動きをコピーする",
+    "params_json": {
+      "sourceSentence": "正面の敵駒の動きをコピーする"
+    }
+  },
+  {
+    "skill_id": 30,
+    "skill_code": "skill_e36eec5d72be",
+    "skill_desc": "周囲の敵駒を「歩」に変化させる。",
+    "effect_order": 1,
+    "effect_type": "transform_piece",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "周囲の敵駒を「歩」に変化させる",
+    "params_json": {
+      "sourceSentence": "周囲の敵駒を「歩」に変化させる"
+    }
+  },
+  {
+    "skill_id": 31,
+    "skill_code": "skill_1aff615b4b26",
+    "skill_desc": "移動時敵駒を1つランダムに2ターン行動不能にする。",
+    "effect_order": 1,
+    "effect_type": "apply_status",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": 2,
+    "radius": null,
+    "value_num": null,
+    "value_text": "移動時敵駒を1つランダムに2ターン行動不能にする",
+    "params_json": {
+      "sourceSentence": "移動時敵駒を1つランダムに2ターン行動不能にする"
+    }
+  },
+  {
+    "skill_id": 32,
+    "skill_code": "skill_9f4de463a843",
+    "skill_desc": "移動時20%の確率で周囲に「山」駒を出現させる。",
+    "effect_order": 1,
+    "effect_type": "summon_piece",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "on_move",
+    "proc_chance": 0.2000,
+    "duration_turns": null,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "移動時20%の確率で周囲に「山」駒を出現させる",
+    "params_json": {
+      "sourceSentence": "移動時20%の確率で周囲に「山」駒を出現させる"
+    }
+  },
+  {
+    "skill_id": 33,
+    "skill_code": "skill_352a0b6cdced",
+    "skill_desc": "画数が10画以上の敵駒を無効化する。",
+    "effect_order": 1,
+    "effect_type": "disable_piece",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "if_strokes_gte_10",
+    "params_json": {
+      "sourceSentence": "if_strokes_gte_10"
+    }
+  },
+  {
+    "skill_id": 34,
+    "skill_code": "skill_cd891eb9f05a",
+    "skill_desc": "移動時左右に岩の障害物を配置する。",
+    "effect_order": 1,
+    "effect_type": "summon_piece",
+    "target_rule": "board_cell",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "place_rock_left_right",
+    "params_json": {
+      "sourceSentence": "place_rock_left_right"
+    }
+  },
+  {
+    "skill_id": 35,
+    "skill_code": "skill_a01690cbcd70",
+    "skill_desc": "20%の確率で味方の「歩」を「金」「銀」「銅」に変化させる。",
+    "effect_order": 1,
+    "effect_type": "transform_piece",
+    "target_rule": "unspecified",
+    "trigger_timing": "passive",
+    "proc_chance": 0.2000,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "20%の確率で味方の「歩」を「金」「銀」「銅」に変化させる",
+    "params_json": {
+      "sourceSentence": "20%の確率で味方の「歩」を「金」「銀」「銅」に変化させる"
+    }
+  },
+  {
+    "skill_id": 36,
+    "skill_code": "skill_0d57156bc307",
+    "skill_desc": "移動時20％の確率で「霊」駒を召喚する。",
+    "effect_order": 1,
+    "effect_type": "summon_piece",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_move",
+    "proc_chance": 0.2000,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "移動時20%の確率で「霊」駒を召喚する",
+    "params_json": {
+      "sourceSentence": "移動時20%の確率で「霊」駒を召喚する"
+    }
+  },
+  {
+    "skill_id": 37,
+    "skill_code": "skill_eae7963650bd",
+    "skill_desc": "敵駒に取られても相手の持ち駒に加わらない。",
+    "effect_order": 1,
+    "effect_type": "capture_constraint",
+    "target_rule": "self",
+    "trigger_timing": "on_captured",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "not_added_to_enemy_hand",
+    "params_json": {
+      "sourceSentence": "not_added_to_enemy_hand"
+    }
+  },
+  {
+    "skill_id": 38,
+    "skill_code": "skill_5192a109720d",
+    "skill_desc": "50％の確率で敵駒に取られるのを回避する。",
+    "effect_order": 1,
+    "effect_type": "defense_or_immunity",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "passive",
+    "proc_chance": 0.5000,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "50%の確率で敵駒に取られるのを回避する",
+    "params_json": {
+      "sourceSentence": "50%の確率で敵駒に取られるのを回避する"
+    }
+  },
+  {
+    "skill_id": 39,
+    "skill_code": "skill_1ed80d5124bd",
+    "skill_desc": "周囲の敵駒を20％の確率で相手の持ち駒に送る。",
+    "effect_order": 1,
+    "effect_type": "send_to_hand",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "passive",
+    "proc_chance": 0.2000,
+    "duration_turns": null,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "to_enemy_hand",
+    "params_json": {
+      "sourceSentence": "to_enemy_hand"
+    }
+  },
+  {
+    "skill_id": 40,
+    "skill_code": "skill_adda8b3d4453",
+    "skill_desc": "ターンごとに移動能力が変化する。",
+    "effect_order": 1,
+    "effect_type": "modify_movement",
+    "target_rule": "self",
+    "trigger_timing": "on_turn_start",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "cyclic_pattern_change",
+    "params_json": {
+      "sourceSentence": "cyclic_pattern_change"
+    }
+  },
+  {
+    "skill_id": 41,
+    "skill_code": "skill_aa837708c675",
+    "skill_desc": "移動時後方の味方駒を連れていく。",
+    "effect_order": 1,
+    "effect_type": "linked_action",
+    "target_rule": "ally_piece",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "pull_ally_behind",
+    "params_json": {
+      "sourceSentence": "pull_ally_behind"
+    }
+  },
+  {
+    "skill_id": 42,
+    "skill_code": "skill_333c2fe9f056",
+    "skill_desc": "左または右隣りの見方駒のスキルをコピーする。",
+    "effect_order": 1,
+    "effect_type": "copy_ability",
+    "target_rule": "unspecified",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "左または右隣りの見方駒のスキルをコピーする",
+    "params_json": {
+      "sourceSentence": "左または右隣りの見方駒のスキルをコピーする"
+    }
+  },
+  {
+    "skill_id": 43,
+    "skill_code": "skill_1896ef7ab659",
+    "skill_desc": "隣接する駒が動いたらそれに連動して動く。",
+    "effect_order": 1,
+    "effect_type": "linked_action",
+    "target_rule": "self",
+    "trigger_timing": "on_other_piece_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "reactive_follow_move",
+    "params_json": {
+      "sourceSentence": "reactive_follow_move"
+    }
+  },
+  {
+    "skill_id": 44,
+    "skill_code": "skill_14b136ab29d9",
+    "skill_desc": "「民」駒を自陣4行のランダムな場所に召喚(召喚制限は5体)。",
+    "effect_order": 1,
+    "effect_type": "summon_piece",
+    "target_rule": "unspecified",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "「民」駒を自陣4行のランダムな場所に召喚(召喚制限は5体)",
+    "params_json": {
+      "sourceSentence": "「民」駒を自陣4行のランダムな場所に召喚(召喚制限は5体)"
+    }
+  },
+  {
+    "skill_id": 45,
+    "skill_code": "skill_cd294280ec16",
+    "skill_desc": "「畑」があると斜め前も移動可能となる。",
+    "effect_order": 1,
+    "effect_type": "modify_movement",
+    "target_rule": "unspecified",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "「畑」があると斜め前も移動可能となる",
+    "params_json": {
+      "sourceSentence": "「畑」があると斜め前も移動可能となる"
+    }
+  },
+  {
+    "skill_id": 46,
+    "skill_code": "skill_81e00837d9cd",
+    "skill_desc": "民駒を斜め前にも移動可能にする。",
+    "effect_order": 1,
+    "effect_type": "modify_movement",
+    "target_rule": "unspecified",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "民駒を斜め前にも移動可能にする",
+    "params_json": {
+      "sourceSentence": "民駒を斜め前にも移動可能にする"
+    }
+  },
+  {
+    "skill_id": 47,
+    "skill_code": "skill_1cdaaf25b0b5",
+    "skill_desc": "味方駒を強化し敵駒から取られないようにする(5ターン持続)。味方の「竜」を覚醒させる。",
+    "effect_order": 1,
+    "effect_type": "buff",
+    "target_rule": "ally_piece",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": 5,
+    "radius": null,
+    "value_num": null,
+    "value_text": "grant_uncapturable",
+    "params_json": {
+      "sourceSentence": "grant_uncapturable"
+    }
+  },
+  {
+    "skill_id": 47,
+    "skill_code": "skill_1cdaaf25b0b5",
+    "skill_desc": "味方駒を強化し敵駒から取られないようにする(5ターン持続)。味方の「竜」を覚醒させる。",
+    "effect_order": 2,
+    "effect_type": "transform_piece",
+    "target_rule": "ally_piece",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": 5,
+    "radius": null,
+    "value_num": null,
+    "value_text": "awaken_ryu",
+    "params_json": {
+      "sourceSentence": "awaken_ryu"
+    }
+  },
+  {
+    "skill_id": 48,
+    "skill_code": "skill_b7254d882fa3",
+    "skill_desc": "移動時10%の確率で周囲8マスの敵駒を1つ消滅させる。",
+    "effect_order": 1,
+    "effect_type": "remove_piece",
+    "target_rule": "adjacent_8",
+    "trigger_timing": "on_move",
+    "proc_chance": 0.1000,
+    "duration_turns": null,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "移動時10%の確率で周囲8マスの敵駒を1つ消滅させる",
+    "params_json": {
+      "sourceSentence": "移動時10%の確率で周囲8マスの敵駒を1つ消滅させる"
+    }
+  },
+  {
+    "skill_id": 49,
+    "skill_code": "skill_79886de99d71",
+    "skill_desc": "40%で実験体を召喚。2回取られないと消えない。",
+    "effect_order": 1,
+    "effect_type": "summon_piece",
+    "target_rule": "unspecified",
+    "trigger_timing": "passive",
+    "proc_chance": 0.4000,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "40%で実験体を召喚",
+    "params_json": {
+      "sourceSentence": "40%で実験体を召喚"
+    }
+  },
+  {
+    "skill_id": 49,
+    "skill_code": "skill_79886de99d71",
+    "skill_desc": "40%で実験体を召喚。2回取られないと消えない。",
+    "effect_order": 2,
+    "effect_type": "defense_or_immunity",
+    "target_rule": "unspecified",
+    "trigger_timing": "passive",
+    "proc_chance": 0.4000,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "2回取られないと消えない",
+    "params_json": {
+      "sourceSentence": "2回取られないと消えない"
+    }
+  },
+  {
+    "skill_id": 50,
+    "skill_code": "skill_f5b522d359d3",
+    "skill_desc": "敵駒を「異」駒に変化させる。",
+    "effect_order": 1,
+    "effect_type": "transform_piece",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "敵駒を「異」駒に変化させる",
+    "params_json": {
+      "sourceSentence": "敵駒を「異」駒に変化させる"
+    }
+  },
+  {
+    "skill_id": 51,
+    "skill_code": "skill_68064fd5d28a",
+    "skill_desc": "変化前の駒の能力を継承する。",
+    "effect_order": 1,
+    "effect_type": "transform_piece",
+    "target_rule": "unspecified",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "変化前の駒の能力を継承する",
+    "params_json": {
+      "sourceSentence": "変化前の駒の能力を継承する"
+    }
+  },
+  {
+    "skill_id": 52,
+    "skill_code": "skill_dc1e194f434b",
+    "skill_desc": "敵駒を取ったとき、左右にいる敵駒もまとめて取る。",
+    "effect_order": 1,
+    "effect_type": "multi_capture",
+    "target_rule": "left_right",
+    "trigger_timing": "on_capture",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "敵駒を取ったとき、左右にいる敵駒もまとめて取る",
+    "params_json": {
+      "sourceSentence": "敵駒を取ったとき、左右にいる敵駒もまとめて取る"
+    }
+  },
+  {
+    "skill_id": 53,
+    "skill_code": "skill_2c909f91e84b",
+    "skill_desc": "敵駒を取れないが敵駒から取られない。",
+    "effect_order": 1,
+    "effect_type": "defense_or_immunity",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "敵駒を取れないが敵駒から取られない",
+    "params_json": {
+      "sourceSentence": "敵駒を取れないが敵駒から取られない"
+    }
+  },
+  {
+    "skill_id": 54,
+    "skill_code": "skill_a517ef7b8361",
+    "skill_desc": "移動方向の1、2マス先に敵駒がいる場合、まとめて取る。",
+    "effect_order": 1,
+    "effect_type": "multi_capture",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "移動方向の1、2マス先に敵駒がいる場合、まとめて取る",
+    "params_json": {
+      "sourceSentence": "移動方向の1、2マス先に敵駒がいる場合、まとめて取る"
+    }
+  },
+  {
+    "skill_id": 55,
+    "skill_code": "skill_42835ba65eb6",
+    "skill_desc": "一手前に相手が移動させた駒と同じ移動範囲になる。",
+    "effect_order": 1,
+    "effect_type": "copy_ability",
+    "target_rule": "self",
+    "trigger_timing": "on_turn_start",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "copy_last_enemy_move_pattern",
+    "params_json": {
+      "sourceSentence": "copy_last_enemy_move_pattern"
+    }
+  },
+  {
+    "skill_id": 56,
+    "skill_code": "skill_d4519ec5e69f",
+    "skill_desc": "斜め4方向の敵駒のスキルを封印する。",
+    "effect_order": 1,
+    "effect_type": "seal_skill",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "斜め4方向の敵駒のスキルを封印する",
+    "params_json": {
+      "sourceSentence": "斜め4方向の敵駒のスキルを封印する"
+    }
+  },
+  {
+    "skill_id": 57,
+    "skill_code": "skill_5a27f3c13930",
+    "skill_desc": "轟音で移動時両隣の敵駒を押し出す。",
+    "effect_order": 1,
+    "effect_type": "forced_move",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "轟音で移動時両隣の敵駒を押し出す",
+    "params_json": {
+      "sourceSentence": "轟音で移動時両隣の敵駒を押し出す"
+    }
+  },
+  {
+    "skill_id": 58,
+    "skill_code": "skill_9dd5e8b22bae",
+    "skill_desc": "移動時10％の確率で周囲の空きマスに「犇」駒を召喚する。",
+    "effect_order": 1,
+    "effect_type": "summon_piece",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "on_move",
+    "proc_chance": 0.1000,
+    "duration_turns": null,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "移動時10%の確率で周囲の空きマスに「犇」駒を召喚する",
+    "params_json": {
+      "sourceSentence": "移動時10%の確率で周囲の空きマスに「犇」駒を召喚する"
+    }
+  },
+  {
+    "skill_id": 59,
+    "skill_code": "skill_58b7e60e5c56",
+    "skill_desc": "他の味方駒が取られたときに身代わりとなる。。",
+    "effect_order": 1,
+    "effect_type": "substitute",
+    "target_rule": "ally_piece",
+    "trigger_timing": "on_captured",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "他の味方駒が取られたときに身代わりとなる",
+    "params_json": {
+      "sourceSentence": "他の味方駒が取られたときに身代わりとなる"
+    }
+  },
+  {
+    "skill_id": 60,
+    "skill_code": "skill_b5788858c26a",
+    "skill_desc": "周囲8マスにいる全ての駒のスキルと移動を無効化する。",
+    "effect_order": 1,
+    "effect_type": "disable_piece",
+    "target_rule": "adjacent_8",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "周囲8マスにいる全ての駒のスキルと移動を無効化する",
+    "params_json": {
+      "sourceSentence": "周囲8マスにいる全ての駒のスキルと移動を無効化する"
+    }
+  },
+  {
+    "skill_id": 61,
+    "skill_code": "skill_4ef73b74441d",
+    "skill_desc": "敵の攻撃を左右の空きマスに移動して回避する。",
+    "effect_order": 1,
+    "effect_type": "defense_or_immunity",
+    "target_rule": "left_right",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "敵の攻撃を左右の空きマスに移動して回避する",
+    "params_json": {
+      "sourceSentence": "敵の攻撃を左右の空きマスに移動して回避する"
+    }
+  },
+  {
+    "skill_id": 62,
+    "skill_code": "skill_f0d9029c7d66",
+    "skill_desc": "前方以外の隣接する味方への攻撃を50%で無効化する。",
+    "effect_order": 1,
+    "effect_type": "disable_piece",
+    "target_rule": "unspecified",
+    "trigger_timing": "passive",
+    "proc_chance": 0.5000,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "前方以外の隣接する味方への攻撃を50%で無効化する",
+    "params_json": {
+      "sourceSentence": "前方以外の隣接する味方への攻撃を50%で無効化する"
+    }
+  },
+  {
+    "skill_id": 63,
+    "skill_code": "skill_e982c444d305",
+    "skill_desc": "取られると相手駒を感染状態にし2ターン移動不能にする。",
+    "effect_order": 1,
+    "effect_type": "apply_status",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "on_captured",
+    "proc_chance": null,
+    "duration_turns": 2,
+    "radius": null,
+    "value_num": null,
+    "value_text": "infected_immobilized",
+    "params_json": {
+      "sourceSentence": "infected_immobilized"
+    }
+  },
+  {
+    "skill_id": 64,
+    "skill_code": "skill_960ce1c3943b",
+    "skill_desc": "隣接する味方駒の移動範囲を1マス延長する。",
+    "effect_order": 1,
+    "effect_type": "modify_movement",
+    "target_rule": "ally_piece",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "隣接する味方駒の移動範囲を1マス延長する",
+    "params_json": {
+      "sourceSentence": "隣接する味方駒の移動範囲を1マス延長する"
+    }
+  },
+  {
+    "skill_id": 65,
+    "skill_code": "skill_86a7d9d2b18f",
+    "skill_desc": "移動時20%で周囲の敵駒を押し流す。",
+    "effect_order": 1,
+    "effect_type": "forced_move",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "on_move",
+    "proc_chance": 0.2000,
+    "duration_turns": null,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "移動時20%で周囲の敵駒を押し流す",
+    "params_json": {
+      "sourceSentence": "移動時20%で周囲の敵駒を押し流す"
+    }
+  },
+  {
+    "skill_id": 66,
+    "skill_code": "skill_1c47c30eaf8b",
+    "skill_desc": "取られた時、周囲のマスに4ターン侵入不可の穴を生成する。",
+    "effect_order": 1,
+    "effect_type": "board_hazard",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "on_captured",
+    "proc_chance": null,
+    "duration_turns": 4,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "取られた時、周囲のマスに4ターン侵入不可の穴を生成する",
+    "params_json": {
+      "sourceSentence": "取られた時、周囲のマスに4ターン侵入不可の穴を生成する"
+    }
+  },
+  {
+    "skill_id": 67,
+    "skill_code": "skill_851ae0a2025f",
+    "skill_desc": "取られた時、相手駒を淵に沈めて3ターン行動不能にする。",
+    "effect_order": 1,
+    "effect_type": "apply_status",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_captured",
+    "proc_chance": null,
+    "duration_turns": 3,
+    "radius": null,
+    "value_num": null,
+    "value_text": "取られた時、相手駒を淵に沈めて3ターン行動不能にする",
+    "params_json": {
+      "sourceSentence": "取られた時、相手駒を淵に沈めて3ターン行動不能にする"
+    }
+  },
+  {
+    "skill_id": 68,
+    "skill_code": "skill_f724995a7cc4",
+    "skill_desc": "移動時に左右の敵駒を1マス遠ざける。敵駒を取った時、周囲のランダムな空マス1つを×マスにする。",
+    "effect_order": 1,
+    "effect_type": "forced_move",
+    "target_rule": "left_right",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "移動時に左右の敵駒を1マス遠ざける",
+    "params_json": {
+      "sourceSentence": "移動時に左右の敵駒を1マス遠ざける"
+    }
+  },
+  {
+    "skill_id": 68,
+    "skill_code": "skill_f724995a7cc4",
+    "skill_desc": "移動時に左右の敵駒を1マス遠ざける。敵駒を取った時、周囲のランダムな空マス1つを×マスにする。",
+    "effect_order": 2,
+    "effect_type": "board_hazard",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "on_capture",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "敵駒を取った時、周囲のランダムな空マス1つを×マスにする",
+    "params_json": {
+      "sourceSentence": "敵駒を取った時、周囲のランダムな空マス1つを×マスにする"
+    }
+  },
+  {
+    "skill_id": 69,
+    "skill_code": "skill_f842ff5429ef",
+    "skill_desc": "盤面に「死」、「魂」駒が残っていると、敵駒からの攻撃を回避する。",
+    "effect_order": 1,
+    "effect_type": "defense_or_immunity",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "盤面に「死」、「魂」駒が残っていると、敵駒からの攻撃を回避する",
+    "params_json": {
+      "sourceSentence": "盤面に「死」、「魂」駒が残っていると、敵駒からの攻撃を回避する"
+    }
+  },
+  {
+    "skill_id": 70,
+    "skill_code": "skill_3047eded7dbe",
+    "skill_desc": "味方の駒を取った敵駒に5ターン後に消滅する呪いをかける。",
+    "effect_order": 1,
+    "effect_type": "remove_piece",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": 5,
+    "radius": null,
+    "value_num": null,
+    "value_text": "味方の駒を取った敵駒に5ターン後に消滅する呪いをかける",
+    "params_json": {
+      "sourceSentence": "味方の駒を取った敵駒に5ターン後に消滅する呪いをかける"
+    }
+  },
+  {
+    "skill_id": 71,
+    "skill_code": "skill_cc1fd6c8c6ed",
+    "skill_desc": "盤面に「魂」が残っているとき、相手は「王」を攻撃できない。",
+    "effect_order": 1,
+    "effect_type": "defense_or_immunity",
+    "target_rule": "board_cell",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "盤面に「魂」が残っているとき、相手は「王」を攻撃できない",
+    "params_json": {
+      "sourceSentence": "盤面に「魂」が残っているとき、相手は「王」を攻撃できない"
+    }
+  },
+  {
+    "skill_id": 72,
+    "skill_code": "skill_4ca067bcf209",
+    "skill_desc": "移動時敵駒から1つ選択し2ターン行動不能にする。",
+    "effect_order": 1,
+    "effect_type": "apply_status",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": 2,
+    "radius": null,
+    "value_num": null,
+    "value_text": "移動時敵駒から1つ選択し2ターン行動不能にする",
+    "params_json": {
+      "sourceSentence": "移動時敵駒から1つ選択し2ターン行動不能にする"
+    }
+  },
+  {
+    "skill_id": 73,
+    "skill_code": "skill_b1682f0f7915",
+    "skill_desc": "移動時味方駒から1つ選択し2ターン無敵状態にする。",
+    "effect_order": 1,
+    "effect_type": "defense_or_immunity",
+    "target_rule": "ally_piece",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": 2,
+    "radius": null,
+    "value_num": null,
+    "value_text": "移動時味方駒から1つ選択し2ターン無敵状態にする",
+    "params_json": {
+      "sourceSentence": "移動時味方駒から1つ選択し2ターン無敵状態にする"
+    }
+  },
+  {
+    "skill_id": 74,
+    "skill_code": "skill_97628ffec5c5",
+    "skill_desc": "移動時に周囲の敵駒を1ターン行動不能にする。",
+    "effect_order": 1,
+    "effect_type": "apply_status",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": 1,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "移動時に周囲の敵駒を1ターン行動不能にする",
+    "params_json": {
+      "sourceSentence": "移動時に周囲の敵駒を1ターン行動不能にする"
+    }
+  },
+  {
+    "skill_id": 75,
+    "skill_code": "skill_7a9b0dc24e29",
+    "skill_desc": "移動時もともといたマスを行動不能マスにする。",
+    "effect_order": 1,
+    "effect_type": "apply_status",
+    "target_rule": "board_cell",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "移動時もともといたマスを行動不能マスにする",
+    "params_json": {
+      "sourceSentence": "移動時もともといたマスを行動不能マスにする"
+    }
+  },
+  {
+    "skill_id": 76,
+    "skill_code": "skill_e0bbf4f5c976",
+    "skill_desc": "相手の駒を取ると、もう一度だけ移動ができる。",
+    "effect_order": 1,
+    "effect_type": "extra_action",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_capture",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "相手の駒を取ると、もう一度だけ移動ができる",
+    "params_json": {
+      "sourceSentence": "相手の駒を取ると、もう一度だけ移動ができる"
+    }
+  },
+  {
+    "skill_id": 77,
+    "skill_code": "skill_98c9f134f30d",
+    "skill_desc": "上下1マスを茨化して、相手が持ち駒をそのマスに置けないようにする。",
+    "effect_order": 1,
+    "effect_type": "board_hazard",
+    "target_rule": "hand_piece",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "上下1マスを茨化して、相手が持ち駒をそのマスに置けないようにする",
+    "params_json": {
+      "sourceSentence": "上下1マスを茨化して、相手が持ち駒をそのマスに置けないようにする"
+    }
+  },
+  {
+    "skill_id": 78,
+    "skill_code": "skill_dd7efd716323",
+    "skill_desc": "隣接する味方駒一体に復活効果を付与する。",
+    "effect_order": 1,
+    "effect_type": "revive",
+    "target_rule": "ally_piece",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "隣接する味方駒一体に復活効果を付与する",
+    "params_json": {
+      "sourceSentence": "隣接する味方駒一体に復活効果を付与する"
+    }
+  },
+  {
+    "skill_id": 79,
+    "skill_code": "skill_782af1b3c794",
+    "skill_desc": "移動後同じ行にいる味方駒の行動範囲が1マス伸びる。",
+    "effect_order": 1,
+    "effect_type": "modify_movement",
+    "target_rule": "ally_piece",
+    "trigger_timing": "after_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": 1,
+    "value_text": "extend_range_same_row",
+    "params_json": {
+      "sourceSentence": "extend_range_same_row"
+    }
+  },
+  {
+    "skill_id": 80,
+    "skill_code": "skill_e4417e627506",
+    "skill_desc": "盤面の端まで貫通して移動する。",
+    "effect_order": 1,
+    "effect_type": "modify_movement",
+    "target_rule": "self",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "penetrate_to_edge",
+    "params_json": {
+      "sourceSentence": "penetrate_to_edge"
+    }
+  },
+  {
+    "skill_id": 81,
+    "skill_code": "skill_839f21e34926",
+    "skill_desc": "2回行動ができる。",
+    "effect_order": 1,
+    "effect_type": "extra_action",
+    "target_rule": "unspecified",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "2回行動ができる",
+    "params_json": {
+      "sourceSentence": "2回行動ができる"
+    }
+  },
+  {
+    "skill_id": 82,
+    "skill_code": "skill_0a0cef0a6692",
+    "skill_desc": "敵駒を取った時盤面のランダムなマスに「炎」駒を召喚する。",
+    "effect_order": 1,
+    "effect_type": "summon_piece",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "on_capture",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "敵駒を取った時盤面のランダムなマスに「炎」駒を召喚する",
+    "params_json": {
+      "sourceSentence": "敵駒を取った時盤面のランダムなマスに「炎」駒を召喚する"
+    }
+  },
+  {
+    "skill_id": 83,
+    "skill_code": "skill_6c98ef53b243",
+    "skill_desc": "敵駒を取ったらもう一度だけ移動できる。",
+    "effect_order": 1,
+    "effect_type": "extra_action",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "敵駒を取ったらもう一度だけ移動できる",
+    "params_json": {
+      "sourceSentence": "敵駒を取ったらもう一度だけ移動できる"
+    }
+  },
+  {
+    "skill_id": 84,
+    "skill_code": "skill_96e9c8d22d09",
+    "skill_desc": "敵駒を取った時盤面のランダムなマスに「火」駒を召喚する。",
+    "effect_order": 1,
+    "effect_type": "summon_piece",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "on_capture",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "敵駒を取った時盤面のランダムなマスに「火」駒を召喚する",
+    "params_json": {
+      "sourceSentence": "敵駒を取った時盤面のランダムなマスに「火」駒を召喚する"
+    }
+  },
+  {
+    "skill_id": 85,
+    "skill_code": "skill_9576ea04de27",
+    "skill_desc": "周囲の味方駒のスキル発動確率を30％増加させる。味方の「陰」駒が同じ行や列にいるとき敵駒に取られない。",
+    "effect_order": 1,
+    "effect_type": "buff",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "passive",
+    "proc_chance": 0.3000,
+    "duration_turns": null,
+    "radius": 1,
+    "value_num": 0.3,
+    "value_text": "skill_proc_chance_up",
+    "params_json": {
+      "sourceSentence": "skill_proc_chance_up"
+    }
+  },
+  {
+    "skill_id": 85,
+    "skill_code": "skill_9576ea04de27",
+    "skill_desc": "周囲の味方駒のスキル発動確率を30％増加させる。味方の「陰」駒が同じ行や列にいるとき敵駒に取られない。",
+    "effect_order": 2,
+    "effect_type": "defense_or_immunity",
+    "target_rule": "self",
+    "trigger_timing": "passive",
+    "proc_chance": 0.3000,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "uncapturable_if_ally_yin_same_row_or_col",
+    "params_json": {
+      "sourceSentence": "uncapturable_if_ally_yin_same_row_or_col"
+    }
+  },
+  {
+    "skill_id": 86,
+    "skill_code": "skill_460cb62ca305",
+    "skill_desc": "周囲の敵駒を呪い状態にしてスキル発動を阻害する。味方の「陽」が同じ行や列にいるとき敵駒に取られない。",
+    "effect_order": 1,
+    "effect_type": "seal_skill",
+    "target_rule": "adjacent_area",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": 1,
+    "value_num": null,
+    "value_text": "周囲の敵駒を呪い状態にしてスキル発動を阻害する",
+    "params_json": {
+      "sourceSentence": "周囲の敵駒を呪い状態にしてスキル発動を阻害する"
+    }
+  },
+  {
+    "skill_id": 86,
+    "skill_code": "skill_460cb62ca305",
+    "skill_desc": "周囲の敵駒を呪い状態にしてスキル発動を阻害する。味方の「陽」が同じ行や列にいるとき敵駒に取られない。",
+    "effect_order": 2,
+    "effect_type": "defense_or_immunity",
+    "target_rule": "same_row_or_col",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "味方の「陽」が同じ行や列にいるとき敵駒に取られない",
+    "params_json": {
+      "sourceSentence": "味方の「陽」が同じ行や列にいるとき敵駒に取られない"
+    }
+  },
+  {
+    "skill_id": 87,
+    "skill_code": "skill_32c079628d7d",
+    "skill_desc": "後ろに移動した分前に行けるマスが増える。移動途中の駒を全て取る。",
+    "effect_order": 1,
+    "effect_type": "modify_movement",
+    "target_rule": "self",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "gain_forward_range_by_backward_steps",
+    "params_json": {
+      "sourceSentence": "gain_forward_range_by_backward_steps"
+    }
+  },
+  {
+    "skill_id": 87,
+    "skill_code": "skill_32c079628d7d",
+    "skill_desc": "後ろに移動した分前に行けるマスが増える。移動途中の駒を全て取る。",
+    "effect_order": 2,
+    "effect_type": "multi_capture",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "capture_all_pieces_on_path",
+    "params_json": {
+      "sourceSentence": "capture_all_pieces_on_path"
+    }
+  },
+  {
+    "skill_id": 88,
+    "skill_code": "skill_7b6a09569b57",
+    "skill_desc": "取った敵駒の移動範囲を継承する。",
+    "effect_order": 1,
+    "effect_type": "inherit_ability",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "取った敵駒の移動範囲を継承する",
+    "params_json": {
+      "sourceSentence": "取った敵駒の移動範囲を継承する"
+    }
+  },
+  {
+    "skill_id": 89,
+    "skill_code": "skill_f1b6093ade42",
+    "skill_desc": "移動時に20％の確率で「金」に変化、10％の確率で「宝」に変化する。",
+    "effect_order": 1,
+    "effect_type": "transform_piece",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_move",
+    "proc_chance": 0.2000,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "移動時に20%の確率で「金」に変化、10%の確率で「宝」に変化する",
+    "params_json": {
+      "sourceSentence": "移動時に20%の確率で「金」に変化、10%の確率で「宝」に変化する"
+    }
+  },
+  {
+    "skill_id": 90,
+    "skill_code": "skill_ea69f47a3164",
+    "skill_desc": "敵駒を取ったとき、味方の「銭」駒をひとつ取った敵駒に変化させる。",
+    "effect_order": 1,
+    "effect_type": "transform_piece",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "on_capture",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "敵駒を取ったとき、味方の「銭」駒をひとつ取った敵駒に変化させる",
+    "params_json": {
+      "sourceSentence": "敵駒を取ったとき、味方の「銭」駒をひとつ取った敵駒に変化させる"
+    }
+  },
+  {
+    "skill_id": 91,
+    "skill_code": "skill_000d673d1320",
+    "skill_desc": "相手から取られない。特殊効果を受けない。移動時に移動先の2×2領域の敵駒をすべて取る。",
+    "effect_order": 1,
+    "effect_type": "defense_or_immunity",
+    "target_rule": "self",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "uncapturable",
+    "params_json": {
+      "sourceSentence": "uncapturable"
+    }
+  },
+  {
+    "skill_id": 91,
+    "skill_code": "skill_000d673d1320",
+    "skill_desc": "相手から取られない。特殊効果を受けない。移動時に移動先の2×2領域の敵駒をすべて取る。",
+    "effect_order": 2,
+    "effect_type": "defense_or_immunity",
+    "target_rule": "self",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "immune_to_special_effects",
+    "params_json": {
+      "sourceSentence": "immune_to_special_effects"
+    }
+  },
+  {
+    "skill_id": 91,
+    "skill_code": "skill_000d673d1320",
+    "skill_desc": "相手から取られない。特殊効果を受けない。移動時に移動先の2×2領域の敵駒をすべて取る。",
+    "effect_order": 3,
+    "effect_type": "multi_capture",
+    "target_rule": "board_cell",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "capture_enemies_in_2x2_at_destination",
+    "params_json": {
+      "sourceSentence": "capture_enemies_in_2x2_at_destination"
+    }
+  },
+  {
+    "skill_id": 92,
+    "skill_code": "skill_cf3210affb36",
+    "skill_desc": "移動不可。敵駒を取れない。敵駒に取られない。",
+    "effect_order": 1,
+    "effect_type": "modify_movement",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "移動不可",
+    "params_json": {
+      "sourceSentence": "移動不可"
+    }
+  },
+  {
+    "skill_id": 92,
+    "skill_code": "skill_cf3210affb36",
+    "skill_desc": "移動不可。敵駒を取れない。敵駒に取られない。",
+    "effect_order": 2,
+    "effect_type": "capture_constraint",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "敵駒を取れない",
+    "params_json": {
+      "sourceSentence": "敵駒を取れない"
+    }
+  },
+  {
+    "skill_id": 92,
+    "skill_code": "skill_cf3210affb36",
+    "skill_desc": "移動不可。敵駒を取れない。敵駒に取られない。",
+    "effect_order": 3,
+    "effect_type": "defense_or_immunity",
+    "target_rule": "enemy_piece",
+    "trigger_timing": "passive",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "敵駒に取られない",
+    "params_json": {
+      "sourceSentence": "敵駒に取られない"
+    }
+  },
+  {
+    "skill_id": 93,
+    "skill_code": "skill_d2a9d5a13c8f",
+    "skill_desc": "移動時20％の確率で味方の「歩」駒ひとつを「火」駒に変化させる。",
+    "effect_order": 1,
+    "effect_type": "transform_piece",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_move",
+    "proc_chance": 0.2000,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "移動時20%の確率で味方の「歩」駒ひとつを「火」駒に変化させる",
+    "params_json": {
+      "sourceSentence": "移動時20%の確率で味方の「歩」駒ひとつを「火」駒に変化させる"
+    }
+  },
+  {
+    "skill_id": 97,
+    "skill_code": "skill_gacha_baku",
+    "skill_desc": "爆発で周囲の敵駒を吹き飛ばす破壊的な駒。",
+    "effect_order": 1,
+    "effect_type": "custom",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "敵を吹き飛ばす効果",
+    "params_json": {}
+  },
+  {
+    "skill_id": 98,
+    "skill_code": "skill_gacha_aori",
+    "skill_desc": "相手を煽りたい人の為に。",
+    "effect_order": 1,
+    "effect_type": "custom",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "敵を攪乱する効果",
+    "params_json": {}
+  },
+  {
+    "skill_id": 99,
+    "skill_code": "skill_gacha_muro",
+    "skill_desc": "セーフルームを用意して「王」を守る。",
+    "effect_order": 1,
+    "effect_type": "custom",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "王を守る効果",
+    "params_json": {}
+  },
+  {
+    "skill_id": 100,
+    "skill_code": "skill_gacha_sadame",
+    "skill_desc": "相手の戦略を固定しろ。",
+    "effect_order": 1,
+    "effect_type": "custom",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "敵行動固定効果",
+    "params_json": {}
+  },
+  {
+    "skill_id": 101,
+    "skill_code": "skill_gacha_an",
+    "skill_desc": "敵の駒を安くする。",
+    "effect_order": 1,
+    "effect_type": "custom",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "敵弱体化効果",
+    "params_json": {}
+  },
+  {
+    "skill_id": 102,
+    "skill_code": "skill_gacha_so",
+    "skill_desc": "味方に繁栄をもたらす。",
+    "effect_order": 1,
+    "effect_type": "custom",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "味方強化効果",
+    "params_json": {}
+  },
+  {
+    "skill_id": 103,
+    "skill_code": "skill_gacha_hen",
+    "skill_desc": "盤面の辺を利用した戦略。",
+    "effect_order": 1,
+    "effect_type": "custom",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "盤端戦術効果",
+    "params_json": {}
+  },
+  {
+    "skill_id": 104,
+    "skill_code": "skill_gacha_itsu",
+    "skill_desc": "敵駒を盤面から逸脱させる。",
+    "effect_order": 1,
+    "effect_type": "custom",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "逸脱効果",
+    "params_json": {}
+  },
+  {
+    "skill_id": 105,
+    "skill_code": "skill_gacha_shin",
+    "skill_desc": "次はどこに進んでいくのか。",
+    "effect_order": 1,
+    "effect_type": "custom",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "進軍補助効果",
+    "params_json": {}
+  },
+  {
+    "skill_id": 106,
+    "skill_code": "skill_gacha_to",
+    "skill_desc": "移動すると味方の王も同じ方向へ逃がす緊急離脱の駒。",
+    "effect_order": 1,
+    "effect_type": "custom",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "緊急離脱効果",
+    "params_json": {}
+  },
+  {
+    "skill_id": 107,
+    "skill_code": "skill_gacha_sou",
+    "skill_desc": "草の力を操り盤面を支配する自然の駒。",
+    "effect_order": 1,
+    "effect_type": "custom",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "盤面制御効果",
+    "params_json": {}
+  },
+  {
+    "skill_id": 108,
+    "skill_code": "skill_gacha_en",
+    "skill_desc": "敵の動きを封じる封印の駒。",
+    "effect_order": 1,
+    "effect_type": "custom",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "封印効果",
+    "params_json": {}
+  },
+  {
+    "skill_id": 109,
+    "skill_code": "skill_gacha_lai",
+    "skill_desc": "報酬を与え味方を強化する恩恵の駒。",
+    "effect_order": 1,
+    "effect_type": "custom",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "恩恵付与効果",
+    "params_json": {}
+  },
+  {
+    "skill_id": 110,
+    "skill_code": "skill_gacha_sen",
+    "skill_desc": "敵を一掃する殲滅の駒。",
+    "effect_order": 1,
+    "effect_type": "custom",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "殲滅効果",
+    "params_json": {}
+  },
+  {
+    "skill_id": 111,
+    "skill_code": "skill_gacha_ko",
+    "skill_desc": "盤面を膠着させ敵の動きを止める粘着の駒。",
+    "effect_order": 1,
+    "effect_type": "custom",
+    "target_rule": "unspecified",
+    "trigger_timing": "on_move",
+    "proc_chance": null,
+    "duration_turns": null,
+    "radius": null,
+    "value_num": null,
+    "value_text": "膠着効果",
+    "params_json": {}
+  }
+]
