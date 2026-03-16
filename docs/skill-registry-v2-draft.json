@@ -1,0 +1,741 @@
+{
+  "version": "skill-registry-v2-draft",
+  "updatedAt": "2026-03-15",
+  "implementationKinds": [
+    {
+      "code": "primitive",
+      "name": "Primitive",
+      "description": "1つの共通実行器で解釈できるスキル"
+    },
+    {
+      "code": "composite",
+      "name": "Composite",
+      "description": "複数の primitive effect を順序付きで並べるスキル"
+    },
+    {
+      "code": "script_hook",
+      "name": "Script Hook",
+      "description": "共通実行器では表現できず専用実装へ dispatch するスキル"
+    }
+  ],
+  "registries": {
+    "trigger": {
+      "groups": [
+        {
+          "groupCode": "event_move",
+          "groupName": "移動イベント",
+          "description": "自駒の移動に紐づく発火",
+          "options": [
+            {
+              "optionCode": "before_move",
+              "optionName": "移動前",
+              "description": "移動が確定する前に評価"
+            },
+            {
+              "optionCode": "after_move",
+              "optionName": "移動後",
+              "description": "移動完了直後に評価"
+            }
+          ]
+        },
+        {
+          "groupCode": "event_capture",
+          "groupName": "捕獲イベント",
+          "description": "駒を取る、または取られることに紐づく発火",
+          "options": [
+            {
+              "optionCode": "before_capture",
+              "optionName": "捕獲前",
+              "description": "捕獲判定前に評価"
+            },
+            {
+              "optionCode": "after_capture",
+              "optionName": "捕獲後",
+              "description": "自駒が相手駒を取った直後に評価"
+            },
+            {
+              "optionCode": "after_captured",
+              "optionName": "被捕獲後",
+              "description": "自駒が相手に取られた直後に評価"
+            }
+          ]
+        },
+        {
+          "groupCode": "event_turn",
+          "groupName": "ターンイベント",
+          "description": "ターンの境界で評価",
+          "options": [
+            {
+              "optionCode": "turn_start",
+              "optionName": "ターン開始",
+              "description": "手番開始時に評価"
+            },
+            {
+              "optionCode": "turn_end",
+              "optionName": "ターン終了",
+              "description": "手番終了時に評価"
+            }
+          ]
+        },
+        {
+          "groupCode": "event_other",
+          "groupName": "他駒イベント",
+          "description": "他の駒の行動に反応して発火",
+          "options": [
+            {
+              "optionCode": "other_piece_moved",
+              "optionName": "他駒移動時",
+              "description": "隣接駒や対象駒の移動に反応"
+            },
+            {
+              "optionCode": "other_piece_captured",
+              "optionName": "他駒被捕獲時",
+              "description": "味方または対象駒が取られた時に反応"
+            }
+          ]
+        },
+        {
+          "groupCode": "continuous",
+          "groupName": "常時評価",
+          "description": "盤面上に存在する限り継続的に評価",
+          "options": [
+            {
+              "optionCode": "continuous_aura",
+              "optionName": "オーラ",
+              "description": "周囲や一定範囲へ継続影響を与える"
+            },
+            {
+              "optionCode": "continuous_rule",
+              "optionName": "自己ルール変更",
+              "description": "自駒自身の移動や捕獲ルールを継続変更する"
+            },
+            {
+              "optionCode": "board_state_changed",
+              "optionName": "盤面変化時再計算",
+              "description": "盤面状態が変わるたびに再評価する"
+            }
+          ]
+        },
+        {
+          "groupCode": "special",
+          "groupName": "特殊",
+          "description": "共通系に収まらない発火",
+          "options": [
+            {
+              "optionCode": "condition_met",
+              "optionName": "条件成立時",
+              "description": "特定条件の成立そのものを発火点とする"
+            },
+            {
+              "optionCode": "manual_action",
+              "optionName": "手動発動",
+              "description": "プレイヤーや AI が明示的に選択して発動する"
+            },
+            {
+              "optionCode": "script_hook",
+              "optionName": "専用実装",
+              "description": "専用ロジックに委譲する"
+            }
+          ]
+        }
+      ]
+    },
+    "target": {
+      "groups": [
+        {
+          "groupCode": "self",
+          "groupName": "自身",
+          "description": "自分自身を対象に取る",
+          "options": [
+            {
+              "optionCode": "self_piece",
+              "optionName": "自身",
+              "description": "発動した駒自身"
+            }
+          ]
+        },
+        {
+          "groupCode": "adjacent",
+          "groupName": "隣接",
+          "description": "周囲マスや隣接マスを対象に取る",
+          "options": [
+            {
+              "optionCode": "adjacent_enemy",
+              "optionName": "隣接敵駒",
+              "description": "周囲 8 マスまたは定義済み隣接範囲の敵駒"
+            },
+            {
+              "optionCode": "adjacent_ally",
+              "optionName": "隣接味方駒",
+              "description": "周囲の味方駒"
+            },
+            {
+              "optionCode": "adjacent_any",
+              "optionName": "隣接任意駒",
+              "description": "周囲の全駒"
+            },
+            {
+              "optionCode": "adjacent_empty",
+              "optionName": "隣接空きマス",
+              "description": "周囲の空きマス"
+            },
+            {
+              "optionCode": "adjacent_8_enemy",
+              "optionName": "周囲8敵駒",
+              "description": "周囲 8 マスの敵駒を明示的に対象化"
+            }
+          ]
+        },
+        {
+          "groupCode": "line",
+          "groupName": "直線",
+          "description": "行、列、正面、左右などの直線系ターゲット",
+          "options": [
+            {
+              "optionCode": "left_right_enemy",
+              "optionName": "左右敵駒",
+              "description": "左右隣接または左右方向の敵駒"
+            },
+            {
+              "optionCode": "front_enemy",
+              "optionName": "正面敵駒",
+              "description": "前方に位置する敵駒"
+            },
+            {
+              "optionCode": "same_row_ally",
+              "optionName": "同じ行の味方駒",
+              "description": "移動後または現在行に存在する味方駒"
+            },
+            {
+              "optionCode": "same_row_or_col_ally",
+              "optionName": "同じ行列の味方駒",
+              "description": "同一行または列に存在する味方駒"
+            }
+          ]
+        },
+        {
+          "groupCode": "board",
+          "groupName": "盤面",
+          "description": "盤面のマスや位置を直接対象に取る",
+          "options": [
+            {
+              "optionCode": "random_board_cell",
+              "optionName": "ランダム盤面マス",
+              "description": "盤面全体からランダムに選ぶ"
+            },
+            {
+              "optionCode": "origin_cell",
+              "optionName": "移動元マス",
+              "description": "移動前の位置"
+            },
+            {
+              "optionCode": "destination_cell",
+              "optionName": "移動先マス",
+              "description": "移動後の位置"
+            },
+            {
+              "optionCode": "reachable_empty_cell",
+              "optionName": "到達可能空きマス",
+              "description": "定義済み範囲内の空きマス"
+            }
+          ]
+        },
+        {
+          "groupCode": "hand",
+          "groupName": "持ち駒",
+          "description": "持ち駒を対象に取る",
+          "options": [
+            {
+              "optionCode": "enemy_hand_random",
+              "optionName": "敵持ち駒ランダム",
+              "description": "相手の持ち駒からランダム選択"
+            },
+            {
+              "optionCode": "ally_hand_random",
+              "optionName": "味方持ち駒ランダム",
+              "description": "自分の持ち駒からランダム選択"
+            },
+            {
+              "optionCode": "ally_hand_piece",
+              "optionName": "味方持ち駒指定",
+              "description": "自分の持ち駒から条件付きで選択"
+            }
+          ]
+        },
+        {
+          "groupCode": "global",
+          "groupName": "全体",
+          "description": "盤面全体の駒集合を対象に取る",
+          "options": [
+            {
+              "optionCode": "all_enemy",
+              "optionName": "全敵駒",
+              "description": "盤上の敵駒全体"
+            },
+            {
+              "optionCode": "all_ally",
+              "optionName": "全味方駒",
+              "description": "盤上の味方駒全体"
+            },
+            {
+              "optionCode": "all_enemy_high_stroke",
+              "optionName": "高画数敵駒",
+              "description": "条件に一致する高画数敵駒全体"
+            }
+          ]
+        },
+        {
+          "groupCode": "derived",
+          "groupName": "派生",
+          "description": "コピー先やユーザー選択など、前段で決まる対象",
+          "options": [
+            {
+              "optionCode": "copied_target",
+              "optionName": "コピー由来",
+              "description": "コピー元スキルが解決した対象"
+            },
+            {
+              "optionCode": "selected_target",
+              "optionName": "選択対象",
+              "description": "前段で 1 体または 1 マス選択済みの対象"
+            },
+            {
+              "optionCode": "script_hook",
+              "optionName": "専用実装",
+              "description": "共通セレクタでは扱えない対象"
+            }
+          ]
+        }
+      ]
+    },
+    "effect": {
+      "groups": [
+        {
+          "groupCode": "piece_state",
+          "groupName": "駒状態",
+          "description": "状態異常、封印、無効化、耐性付与",
+          "options": [
+            {
+              "optionCode": "apply_status",
+              "optionName": "状態付与",
+              "description": "対象へ状態異常を付与する"
+            },
+            {
+              "optionCode": "remove_status",
+              "optionName": "状態解除",
+              "description": "対象の状態異常を解除する"
+            },
+            {
+              "optionCode": "seal_skill",
+              "optionName": "スキル封印",
+              "description": "対象のスキル発動を止める"
+            },
+            {
+              "optionCode": "disable_piece",
+              "optionName": "駒無効化",
+              "description": "対象の移動や攻撃を無効化する"
+            },
+            {
+              "optionCode": "defense_or_immunity",
+              "optionName": "防御/無敵",
+              "description": "攻撃回避や特殊効果無効を付与する"
+            }
+          ]
+        },
+        {
+          "groupCode": "piece_position",
+          "groupName": "位置/移動",
+          "description": "位置変更、連動移動、移動ルール変更",
+          "options": [
+            {
+              "optionCode": "forced_move",
+              "optionName": "強制移動",
+              "description": "対象を押し流す、遠ざける、移動させる"
+            },
+            {
+              "optionCode": "linked_action",
+              "optionName": "連携行動",
+              "description": "別駒と連動して動かす"
+            },
+            {
+              "optionCode": "reflective_movement",
+              "optionName": "反射移動",
+              "description": "壁反射など継続移動"
+            },
+            {
+              "optionCode": "modify_movement",
+              "optionName": "移動変更",
+              "description": "移動可能方向や距離を変更する"
+            }
+          ]
+        },
+        {
+          "groupCode": "piece_lifecycle",
+          "groupName": "駒ライフサイクル",
+          "description": "消滅、復帰、持ち駒化など",
+          "options": [
+            {
+              "optionCode": "remove_piece",
+              "optionName": "駒消滅",
+              "description": "対象駒を盤面から取り除く"
+            },
+            {
+              "optionCode": "return_to_hand",
+              "optionName": "手駒復帰",
+              "description": "自分の持ち駒へ戻す"
+            },
+            {
+              "optionCode": "destroy_hand_piece",
+              "optionName": "持ち駒破壊",
+              "description": "持ち駒を除去する"
+            },
+            {
+              "optionCode": "send_to_hand",
+              "optionName": "持ち駒送り",
+              "description": "対象駒を持ち駒へ送る"
+            },
+            {
+              "optionCode": "revive",
+              "optionName": "復活",
+              "description": "復活効果を付与または発動する"
+            },
+            {
+              "optionCode": "substitute",
+              "optionName": "身代わり",
+              "description": "別駒の代わりに処理を受ける"
+            }
+          ]
+        },
+        {
+          "groupCode": "piece_generation",
+          "groupName": "生成/変化",
+          "description": "召喚、変身、獲得",
+          "options": [
+            {
+              "optionCode": "summon_piece",
+              "optionName": "召喚",
+              "description": "盤面や指定位置に駒を出現させる"
+            },
+            {
+              "optionCode": "transform_piece",
+              "optionName": "変身/変化",
+              "description": "対象駒を別の駒へ変える"
+            },
+            {
+              "optionCode": "gain_piece",
+              "optionName": "駒獲得",
+              "description": "持ち駒を増やす"
+            }
+          ]
+        },
+        {
+          "groupCode": "capture_rule",
+          "groupName": "捕獲ルール",
+          "description": "取る、取れない、取り方変更",
+          "options": [
+            {
+              "optionCode": "capture_constraint",
+              "optionName": "捕獲制約",
+              "description": "取れない、味方だけ取れるなどの制約"
+            },
+            {
+              "optionCode": "capture_with_leap",
+              "optionName": "飛び越え捕獲",
+              "description": "駒をまたいで捕獲する"
+            },
+            {
+              "optionCode": "multi_capture",
+              "optionName": "複数捕獲",
+              "description": "1 手で複数駒を取る"
+            }
+          ]
+        },
+        {
+          "groupCode": "action_economy",
+          "groupName": "行動経済",
+          "description": "追加行動や 2 回行動",
+          "options": [
+            {
+              "optionCode": "extra_action",
+              "optionName": "追加行動",
+              "description": "追加の移動や行動権を得る"
+            }
+          ]
+        },
+        {
+          "groupCode": "meta_skill",
+          "groupName": "能力操作",
+          "description": "コピーや継承",
+          "options": [
+            {
+              "optionCode": "copy_ability",
+              "optionName": "能力コピー",
+              "description": "別駒の移動やスキルをコピーする"
+            },
+            {
+              "optionCode": "inherit_ability",
+              "optionName": "能力継承",
+              "description": "元の能力や捕獲対象の能力を継承する"
+            }
+          ]
+        },
+        {
+          "groupCode": "board_control",
+          "groupName": "盤面制御",
+          "description": "マス状態や侵入制限",
+          "options": [
+            {
+              "optionCode": "board_hazard",
+              "optionName": "盤面ハザード",
+              "description": "毒マス、穴、茨、封鎖マスなどを生成する"
+            }
+          ]
+        },
+        {
+          "groupCode": "special",
+          "groupName": "特殊",
+          "description": "共通化困難な効果",
+          "options": [
+            {
+              "optionCode": "composite",
+              "optionName": "複合",
+              "description": "複数 effect の束として扱う"
+            },
+            {
+              "optionCode": "script_hook",
+              "optionName": "専用実装",
+              "description": "専用関数へ dispatch する"
+            }
+          ]
+        }
+      ]
+    },
+    "condition": {
+      "groups": [
+        {
+          "groupCode": "probability",
+          "groupName": "確率",
+          "description": "乱数発動条件",
+          "options": [
+            {
+              "optionCode": "chance_roll",
+              "optionName": "確率判定",
+              "description": "指定確率で発動する"
+            }
+          ]
+        },
+        {
+          "groupCode": "piece_presence",
+          "groupName": "駒存在",
+          "description": "特定の駒が存在するかを判定",
+          "options": [
+            {
+              "optionCode": "ally_piece_exists",
+              "optionName": "味方駒存在",
+              "description": "味方の特定駒が存在する"
+            },
+            {
+              "optionCode": "enemy_piece_exists",
+              "optionName": "敵駒存在",
+              "description": "敵の特定駒が存在する"
+            },
+            {
+              "optionCode": "same_row_or_col_piece_exists",
+              "optionName": "同一行列存在",
+              "description": "同じ行または列に特定駒が存在する"
+            }
+          ]
+        },
+        {
+          "groupCode": "board_state",
+          "groupName": "盤面状態",
+          "description": "盤面状況の条件",
+          "options": [
+            {
+              "optionCode": "adjacent_enemy_exists",
+              "optionName": "隣接敵存在",
+              "description": "周囲に敵駒がいる"
+            },
+            {
+              "optionCode": "adjacent_empty_exists",
+              "optionName": "隣接空きあり",
+              "description": "周囲に空きマスがある"
+            },
+            {
+              "optionCode": "target_not_king",
+              "optionName": "王除外",
+              "description": "対象が王/玉ではない"
+            }
+          ]
+        },
+        {
+          "groupCode": "history",
+          "groupName": "履歴",
+          "description": "直前手や過去イベントに依存する条件",
+          "options": [
+            {
+              "optionCode": "last_enemy_move_exists",
+              "optionName": "直前敵手あり",
+              "description": "相手の直前手が参照可能"
+            },
+            {
+              "optionCode": "captured_by_enemy",
+              "optionName": "敵に取られた",
+              "description": "敵に捕獲されたことを条件にする"
+            }
+          ]
+        },
+        {
+          "groupCode": "special",
+          "groupName": "特殊",
+          "description": "共通条件に収まらないもの",
+          "options": [
+            {
+              "optionCode": "script_hook",
+              "optionName": "専用実装",
+              "description": "専用条件評価へ委譲する"
+            }
+          ]
+        }
+      ]
+    },
+    "param": {
+      "groups": [
+        {
+          "groupCode": "probability",
+          "groupName": "確率",
+          "description": "確率に関するパラメータ",
+          "options": [
+            {
+              "optionCode": "procChance",
+              "optionName": "発動確率",
+              "valueType": "number",
+              "description": "0.0 以上 1.0 以下"
+            }
+          ]
+        },
+        {
+          "groupCode": "duration",
+          "groupName": "持続",
+          "description": "継続ターンに関するパラメータ",
+          "options": [
+            {
+              "optionCode": "durationTurns",
+              "optionName": "持続ターン",
+              "valueType": "integer",
+              "description": "1 以上のターン数"
+            }
+          ]
+        },
+        {
+          "groupCode": "range",
+          "groupName": "範囲",
+          "description": "距離や半径に関するパラメータ",
+          "options": [
+            {
+              "optionCode": "radius",
+              "optionName": "半径",
+              "valueType": "integer",
+              "description": "中心からの範囲"
+            },
+            {
+              "optionCode": "distance",
+              "optionName": "距離",
+              "valueType": "integer",
+              "description": "対象までの距離"
+            }
+          ]
+        },
+        {
+          "groupCode": "count",
+          "groupName": "件数",
+          "description": "選択数や対象数",
+          "options": [
+            {
+              "optionCode": "count",
+              "optionName": "対象数",
+              "valueType": "integer_or_all",
+              "description": "対象件数または all"
+            },
+            {
+              "optionCode": "selection",
+              "optionName": "選択方式",
+              "valueType": "enum",
+              "description": "random / manual / priority"
+            }
+          ]
+        },
+        {
+          "groupCode": "piece_ref",
+          "groupName": "駒参照",
+          "description": "生成先や変化先の駒指定",
+          "options": [
+            {
+              "optionCode": "spawnPiece",
+              "optionName": "召喚駒",
+              "valueType": "piece_code",
+              "description": "新たに出現させる駒"
+            },
+            {
+              "optionCode": "transformTo",
+              "optionName": "変化先",
+              "valueType": "piece_code",
+              "description": "変化後の駒"
+            },
+            {
+              "optionCode": "pieceFilter",
+              "optionName": "駒フィルタ",
+              "valueType": "json",
+              "description": "対象とする駒種別条件"
+            }
+          ]
+        },
+        {
+          "groupCode": "movement_rule",
+          "groupName": "移動規則",
+          "description": "押し出し方や方向など",
+          "options": [
+            {
+              "optionCode": "movementRule",
+              "optionName": "移動ルール",
+              "valueType": "enum",
+              "description": "push_away / pull / random_step / reflect"
+            },
+            {
+              "optionCode": "directionRule",
+              "optionName": "方向ルール",
+              "valueType": "enum",
+              "description": "front / back / left_right / relative / copied"
+            }
+          ]
+        },
+        {
+          "groupCode": "status_rule",
+          "groupName": "状態規則",
+          "description": "付与する状態異常の種類",
+          "options": [
+            {
+              "optionCode": "statusType",
+              "optionName": "状態種別",
+              "valueType": "enum",
+              "description": "freeze / stun / curse / dark / poison / revive"
+            }
+          ]
+        },
+        {
+          "groupCode": "special",
+          "groupName": "特殊",
+          "description": "共通パラメータでは表せない引数",
+          "options": [
+            {
+              "optionCode": "scriptArgs",
+              "optionName": "専用引数",
+              "valueType": "json",
+              "description": "script_hook 専用の JSON"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
