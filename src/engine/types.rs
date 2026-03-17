@@ -831,19 +831,15 @@ impl SearchState {
         col: usize,
         target_side: Side,
     ) -> bool {
-        self.skill_state.piece_defenses.iter().any(|defense| {
-            defense.remaining_turns > 0
-                && defense.side == target_side
-                && defense.row == row
-                && defense.col == col
-                && matches!(
-                    defense.mode.as_str(),
-                    "immune_to_capture"
-                        | "grant_invulnerability"
-                        | "grant_uncapturable"
-                        | "uncapturable_if_ally_yin_same_row_or_col"
-                )
-        })
+        self.has_piece_defense(row, col, target_side, "immune_to_capture")
+            || self.has_piece_defense(row, col, target_side, "grant_invulnerability")
+            || self.has_piece_defense(row, col, target_side, "grant_uncapturable")
+            || self.has_piece_defense(
+                row,
+                col,
+                target_side,
+                "uncapturable_if_ally_yin_same_row_or_col",
+            )
     }
 
     pub fn piece_defense_bonus(&self, row: usize, col: usize, side: Side) -> i32 {
