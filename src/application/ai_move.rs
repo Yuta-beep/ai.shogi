@@ -38,6 +38,7 @@ pub struct ComputeMoveMeta {
 pub enum ComputeMoveError {
     InvalidEngineConfig(String),
     InvalidPosition(&'static str),
+    Checkmate,
 }
 
 impl ComputeMoveError {
@@ -45,6 +46,7 @@ impl ComputeMoveError {
         match self {
             Self::InvalidEngineConfig(_) => "INVALID_ENGINE_CONFIG",
             Self::InvalidPosition(_) => "INVALID_POSITION",
+            Self::Checkmate => "CHECKMATE",
         }
     }
 
@@ -52,6 +54,7 @@ impl ComputeMoveError {
         match self {
             Self::InvalidEngineConfig(msg) => msg.clone(),
             Self::InvalidPosition(msg) => (*msg).to_string(),
+            Self::Checkmate => "no legal move available (checkmate)".to_string(),
         }
     }
 }
@@ -134,7 +137,7 @@ pub fn compute_ai_move(input: ComputeMoveCommand) -> Result<ComputeMoveResult, C
     };
 
     if normalized_moves.is_empty() || scored.is_empty() {
-        return Err(ComputeMoveError::InvalidPosition("no legal move available"));
+        return Err(ComputeMoveError::Checkmate);
     }
 
     if let Some(state) = parsed_state.as_ref() {

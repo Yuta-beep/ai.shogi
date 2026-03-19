@@ -53,12 +53,15 @@ pub async fn post_ai_move(Json(payload): Json<EngineMoveRequest>) -> impl IntoRe
                 "failed /v1/ai/move"
             );
 
-            let status = if e.code() == "INVALID_ENGINE_CONFIG" {
-                StatusCode::BAD_REQUEST
-            } else {
-                StatusCode::BAD_REQUEST
-            };
-            return err(status, e.code(), e.message());
+            if e.code() == "CHECKMATE" {
+                return (
+                    StatusCode::OK,
+                    Json(serde_json::json!({ "is_checkmate": true })),
+                )
+                    .into_response();
+            }
+
+            return err(StatusCode::BAD_REQUEST, e.code(), e.message());
         }
     };
 

@@ -63,6 +63,47 @@ async fn ai_move_rejects_empty_position_without_sfen() {
 }
 
 #[tokio::test]
+async fn ai_move_returns_checkmate_when_no_legal_moves_in_sfen() {
+    let app = router();
+
+    // Enemy king at (0,0), player golds at (0,1) and (1,0) and (1,1).
+    // All king escape squares are occupied or covered — genuine checkmate.
+    // SFEN: kG7/GG7/9/9/9/9/9/9/8K  w (enemy to move)
+    let payload = json!({
+        "game_id": "test-checkmate",
+        "move_no": 1,
+        "position": {
+            "side_to_move": "enemy",
+            "turn_number": 1,
+            "move_count": 0,
+            "sfen": "kG7/GG7/9/9/9/9/9/9/8K w - 1",
+            "board_state": {},
+            "hands": { "player": {}, "enemy": {} },
+            "legal_moves": []
+        },
+        "engine_config": {}
+    });
+
+    let response = app
+        .oneshot(
+            Request::builder()
+                .method("POST")
+                .uri("/v1/ai/move")
+                .header("content-type", "application/json")
+                .body(Body::from(payload.to_string()))
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let body = to_bytes(response.into_body(), usize::MAX).await.unwrap();
+    let parsed: serde_json::Value = serde_json::from_slice(&body).unwrap();
+    assert_eq!(parsed["is_checkmate"], true);
+}
+
+#[tokio::test]
 async fn apply_move_returns_canonical_next_position() {
     let app = router();
 
