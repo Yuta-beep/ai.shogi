@@ -1,5 +1,6 @@
 pub mod config;
 pub mod heuristic;
+pub mod piece_mapping;
 pub mod rules;
 pub mod search;
 pub mod skill_executor;

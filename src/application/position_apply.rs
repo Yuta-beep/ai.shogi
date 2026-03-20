@@ -97,8 +97,41 @@ fn merge_board_state(
     skill_state: serde_json::Value,
 ) -> serde_json::Value {
     let mut next = board_state.as_object().cloned().unwrap_or_default();
+    // SFEN が正規の盤面ソースなので、視覚用の配置キャッシュは局面更新後に捨てる。
+    // これを残すとフロントで移動前の駒が重複表示される。
+    next.remove("pieces");
+    next.remove("placements");
+    next.remove("boardPieces");
+    next.remove("board_pieces");
     next.insert("skill_state".to_string(), skill_state);
     serde_json::Value::Object(next)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::merge_board_state;
+    use serde_json::json;
+
+    #[test]
+    fn merge_board_state_drops_visual_piece_caches() {
+        let board_state = json!({
+            "pieces": [{ "row": 6, "col": 4 }],
+            "placements": [{ "row": 6, "col": 4 }],
+            "boardPieces": [{ "row": 6, "col": 4 }],
+            "board_pieces": [{ "row": 6, "col": 4 }],
+            "custom_move_vectors": { "FU": [{ "dr": -1, "dc": 0 }] },
+            "skill_state": { "before": true }
+        });
+
+        let merged = merge_board_state(&board_state, json!({ "after": true }));
+
+        assert!(merged.get("pieces").is_none());
+        assert!(merged.get("placements").is_none());
+        assert!(merged.get("boardPieces").is_none());
+        assert!(merged.get("board_pieces").is_none());
+        assert_eq!(merged.get("custom_move_vectors"), Some(&json!({ "FU": [{ "dr": -1, "dc": 0 }] })));
+        assert_eq!(merged.get("skill_state"), Some(&json!({ "after": true })));
+    }
 }
 
 fn generated_move_matches(candidate: &GenMove, selected_move: &EngineMove) -> bool {
@@ -120,9 +153,10 @@ fn generated_move_matches(candidate: &GenMove, selected_move: &EngineMove) -> bo
     candidate.to.0 == selected_move.to_row as usize
         && candidate.to.1 == selected_move.to_col as usize
         && candidate.promote == selected_move.promote
-        && piece_code(candidate.piece.kind).eq_ignore_ascii_case(&selected_move.piece_code)
+        && piece_code(&candidate.piece.kind).eq_ignore_ascii_case(&selected_move.piece_code)
         && candidate
             .drop
+            .as_ref()
             .map(|kind| piece_code(kind))
             .map(|code| {
                 code.eq_ignore_ascii_case(selected_move.drop_piece_code.as_deref().unwrap_or(""))

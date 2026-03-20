@@ -2,7 +2,7 @@ use crate::engine::skills::{
     builtin_skill_registry, parse_skill_definition_document_value, parse_skill_registry_value,
     validate_skill_definitions,
 };
-use crate::engine::types::{RuntimeRules, VectorRule};
+use crate::engine::types::{CaptureMode, RuntimeRules, VectorRule};
 
 pub fn parse_runtime_rules(board_state: &serde_json::Value) -> Result<RuntimeRules, String> {
     let mut rules = RuntimeRules::default();
@@ -31,8 +31,16 @@ pub fn parse_runtime_rules(board_state: &serde_json::Value) -> Result<RuntimeRul
                     let dr = item.get("dr").and_then(|x| x.as_i64()).unwrap_or(0) as i32;
                     let dc = item.get("dc").and_then(|x| x.as_i64()).unwrap_or(0) as i32;
                     let slide = item.get("slide").and_then(|x| x.as_bool()).unwrap_or(false);
+                    let capture_mode = match item
+                        .get("capture_mode")
+                        .and_then(|x| x.as_str())
+                        .unwrap_or("")
+                    {
+                        "leap_over_one" => CaptureMode::LeapOverOne,
+                        _ => CaptureMode::Normal,
+                    };
                     if dr != 0 || dc != 0 {
-                        vecs.push(VectorRule { dr, dc, slide });
+                        vecs.push(VectorRule { dr, dc, slide, capture_mode });
                     }
                 }
             }

@@ -62,10 +62,10 @@ fn to_move_input(mv: &GenMove) -> MoveInput {
         from_col: mv.from.map(|(_, col)| col as i32),
         to_row: mv.to.0 as i32,
         to_col: mv.to.1 as i32,
-        piece_code: piece_code(mv.piece.kind).to_string(),
+        piece_code: piece_code(&mv.piece.kind).to_string(),
         promote: mv.promote,
-        drop_piece_code: mv.drop.map(|kind| piece_code(kind).to_string()),
-        captured_piece_code: mv.capture.map(|piece| piece_code(piece.kind).to_string()),
+        drop_piece_code: mv.drop.as_ref().map(|kind| piece_code(kind).to_string()),
+        captured_piece_code: mv.capture.map(|piece| piece_code(&piece.kind).to_string()),
         notation: None,
     }
 }

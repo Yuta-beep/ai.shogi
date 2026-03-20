@@ -1,8 +1,9 @@
 use crate::engine::config::EngineConfig;
+use crate::engine::piece_mapping::sfen_char_from_piece_kind;
 use crate::engine::search::{apply_move, evaluate_state};
 use crate::engine::skills::{SkillCondition, SkillDefinition, SkillEffect};
 use crate::engine::types::{
-    hand_index, piece_kind_from_code, side_index, EngineMove, GenMove, Piece, PieceKind,
+    piece_kind_from_code, side_index, EngineMove, GenMove, Piece, PieceKind,
     RuntimeRules, SearchState, Side,
 };
 use serde_json::Value;
@@ -129,7 +130,7 @@ fn move_captures_piece(state: &SearchState, mv: &EngineMove) -> bool {
         return false;
     }
     let idx = mv.to_row as usize * 9 + mv.to_col as usize;
-    matches!(state.board.get(idx).copied().flatten(), Some(piece) if piece.side != state.side_to_move)
+    matches!(state.board.get(idx).and_then(|piece| *piece), Some(piece) if piece.side != state.side_to_move)
 }
 
 fn apply_engine_move(state: &SearchState, mv: &EngineMove) -> Option<SearchState> {
@@ -146,6 +147,7 @@ fn engine_move_to_gen_move(state: &SearchState, mv: &EngineMove) -> Option<GenMo
                 side: state.side_to_move,
                 kind,
                 promoted: false,
+                sfen_char: sfen_char_from_piece_kind(&kind)?,
             },
             promote: false,
             capture: None,
@@ -794,7 +796,7 @@ fn execute_remove_piece(state: &mut SearchState, mv: &EngineMove) -> bool {
 }
 
 fn execute_remove_enemy_hand_piece(state: &mut SearchState) -> bool {
-    decrement_first_hand_piece(&mut state.hands[side_index(state.side_to_move)])
+    decrement_first_hand_piece(&mut state.hands.standard[side_index(state.side_to_move)])
 }
 
 fn execute_destroy_hand_piece(state: &mut SearchState) -> bool {
@@ -820,12 +822,8 @@ fn execute_send_to_hand(state: &mut SearchState, mv: &EngineMove) -> bool {
             if piece.side != enemy_side || piece.kind == PieceKind::King {
                 continue;
             }
-            let Some(hand_idx) = hand_index(piece.kind) else {
-                continue;
-            };
             state.board[idx] = None;
-            state.hands[side_index(enemy_side)][hand_idx] =
-                state.hands[side_index(enemy_side)][hand_idx].saturating_add(1);
+            state.hands.add_piece(enemy_side, &piece.kind, 1);
             return true;
         }
     }
@@ -861,12 +859,8 @@ fn execute_gain_piece(state: &mut SearchState, effect: &SkillEffect) -> bool {
     let Some(kind) = kind else {
         return false;
     };
-    let Some(hand_idx) = hand_index(kind) else {
-        return false;
-    };
     let actor_side = state.side_to_move.opposite();
-    state.hands[side_index(actor_side)][hand_idx] =
-        state.hands[side_index(actor_side)][hand_idx].saturating_add(1);
+    state.hands.add_piece(actor_side, &kind, 1);
     true
 }
 
@@ -1022,6 +1016,7 @@ fn execute_transform_adjacent_enemy(
                     side: piece.side,
                     kind: to_kind,
                     promoted: false,
+                    sfen_char: sfen_char_from_piece_kind(&to_kind).unwrap_or(piece.sfen_char),
                 });
                 return true;
             }
@@ -1098,10 +1093,7 @@ fn execute_reflect_until_blocked(state: &mut SearchState, mv: &EngineMove) -> bo
                 state.board[to_idx] = Some(piece);
                 state.board[from_idx] = None;
                 if other.kind != PieceKind::King {
-                    if let Some(hidx) = hand_index(other.kind) {
-                        state.hands[side_index(mover_side)][hidx] =
-                            state.hands[side_index(mover_side)][hidx].saturating_add(1);
-                    }
+                    state.hands.add_piece(mover_side, &other.kind, 1);
                 }
                 moved = true;
                 break;
@@ -1610,10 +1602,15 @@ fn skill_trace_tactical_bonus(trace: &SkillExecutionTrace) -> i32 {
 }
 
 fn matches_piece_code(definition: &SkillDefinition, move_piece_code: &str) -> bool {
-    definition
-        .piece_chars
-        .iter()
-        .any(|piece| piece == move_piece_code || piece.eq_ignore_ascii_case(move_piece_code))
+    use crate::engine::piece_mapping::kanji_to_code;
+    definition.piece_chars.iter().any(|piece| {
+        piece == move_piece_code
+            || piece.eq_ignore_ascii_case(move_piece_code)
+            // catalog の pieceChars は漢字 (砲, 竜, …) を使用するため、
+            // kanji_to_code で displayCode (HOU, RYU, …) に変換して照合する
+            || kanji_to_code(piece)
+                .map_or(false, |code| code.eq_ignore_ascii_case(move_piece_code))
+    })
 }
 
 fn in_bounds(row: isize, col: isize) -> bool {

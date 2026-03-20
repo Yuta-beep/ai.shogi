@@ -7,7 +7,7 @@ use super::skills::{
     builtin_skill_registry, parse_skill_definition_document_value, validate_skill_definitions,
     SkillDefinition,
 };
-use super::types::{EngineMove, GenMove, PieceKind, RuntimeRules, SearchState, Side};
+use super::types::{piece_code, EngineMove, GenMove, PieceKind, RuntimeRules, SearchState, Side};
 use super::util::{make_seed, select_move_index};
 use rand::rngs::StdRng;
 use rand::SeedableRng;
@@ -5175,4 +5175,793 @@ fn nothing_skill_improves_move_score_when_capture_constraint_and_defense_apply()
 
     let adjustment = score_move_with_skill_effects(&state, &mv, &rules, &cfg);
     assert!(adjustment > 0);
+}
+
+// ── piece_mapping: 特殊SFENコード処理 (Phase 3 TDD) ──────────────────────────
+
+/// 標準SFEN (P/L/N/S/G/B/R/K) で from_sfen が正常にパースできる（リグレッション）
+#[test]
+fn piece_mapping_standard_sfen_parses_correctly() {
+    let result = SearchState::from_sfen(
+        "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1",
+    );
+    assert!(result.is_ok(), "標準SFEN は Ok を返すべき: {:?}", result.err());
+    let state = result.unwrap();
+    let pieces: Vec<_> = state.board.iter().filter_map(|p| *p).collect();
+    assert!(!pieces.is_empty());
+}
+
+/// 成り駒 (+P) が正しくパースされる
+#[test]
+fn piece_mapping_promoted_sfen_parses_correctly() {
+    let result = SearchState::from_sfen("9/9/9/9/4+P4/9/9/9/4K4 b - 1");
+    assert!(result.is_ok(), "成り駒SFENはOkを返すべき: {:?}", result.err());
+    let state = result.unwrap();
+    let piece = state.board[4 * 9 + 4].expect("row=4 col=4 に駒があるべき");
+    assert!(piece.promoted);
+    assert_eq!(piece.kind, PieceKind::Pawn);
+}
+
+/// 特殊SFENコード (C/D/E/F/H 等) は Err を返さずスキップされる
+#[test]
+fn piece_mapping_special_sfen_chars_are_parsed_not_skipped() {
+    for (ch, name) in [('C', "NIN"), ('D', "KAG"), ('E', "HOU"), ('F', "RYU"), ('H', "HOO"),
+                       ('I', "ENN"), ('J', "FIR"), ('M', "SUI"), ('Q', "NAM"), ('T', "MOK"),
+                       ('U', "HAA"), ('V', "HIK"), ('W', "HOS"), ('X', "YAM"), ('Y', "MAK")] {
+        let sfen = format!("9/9/9/9/4{}4/9/9/9/4K4 b - 1", ch);
+        let result = SearchState::from_sfen(&sfen);
+        assert!(
+            result.is_ok(),
+            "特殊SFENコード {}={} を含む SFEN は Ok であるべき: {:?}",
+            ch, name, result.err()
+        );
+        let state = result.unwrap();
+        assert!(state.board[4 * 9 + 4].is_some(), "{} should stay on board", name);
+    }
+}
+
+/// 特殊SFENコードが存在しても王将の位置は正しい
+#[test]
+fn piece_mapping_king_survives_after_special_sfen_parse() {
+    let result = SearchState::from_sfen("9/9/9/9/4C4/9/9/9/4K4 b - 1");
+    assert!(result.is_ok());
+    let state = result.unwrap();
+    let king = state.board[8 * 9 + 4].expect("王将が row=8 col=4 に存在すべき");
+    assert_eq!(king.kind, PieceKind::King);
+}
+
+/// displayChar ↔ PieceKind のラウンドトリップが一致している
+#[test]
+fn piece_mapping_standard_display_codes_round_trip() {
+    use super::types::{piece_code, piece_kind_from_code};
+    let pairs = [
+        ("FU", PieceKind::Pawn),
+        ("KY", PieceKind::Lance),
+        ("KE", PieceKind::Knight),
+        ("GI", PieceKind::Silver),
+        ("KI", PieceKind::Gold),
+        ("KA", PieceKind::Bishop),
+        ("HI", PieceKind::Rook),
+        ("OU", PieceKind::King),
+    ];
+    for (display, kind) in &pairs {
+        assert_eq!(piece_kind_from_code(display), Some(*kind));
+        assert_eq!(piece_code(kind), *display);
+    }
+}
+
+#[test]
+fn special_piece_sfen_generates_legal_moves_with_custom_vectors() {
+    let state = SearchState::from_sfen("4k4/9/9/9/4C4/9/9/9/4K4 b - 1").expect("must parse");
+    let rules = parse_runtime_rules(&serde_json::json!({
+        "custom_move_vectors": {
+            "NIN": [
+                { "dr": -1, "dc": 0, "slide": false }
+            ]
+        }
+    }))
+    .expect("rules must parse");
+
+    let moves = generate_legal_moves(&state, &rules, true);
+    assert!(moves.iter().any(|mv| mv.piece.kind == PieceKind::Custom("NIN")));
+    assert!(moves.iter().any(|mv| mv.to == (3, 4)));
+}
+
+#[test]
+fn special_piece_in_hand_generates_drop_moves() {
+    let state = SearchState::from_sfen("4k4/9/9/9/9/9/9/9/4K4 b C 1").expect("must parse");
+    let moves = generate_legal_moves(&state, &RuntimeRules::default(), true);
+    assert!(moves.iter().any(|mv| mv.drop == Some(PieceKind::Custom("NIN"))));
+}
+
+#[test]
+fn special_piece_skill_path_is_applied() {
+    use super::skills::{RegistryRef, SkillClassification, SkillEffect, SkillSource, TargetRef};
+
+    let state = SearchState::from_sfen("4k4/9/9/9/4E4/9/9/9/4K4 b - 1").expect("must parse");
+    let mv = EngineMove {
+        from_row: Some(4),
+        from_col: Some(4),
+        to_row: 3,
+        to_col: 4,
+        piece_code: "HOU".to_string(),
+        promote: false,
+        drop_piece_code: None,
+        captured_piece_code: None,
+        notation: None,
+    };
+    let mut rules = parse_runtime_rules(&serde_json::json!({
+        "custom_move_vectors": {
+            "HOU": [
+                { "dr": -1, "dc": 0, "slide": false }
+            ]
+        }
+    }))
+    .expect("rules must parse");
+    rules.skill_runtime.definitions.push(SkillDefinition {
+        skill_id: 999,
+        piece_chars: vec!["HOU".to_string()],
+        source: SkillSource {
+            skill_text: "special test".to_string(),
+            source_kind: "test".to_string(),
+            source_file: "tests".to_string(),
+            source_function: "special_piece_skill_path_is_applied".to_string(),
+        },
+        classification: SkillClassification {
+            implementation_kind: "primitive".to_string(),
+            tags: vec![],
+        },
+        trigger: RegistryRef {
+            group: "event_move".to_string(),
+            type_code: "after_move".to_string(),
+        },
+        conditions: vec![],
+        effects: vec![SkillEffect {
+            order: 1,
+            group: "extra_action".to_string(),
+            type_code: "extra_action".to_string(),
+            target: TargetRef {
+                group: "self".to_string(),
+                selector: "self_piece".to_string(),
+            },
+            params: serde_json::json!({ "extraActions": 1 }),
+        }],
+        script_hook: None,
+        notes: None,
+    });
+
+    let simulated = simulate_move_with_skills(&state, &mv, &rules).expect("skill must apply");
+    assert!(simulated.trace.applied_skill_ids.contains(&999));
+}
+
+// ─── Section: 特殊駒 14種 合法手テスト (NIN は既存テストで保証済み) ───────────────
+
+fn make_custom_rules(code: &str, vectors: &[(i32, i32, bool)]) -> RuntimeRules {
+    let vec_arr: Vec<serde_json::Value> = vectors
+        .iter()
+        .map(|(dr, dc, slide)| serde_json::json!({"dr": dr, "dc": dc, "slide": slide}))
+        .collect();
+    let mut cmv_map = serde_json::Map::new();
+    cmv_map.insert(code.to_string(), serde_json::Value::Array(vec_arr));
+    let board_state = serde_json::json!({"custom_move_vectors": cmv_map});
+    parse_runtime_rules(&board_state).expect("rules must parse")
+}
+
+/// 特殊駒15種それぞれが custom_move_vectors 経由で合法手を1つ以上生成する
+#[test]
+fn all_15_special_pieces_generate_at_least_one_legal_move() {
+    // (display_code, sfen_char, vectors, expected_to)
+    // NIN(C) は既存テストで保証済みのため全15種再確認として含める
+    let cases: &[(&str, char, &[(i32, i32, bool)], (usize, usize))] = &[
+        ("NIN", 'C', &[(-1,-1,false),(-1,0,false),(-1,1,false),(0,-1,false),(0,1,false),(1,-1,false),(1,0,false),(1,1,false)], (3,4)),
+        ("KAG", 'D', &[(-1,-1,true),(1,-1,true),(-1,0,false),(1,0,false),(-1,1,true),(1,1,true)], (3,3)),
+        ("HOU", 'E', &[(0,-1,true),(-1,0,true),(1,0,true),(0,1,true)], (3,4)),
+        ("RYU", 'F', &[(-1,-1,true),(0,-1,false),(1,-1,true),(-1,0,false),(1,0,false),(-1,1,true),(0,1,false),(1,1,true)], (3,3)),
+        ("HOO", 'H', &[(-1,-1,false),(0,-1,true),(1,-1,false),(-1,0,true),(1,0,true),(-1,1,false),(0,1,true),(1,1,false)], (3,3)),
+        ("ENN", 'I', &[(-1,-1,false),(-1,0,false),(-1,1,false),(0,-1,false),(0,1,false),(1,-1,false),(1,0,false),(1,1,false)], (3,4)),
+        ("FIR", 'J', &[(0,-1,true),(-1,0,true),(1,0,true),(0,1,true)], (3,4)),
+        ("SUI", 'M', &[(-1,-1,true),(1,-1,true),(-1,1,true),(1,1,true)], (3,3)),
+        ("NAM", 'Q', &[(0,-1,true),(-1,0,true),(1,0,true),(0,1,true)], (3,4)),
+        ("MOK", 'T', &[(-1,-1,false),(-1,0,false),(-1,1,false),(0,-1,false),(0,1,false),(1,-1,false),(1,0,false),(1,1,false)], (3,4)),
+        ("HAA", 'U', &[(-1,-1,true),(1,-1,true),(-1,1,true),(1,1,true)], (3,3)),
+        ("HIK", 'V', &[(-1,-1,true),(1,-1,true),(-1,1,true),(1,1,true)], (3,3)),
+        ("HOS", 'W', &[(0,-1,true),(-1,0,true),(1,0,true),(0,1,true)], (3,4)),
+        ("YAM", 'X', &[(-1,-1,false),(-1,0,false),(-1,1,false),(0,-1,false),(0,1,false),(1,-1,false),(1,0,false),(1,1,false)], (3,4)),
+        ("MAK", 'Y', &[(0,-1,true),(-1,0,true),(1,0,true),(0,1,true)], (3,4)),
+    ];
+    for (code, sfen_ch, vectors, expected_to) in cases {
+        let sfen = format!("4k4/9/9/9/4{}4/9/9/9/4K4 b - 1", sfen_ch);
+        let state = SearchState::from_sfen(&sfen)
+            .unwrap_or_else(|e| panic!("{} SFEN parse error: {}", code, e));
+        let rules = make_custom_rules(code, vectors);
+        let moves = generate_legal_moves(&state, &rules, true);
+        assert!(!moves.is_empty(), "{}: must generate at least one legal move", code);
+        assert!(
+            moves.iter().any(|mv| mv.to == *expected_to),
+            "{}: expected move to {:?} not found; got {:?}",
+            code,
+            expected_to,
+            moves.iter().map(|m| m.to).collect::<Vec<_>>()
+        );
+    }
+}
+
+/// 合法手にスライド方向が含まれる: 例として HOO は正面にスライドできる
+#[test]
+fn hoo_slides_forward_past_first_square() {
+    // HOO at (4,4): forward slide (-1,0,slide=true) → (3,4),(2,4),(1,4) should all be reachable
+    let state = SearchState::from_sfen("4k4/9/9/9/4H4/9/9/9/4K4 b - 1").expect("must parse");
+    let rules = make_custom_rules("HOO", &[(-1, 0, true)]);
+    let moves = generate_legal_moves(&state, &rules, true);
+    assert!(moves.iter().any(|mv| mv.to == (3, 4)), "HOO: must reach (3,4)");
+    assert!(moves.iter().any(|mv| mv.to == (2, 4)), "HOO: must reach (2,4) via slide");
+    assert!(moves.iter().any(|mv| mv.to == (1, 4)), "HOO: must reach (1,4) via slide");
+}
+
+/// 禁止方向が出ないことの確認: ENN は斜め前方にのみ移動できる場合に正面が出ない
+#[test]
+fn custom_vector_does_not_produce_moves_in_absent_direction() {
+    // ENN at (4,4): only diagonal forward-left vector → (3,3) only
+    let state = SearchState::from_sfen("4k4/9/9/9/4I4/9/9/9/4K4 b - 1").expect("must parse");
+    let rules = make_custom_rules("ENN", &[(-1, -1, false)]);
+    let moves = generate_legal_moves(&state, &rules, true);
+    assert!(moves.iter().any(|mv| mv.to == (3, 3)), "ENN: must have (3,3)");
+    assert!(!moves.iter().any(|mv| mv.to == (3, 4)), "ENN: must NOT have forward (3,4)");
+    assert!(!moves.iter().any(|mv| mv.to == (3, 5)), "ENN: must NOT have (3,5)");
+}
+
+// ─── Section: 特殊駒の capture / hand / drop テスト ────────────────────────────
+
+/// 特殊駒を取ったら持ち駒に入る
+#[test]
+fn capturing_special_piece_adds_it_to_custom_hand() {
+    // Black HOU at (4,4), White pawn at (4,5). Black captures.
+    // When Black captures White's pawn, pawn goes to Black hand (not HOU).
+    let state = SearchState::from_sfen("4k4/9/9/9/4Ep3/9/9/9/4K4 b - 1").expect("must parse");
+    let rules = make_custom_rules("HOU", &[(0, 1, true), (-1, 0, true), (1, 0, true), (0, -1, true)]);
+    let moves = generate_legal_moves(&state, &rules, true);
+    let capture_move = moves
+        .iter()
+        .find(|mv| mv.from == Some((4, 4)) && mv.to == (4, 5) && mv.capture.is_some())
+        .expect("HOU must be able to capture at (4,5)");
+    let next = apply_move(&state, capture_move);
+    // pawn (FU) captured by Black goes to Black's standard hand
+    assert!(next.hands.standard[0][0] >= 1, "captured pawn must be in Black's hand");
+    // HOU remains Black's piece on the board (after having moved to (4,5))
+    let piece = next.board[4 * 9 + 5].expect("HOU must be on board at (4,5)");
+    assert_eq!(piece.kind, PieceKind::Custom("HOU"));
+
+    // White rook captures Black HOU: White 'r' at (5,4), HOU at (4,4)
+    let state2 = SearchState::from_sfen("4k4/9/9/9/4E4/4r4/9/9/4K4 w - 1").expect("must parse");
+    let rules2 = RuntimeRules::default(); // White's rook can already slide
+    let moves2 = generate_legal_moves(&state2, &rules2, true);
+    let w_capture = moves2
+        .iter()
+        .find(|mv| mv.from == Some((5, 4)) && mv.to == (4, 4) && mv.capture.is_some())
+        .expect("White rook must capture HOU at (4,4)");
+    let next2 = apply_move(&state2, w_capture);
+    // White side_index = 1
+    let hou_in_white_hand = next2.hands.custom[1].get("HOU").copied().unwrap_or(0);
+    assert_eq!(hou_in_white_hand, 1, "HOU must be in white's custom hand after capture");
+    // Board at (4,4) now has the capturing rook, not the original HOU
+    let at_44 = next2.board[4 * 9 + 4].expect("white rook must be at (4,4) after capture");
+    assert_eq!(at_44.side, Side::White, "the piece at (4,4) must be the capturing white rook");
+    assert_eq!(at_44.kind, PieceKind::Rook, "piece at (4,4) must be the rook, not HOU");
+}
+
+/// 持ち駒からドロップできる（全15種）
+#[test]
+fn all_special_pieces_can_be_dropped_from_hand() {
+    let codes = ["NIN","KAG","HOU","RYU","HOO","ENN","FIR","SUI","NAM","MOK","HAA","HIK","HOS","YAM","MAK"];
+    let sfen_chars = ['C','D','E','F','H','I','J','M','Q','T','U','V','W','X','Y'];
+    for (code, sfen_ch) in codes.iter().zip(sfen_chars.iter()) {
+        // Use hand notation with SFEN char
+        let sfen = format!("4k4/9/9/9/9/9/9/9/4K4 b {} 1", sfen_ch);
+        let state = SearchState::from_sfen(&sfen)
+            .unwrap_or_else(|e| panic!("{} hand SFEN parse error: {}", code, e));
+        let moves = generate_legal_moves(&state, &RuntimeRules::default(), true);
+        let has_drop = moves.iter().any(|mv| {
+            mv.drop.is_some()
+                && mv.from.is_none()
+        });
+        assert!(has_drop, "{}: must have at least one drop move from hand", code);
+    }
+}
+
+/// ドロップ後に駒が盤上に正しく残る（代表: SUI）
+#[test]
+fn dropped_special_piece_appears_on_board() {
+    let state = SearchState::from_sfen("4k4/9/9/9/9/9/9/9/4K4 b M 1").expect("must parse");
+    let moves = generate_legal_moves(&state, &RuntimeRules::default(), true);
+    let drop = moves
+        .iter()
+        .find(|mv| mv.drop == Some(PieceKind::Custom("SUI")) && mv.to == (4, 4))
+        .expect("SUI drop to center must exist");
+    let next = apply_move(&state, drop);
+    let piece = next.board[4 * 9 + 4].expect("SUI must appear on board after drop");
+    assert_eq!(piece.kind, PieceKind::Custom("SUI"));
+    assert_eq!(piece.side, Side::Black);
+    assert!(!piece.promoted);
+    // Hand count reduced to 0
+    assert_eq!(next.hands.custom[0].get("SUI").copied().unwrap_or(0), 0);
+}
+
+/// 取られた特殊駒が不正に複製されない
+#[test]
+fn captured_special_piece_does_not_duplicate() {
+    // White has RYU at (4,4). Black rook captures it.
+    let state = SearchState::from_sfen("4k4/9/9/9/4f4/4R4/9/9/4K4 b - 1").expect("must parse");
+    let moves = generate_legal_moves(&state, &RuntimeRules::default(), true);
+    let cap = moves
+        .iter()
+        .find(|mv| mv.from == Some((5, 4)) && mv.to == (4, 4) && mv.capture.is_some())
+        .expect("Black rook must capture RYU");
+    let next = apply_move(&state, cap);
+    let ryu_on_board = next.board.iter().filter(|p| {
+        p.map(|x| x.kind == PieceKind::Custom("RYU")).unwrap_or(false)
+    }).count();
+    assert_eq!(ryu_on_board, 0, "RYU must not remain on board after capture");
+    let ryu_in_black_hand = next.hands.custom[0].get("RYU").copied().unwrap_or(0);
+    assert_eq!(ryu_in_black_hand, 1, "RYU must be in black hand exactly once");
+}
+
+// ─── Section: スキル定義あり全駒 – display code でのスキル発動テスト ─────────────────
+//
+// 以下のテストは piece_code に displayChar (HOU, RYU, ...) を使って
+// catalog のスキル定義が発動することを保証する。
+// pieceChars は漢字 (砲, 竜, ...) なので matches_piece_code が
+// 漢字→displayChar の変換テーブルを持つまでは失敗する。
+
+/// HOU (砲) after_capture スキルが displayCode で発動する
+#[test]
+fn spec_hou_cannon_after_capture_triggers_with_display_code() {
+    let rules = sample_runtime_rules();
+    // HOU at (4,4) captures enemy at (4,5)
+    let state = SearchState::from_sfen("4k4/9/9/9/4E1p2/9/9/9/4K4 b - 1").expect("must parse");
+    let mv = EngineMove {
+        from_row: Some(4),
+        from_col: Some(4),
+        to_row: 4,
+        to_col: 5,
+        piece_code: "HOU".to_string(),
+        promote: false,
+        drop_piece_code: None,
+        captured_piece_code: Some("FU".to_string()),
+        notation: None,
+    };
+    let simulated = simulate_move_with_skills(&state, &mv, &rules)
+        .expect("HOU skill must apply on capture");
+    assert!(
+        simulated.trace.applied_skill_ids.contains(&1),
+        "skill_id=1 (HOU after_capture) must fire; got {:?}",
+        simulated.trace.applied_skill_ids
+    );
+}
+
+/// RYU (竜) continuous_rule スキルが displayCode で発動する
+#[test]
+fn spec_ryu_dragon_continuous_rule_triggers_with_display_code() {
+    let rules = sample_runtime_rules();
+    let state = SearchState::from_sfen("4k4/9/9/9/4F4/9/9/9/4K4 b - 1").expect("must parse");
+    let mv = EngineMove {
+        from_row: Some(4),
+        from_col: Some(4),
+        to_row: 3,
+        to_col: 4,
+        piece_code: "RYU".to_string(),
+        promote: false,
+        drop_piece_code: None,
+        captured_piece_code: None,
+        notation: None,
+    };
+    let simulated = simulate_move_with_skills(&state, &mv, &rules)
+        .expect("RYU skill must apply");
+    assert!(
+        simulated.trace.applied_skill_ids.contains(&2),
+        "skill_id=2 (RYU continuous_rule) must fire; got {:?}",
+        simulated.trace.applied_skill_ids
+    );
+}
+
+/// ENN (炎) continuous_aura スキルが displayCode + 隣接敵あり で発動する
+#[test]
+fn spec_enn_flame_continuous_aura_triggers_with_display_code() {
+    let rules = sample_runtime_rules();
+    // ENN at (4,4), moves to (4,5), enemy at (4,6) → adjacent to destination
+    let state = SearchState::from_sfen("4k4/9/9/9/4I1p2/9/9/9/4K4 b - 1").expect("must parse");
+    let mv = EngineMove {
+        from_row: Some(4),
+        from_col: Some(4),
+        to_row: 4,
+        to_col: 5,
+        piece_code: "ENN".to_string(),
+        promote: false,
+        drop_piece_code: None,
+        captured_piece_code: None,
+        notation: None,
+    };
+    let simulated = simulate_move_with_skills(&state, &mv, &rules)
+        .expect("ENN skill must apply");
+    assert!(
+        simulated.trace.applied_skill_ids.contains(&3),
+        "skill_id=3 (ENN continuous_aura) must fire; got {:?}",
+        simulated.trace.applied_skill_ids
+    );
+}
+
+/// FIR (火) after_move スキルが displayCode で発動する
+#[test]
+fn spec_fir_fire_after_move_triggers_with_display_code() {
+    let rules = sample_runtime_rules();
+    let state = SearchState::from_sfen("4k4/9/9/9/4J4/9/9/9/4K4 b p 1").expect("must parse");
+    let mv = EngineMove {
+        from_row: Some(4),
+        from_col: Some(4),
+        to_row: 3,
+        to_col: 4,
+        piece_code: "FIR".to_string(),
+        promote: false,
+        drop_piece_code: None,
+        captured_piece_code: None,
+        notation: None,
+    };
+    let simulated = simulate_move_with_skills(&state, &mv, &rules)
+        .expect("FIR skill must apply");
+    assert!(
+        simulated.trace.applied_skill_ids.contains(&4),
+        "skill_id=4 (FIR after_move) must fire; got {:?}",
+        simulated.trace.applied_skill_ids
+    );
+}
+
+/// NAM (波) continuous_aura スキルが displayCode + 隣接敵あり で発動する
+#[test]
+fn spec_nam_wave_continuous_aura_triggers_with_display_code() {
+    let rules = sample_runtime_rules();
+    let state = SearchState::from_sfen("4k4/9/9/9/4Q1p2/9/9/9/4K4 b - 1").expect("must parse");
+    let mv = EngineMove {
+        from_row: Some(4),
+        from_col: Some(4),
+        to_row: 4,
+        to_col: 5,
+        piece_code: "NAM".to_string(),
+        promote: false,
+        drop_piece_code: None,
+        captured_piece_code: None,
+        notation: None,
+    };
+    let simulated = simulate_move_with_skills(&state, &mv, &rules)
+        .expect("NAM skill must apply");
+    assert!(
+        simulated.trace.applied_skill_ids.contains(&6),
+        "skill_id=6 (NAM continuous_aura) must fire; got {:?}",
+        simulated.trace.applied_skill_ids
+    );
+}
+
+/// MOK (木) continuous_aura スキルが displayCode + 隣接空きマスあり で発動する
+#[test]
+fn spec_mok_tree_continuous_aura_triggers_with_display_code() {
+    let rules = sample_runtime_rules();
+    let state = SearchState::from_sfen("4k4/9/9/9/4T4/9/9/9/4K4 b - 1").expect("must parse");
+    let mv = EngineMove {
+        from_row: Some(4),
+        from_col: Some(4),
+        to_row: 4,
+        to_col: 5,
+        piece_code: "MOK".to_string(),
+        promote: false,
+        drop_piece_code: None,
+        captured_piece_code: None,
+        notation: None,
+    };
+    let simulated = simulate_move_with_skills(&state, &mv, &rules)
+        .expect("MOK skill must apply");
+    assert!(
+        simulated.trace.applied_skill_ids.contains(&7),
+        "skill_id=7 (MOK continuous_aura summon) must fire; got {:?}",
+        simulated.trace.applied_skill_ids
+    );
+}
+
+/// HAA (葉) continuous_aura スキルが displayCode + 隣接敵あり で発動する
+#[test]
+fn spec_haa_leaf_continuous_aura_triggers_with_display_code() {
+    let rules = sample_runtime_rules();
+    let state = SearchState::from_sfen("4k4/9/9/9/4U1p2/9/9/9/4K4 b - 1").expect("must parse");
+    let mv = EngineMove {
+        from_row: Some(4),
+        from_col: Some(4),
+        to_row: 4,
+        to_col: 5,
+        piece_code: "HAA".to_string(),
+        promote: false,
+        drop_piece_code: None,
+        captured_piece_code: None,
+        notation: None,
+    };
+    let simulated = simulate_move_with_skills(&state, &mv, &rules)
+        .expect("HAA skill must apply");
+    assert!(
+        simulated.trace.applied_skill_ids.contains(&8),
+        "skill_id=8 (HAA continuous_aura) must fire; got {:?}",
+        simulated.trace.applied_skill_ids
+    );
+}
+
+/// HIK (光) after_move script_hook スキルが displayCode で発動する
+#[test]
+fn spec_hik_light_after_move_script_hook_triggers_with_display_code() {
+    let rules = sample_runtime_rules();
+    let state = SearchState::from_sfen("4k4/9/9/9/4V1P2/9/9/9/4K4 b - 1").expect("must parse");
+    let mv = EngineMove {
+        from_row: Some(4),
+        from_col: Some(4),
+        to_row: 4,
+        to_col: 7,
+        piece_code: "HIK".to_string(),
+        promote: false,
+        drop_piece_code: None,
+        captured_piece_code: None,
+        notation: None,
+    };
+    let simulated = simulate_move_with_skills(&state, &mv, &rules)
+        .expect("HIK skill must apply");
+    assert!(
+        simulated.trace.applied_skill_ids.contains(&9),
+        "skill_id=9 (HIK reflect) must fire; got {:?}",
+        simulated.trace.applied_skill_ids
+    );
+}
+
+/// HOS (星) after_capture スキルが displayCode で発動する
+#[test]
+fn spec_hos_star_after_capture_triggers_with_display_code() {
+    let rules = sample_runtime_rules();
+    let state = SearchState::from_sfen("4k4/9/9/9/4W1p2/9/9/9/4K4 b - 1").expect("must parse");
+    let mv = EngineMove {
+        from_row: Some(4),
+        from_col: Some(4),
+        to_row: 4,
+        to_col: 5,
+        piece_code: "HOS".to_string(),
+        promote: false,
+        drop_piece_code: None,
+        captured_piece_code: Some("FU".to_string()),
+        notation: None,
+    };
+    let simulated = simulate_move_with_skills(&state, &mv, &rules)
+        .expect("HOS skill must apply");
+    assert!(
+        simulated.trace.applied_skill_ids.contains(&10),
+        "skill_id=10 (HOS after_capture) must fire; got {:?}",
+        simulated.trace.applied_skill_ids
+    );
+}
+
+/// YAM (闇) continuous_aura スキルが displayCode + 隣接敵あり で発動する
+#[test]
+fn spec_yam_darkness_continuous_aura_triggers_with_display_code() {
+    let rules = sample_runtime_rules();
+    let state = SearchState::from_sfen("4k4/9/9/9/4X1p2/9/9/9/4K4 b - 1").expect("must parse");
+    let mv = EngineMove {
+        from_row: Some(4),
+        from_col: Some(4),
+        to_row: 4,
+        to_col: 5,
+        piece_code: "YAM".to_string(),
+        promote: false,
+        drop_piece_code: None,
+        captured_piece_code: None,
+        notation: None,
+    };
+    let simulated = simulate_move_with_skills(&state, &mv, &rules)
+        .expect("YAM skill must apply");
+    assert!(
+        simulated.trace.applied_skill_ids.contains(&11),
+        "skill_id=11 (YAM darkness) must fire; got {:?}",
+        simulated.trace.applied_skill_ids
+    );
+}
+
+/// MAK (魔) continuous_aura スキルが displayCode + 隣接敵あり で発動する
+#[test]
+fn spec_mak_demon_continuous_aura_triggers_with_display_code() {
+    let rules = sample_runtime_rules();
+    let state = SearchState::from_sfen("4k4/9/9/9/4Y1p2/9/9/9/4K4 b - 1").expect("must parse");
+    let mv = EngineMove {
+        from_row: Some(4),
+        from_col: Some(4),
+        to_row: 4,
+        to_col: 5,
+        piece_code: "MAK".to_string(),
+        promote: false,
+        drop_piece_code: None,
+        captured_piece_code: None,
+        notation: None,
+    };
+    let simulated = simulate_move_with_skills(&state, &mv, &rules)
+        .expect("MAK skill must apply");
+    assert!(
+        simulated.trace.applied_skill_ids.contains(&12),
+        "skill_id=12 (MAK demon) must fire; got {:?}",
+        simulated.trace.applied_skill_ids
+    );
+}
+
+// ─── Section: catalog / mapping / moveVectors 整合性テスト ────────────────────
+
+/// piece_mapping.rs の MAPPINGS が全15種の特殊駒 displayCode を含む
+#[test]
+fn piece_mapping_covers_all_15_special_pieces() {
+    use super::piece_mapping::piece_kind_from_code;
+    let codes = ["NIN","KAG","HOU","RYU","HOO","ENN","FIR","SUI","NAM","MOK","HAA","HIK","HOS","YAM","MAK"];
+    for code in &codes {
+        assert!(
+            piece_kind_from_code(code).is_some(),
+            "piece_mapping must contain display code: {}", code
+        );
+    }
+}
+
+/// 全15種の特殊駒が SFEN char を持つ (sfen_char_from_piece_kind が Some を返す)
+#[test]
+fn all_special_pieces_have_sfen_char() {
+    use super::piece_mapping::{piece_kind_from_code, sfen_char_from_piece_kind};
+    let codes = ["NIN","KAG","HOU","RYU","HOO","ENN","FIR","SUI","NAM","MOK","HAA","HIK","HOS","YAM","MAK"];
+    for code in &codes {
+        let kind = piece_kind_from_code(code)
+            .unwrap_or_else(|| panic!("{} must exist in piece_mapping", code));
+        assert!(
+            sfen_char_from_piece_kind(&kind).is_some(),
+            "{} must have a SFEN char", code
+        );
+    }
+}
+
+/// 全15種の特殊駒が SFEN から round-trip でパースできる
+#[test]
+fn all_special_pieces_round_trip_sfen() {
+    use super::piece_mapping::{piece_kind_from_code, sfen_char_from_piece_kind};
+    let codes_and_sfen: &[(&str, char)] = &[
+        ("NIN",'C'),("KAG",'D'),("HOU",'E'),("RYU",'F'),("HOO",'H'),
+        ("ENN",'I'),("FIR",'J'),("SUI",'M'),("NAM",'Q'),("MOK",'T'),
+        ("HAA",'U'),("HIK",'V'),("HOS",'W'),("YAM",'X'),("MAK",'Y'),
+    ];
+    for (code, expected_sfen) in codes_and_sfen {
+        let kind = piece_kind_from_code(code).unwrap();
+        let sfen = sfen_char_from_piece_kind(&kind)
+            .unwrap_or_else(|| panic!("{} must have SFEN char", code));
+        assert_eq!(sfen, *expected_sfen, "{} SFEN char mismatch", code);
+    }
+}
+
+/// catalog の skill_id 1–12 の pieceChars に含まれる漢字が
+/// piece_mapping の kanji_to_code テーブルで displayCode に解決できる
+#[test]
+fn catalog_skill_piece_chars_resolve_to_known_display_codes() {
+    use super::piece_mapping::kanji_to_code;
+    // 特殊駒15種のスキル (skill_id 1–12) の pieceChars は全て漢字
+    // それぞれが kanji_to_code で解決できることを保証する
+    let definitions = load_sample_skill_definitions();
+    let special_skill_ids: &[u64] = &[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    for &sid in special_skill_ids {
+        let def = definitions.iter().find(|d| d.skill_id == sid)
+            .unwrap_or_else(|| panic!("skill_id={} must exist in catalog", sid));
+        for piece_char in &def.piece_chars {
+            // piece_char が displayCode として直接使えるか、または漢字→code で解決できること
+            let resolves = crate::engine::piece_mapping::piece_kind_from_code(piece_char).is_some()
+                || kanji_to_code(piece_char).is_some();
+            assert!(
+                resolves,
+                "skill_id={} pieceChar='{}' must resolve to a known display code via kanji_to_code",
+                sid, piece_char
+            );
+        }
+    }
+}
+
+/// SUI (水) の displayCode がカタログの skill_5 pieceChars と matches_piece_code で一致する
+/// (kanji_to_code 経由で水→SUI が通ること)
+#[test]
+fn kanji_to_code_resolves_all_12_special_skill_piece_chars() {
+    use super::piece_mapping::kanji_to_code;
+    let expected: &[(&str, &str)] = &[
+        ("砲","HOU"),("竜","RYU"),("炎","ENN"),("火","FIR"),
+        ("水","SUI"),("波","NAM"),("木","MOK"),("葉","HAA"),
+        ("光","HIK"),("星","HOS"),("闇","YAM"),("魔","MAK"),
+    ];
+    for (kanji, code) in expected {
+        assert_eq!(
+            kanji_to_code(kanji),
+            Some(*code),
+            "kanji_to_code('{}') must return Some(\"{}\")", kanji, code
+        );
+    }
+}
+
+// ─── Section: HOU 砲型合法手テスト ────────────────────────────────────────────
+
+fn make_cannon_rules() -> RuntimeRules {
+    let vec_arr = serde_json::json!([
+        {"dr": -1, "dc":  0, "slide": true, "capture_mode": "leap_over_one"},
+        {"dr":  1, "dc":  0, "slide": true, "capture_mode": "leap_over_one"},
+        {"dr":  0, "dc": -1, "slide": true, "capture_mode": "leap_over_one"},
+        {"dr":  0, "dc":  1, "slide": true, "capture_mode": "leap_over_one"},
+    ]);
+    let board_state = serde_json::json!({"custom_move_vectors": {"HOU": vec_arr}});
+    parse_runtime_rules(&board_state).expect("cannon rules must parse")
+}
+
+/// HOU は砲台なし方向には非取り移動のみ生成し、取り手は生成しない。
+#[test]
+fn hou_cannot_capture_without_platform() {
+    let rules = make_cannon_rules();
+    // E=HOU(黒) が (4,4)、敵 k が (0,4) にいる。間に駒なし → 取れない。
+    let state =
+        SearchState::from_sfen("4k4/9/9/9/4E4/9/9/9/4K4 b - 1").expect("must parse");
+    let moves = generate_legal_moves(&state, &rules, false);
+    let hou_captures: Vec<_> = moves
+        .iter()
+        .filter(|m| piece_code(&m.piece.kind) == "HOU" && m.capture.is_some())
+        .collect();
+    assert!(
+        hou_captures.is_empty(),
+        "HOU must not capture without a platform piece; got {} capture(s)",
+        hou_captures.len()
+    );
+}
+
+/// HOU は砲台ありの場合、砲台の先の敵駒を取れる。
+#[test]
+fn hou_can_capture_with_platform() {
+    let rules = make_cannon_rules();
+    // E=HOU(黒) (4,4)、味方 P=歩(黒) (2,4) が砲台、敵 k が (0,4)。
+    let state =
+        SearchState::from_sfen("4k4/9/4P4/9/4E4/9/9/9/4K4 b - 1").expect("must parse");
+    let moves = generate_legal_moves(&state, &rules, false);
+    let hou_capture = moves.iter().find(|m| {
+        piece_code(&m.piece.kind) == "HOU"
+            && m.from == Some((4, 4))
+            && m.to == (0, 4)
+            && m.capture.is_some()
+    });
+    assert!(
+        hou_capture.is_some(),
+        "HOU must capture enemy king at (0,4) over platform at (2,4)"
+    );
+}
+
+/// HOU は砲台の手前のマスにしか移動手を生成しない（砲台のマス・砲台の先は非取り移動不可）。
+#[test]
+fn hou_move_only_reaches_squares_before_platform() {
+    let rules = make_cannon_rules();
+    // E=HOU(黒) (6,4)、味方 P=歩(黒) (3,4) が砲台、(0,4) に敵 k。
+    // 上方向の非取り移動は (5,4),(4,4) のみ（砲台 (3,4) の手前まで）。
+    let state =
+        SearchState::from_sfen("4k4/9/9/4P4/9/9/4E4/9/4K4 b - 1").expect("must parse");
+    let moves = generate_legal_moves(&state, &rules, false);
+    let hou_up_non_captures: Vec<(usize, usize)> = moves
+        .iter()
+        .filter(|m| {
+            piece_code(&m.piece.kind) == "HOU"
+                && m.from == Some((6, 4))
+                && m.to.1 == 4  // 同列 = 縦移動
+                && m.to.0 < 6   // 上方向
+                && m.capture.is_none()
+        })
+        .map(|m| m.to)
+        .collect();
+    assert!(
+        hou_up_non_captures.contains(&(5, 4)) && hou_up_non_captures.contains(&(4, 4)),
+        "HOU must move to rows 5 and 4 (before platform); got {:?}",
+        hou_up_non_captures
+    );
+    assert!(
+        !hou_up_non_captures.contains(&(3, 4))
+            && !hou_up_non_captures.contains(&(2, 4))
+            && !hou_up_non_captures.contains(&(1, 4)),
+        "HOU must NOT move to rows 3,2,1 (platform or beyond); got {:?}",
+        hou_up_non_captures
+    );
 }

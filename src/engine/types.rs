@@ -1,3 +1,5 @@
+pub use crate::engine::piece_mapping::{piece_code, piece_kind_from_code};
+use crate::engine::piece_mapping::{piece_kind_from_sfen_char, sfen_char_from_piece_kind};
 use crate::engine::skills::SkillRuntimeRules;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -45,7 +47,7 @@ impl Side {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum PieceKind {
     Pawn,
     Lance,
@@ -55,13 +57,15 @@ pub enum PieceKind {
     Bishop,
     Rook,
     King,
+    Custom(&'static str),
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Piece {
     pub side: Side,
     pub kind: PieceKind,
     pub promoted: bool,
+    pub sfen_char: char,
 }
 
 #[derive(Debug, Clone)]
@@ -118,11 +122,43 @@ pub struct SkillState {
     pub turn_start_rules: Vec<TurnStartRuleState>,
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct HandsState {
+    pub standard: [[u8; 7]; 2],
+    pub custom: [HashMap<String, u8>; 2],
+}
+
+impl HandsState {
+    pub fn add_piece(&mut self, side: Side, kind: &PieceKind, count: u8) {
+        if let Some(idx) = hand_index(kind) {
+            self.standard[side_index(side)][idx] =
+                self.standard[side_index(side)][idx].saturating_add(count);
+            return;
+        }
+        let entry = self.custom[side_index(side)]
+            .entry(piece_code(kind).to_string())
+            .or_insert(0);
+        *entry = entry.saturating_add(count);
+    }
+
+    pub fn remove_piece(&mut self, side: Side, kind: &PieceKind, count: u8) {
+        if let Some(idx) = hand_index(kind) {
+            self.standard[side_index(side)][idx] =
+                self.standard[side_index(side)][idx].saturating_sub(count);
+            return;
+        }
+        let entry = self.custom[side_index(side)]
+            .entry(piece_code(kind).to_string())
+            .or_insert(0);
+        *entry = entry.saturating_sub(count);
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct SearchState {
     pub board: [Option<Piece>; 81],
     pub side_to_move: Side,
-    pub hands: [[u8; 7]; 2],
+    pub hands: HandsState,
     pub skill_state: SkillState,
 }
 
@@ -136,11 +172,21 @@ pub struct GenMove {
     pub drop: Option<PieceKind>,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum CaptureMode {
+    /// 通常の移動・取り（デフォルト）。
+    Normal,
+    /// 砲型：その方向への非取り移動は通常通り可能だが、
+    /// 取りは間に駒が1つ（砲台）必要で、それを跨いだ先の敵駒だけを取れる。
+    LeapOverOne,
+}
+
 #[derive(Debug, Clone, Copy)]
 pub struct VectorRule {
     pub dr: i32,
     pub dc: i32,
     pub slide: bool,
+    pub capture_mode: CaptureMode,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -185,8 +231,9 @@ impl SearchState {
                 };
                 let piece = Piece {
                     side,
-                    kind: piece_kind_from_char(pch).ok_or("invalid piece")?,
+                    kind: piece_kind_from_sfen_char(pch, promoted).ok_or("invalid piece")?,
                     promoted,
+                    sfen_char: pch.to_ascii_uppercase(),
                 };
                 board[row * 9 + col] = Some(piece);
                 col += 1;
@@ -331,7 +378,7 @@ impl SearchState {
                             if piece.promoted {
                                 chunk.push('+');
                             }
-                            let ch = piece_kind_to_sfen_char(piece.kind);
+                            let ch = piece.sfen_char;
                             if piece.side == Side::Black {
                                 chunk.push(ch);
                             } else {
@@ -361,8 +408,8 @@ impl SearchState {
     }
 
     pub fn hands_to_json(&self) -> serde_json::Value {
-        let player = hands_json_for_side(&self.hands[side_index(Side::Black)]);
-        let enemy = hands_json_for_side(&self.hands[side_index(Side::White)]);
+        let player = hands_json_for_side(&self.hands, Side::Black);
+        let enemy = hands_json_for_side(&self.hands, Side::White);
         serde_json::json!({
             "player": player,
             "enemy": enemy
@@ -420,9 +467,9 @@ impl SearchState {
             (PieceKind::Lance, 1usize),
             (PieceKind::Pawn, 0usize),
         ] {
-            let player_count = self.hands[side_index(Side::Black)][idx];
-            let enemy_count = self.hands[side_index(Side::White)][idx];
-            let sfen = piece_kind_to_sfen_char(kind);
+            let player_count = self.hands.standard[side_index(Side::Black)][idx];
+            let enemy_count = self.hands.standard[side_index(Side::White)][idx];
+            let sfen = sfen_char_from_piece_kind(&kind).expect("standard hands must have sfen");
             if player_count > 0 {
                 chunks.push(format!("{}{}", count_prefix(player_count), sfen));
             }
@@ -434,6 +481,8 @@ impl SearchState {
                 ));
             }
         }
+        append_custom_sfen_hands(&mut chunks, &self.hands.custom[side_index(Side::Black)], true);
+        append_custom_sfen_hands(&mut chunks, &self.hands.custom[side_index(Side::White)], false);
         if chunks.is_empty() {
             "-".to_string()
         } else {
@@ -865,48 +914,7 @@ impl SearchState {
     }
 }
 
-pub fn piece_kind_from_char(ch: char) -> Option<PieceKind> {
-    match ch.to_ascii_uppercase() {
-        'P' => Some(PieceKind::Pawn),
-        'L' => Some(PieceKind::Lance),
-        'N' => Some(PieceKind::Knight),
-        'S' => Some(PieceKind::Silver),
-        'G' => Some(PieceKind::Gold),
-        'B' => Some(PieceKind::Bishop),
-        'R' => Some(PieceKind::Rook),
-        'K' => Some(PieceKind::King),
-        _ => None,
-    }
-}
-
-pub fn piece_kind_from_code(code: &str) -> Option<PieceKind> {
-    match code.to_ascii_uppercase().as_str() {
-        "FU" | "P" => Some(PieceKind::Pawn),
-        "KY" | "L" => Some(PieceKind::Lance),
-        "KE" | "N" => Some(PieceKind::Knight),
-        "GI" | "S" => Some(PieceKind::Silver),
-        "KI" | "G" => Some(PieceKind::Gold),
-        "KA" | "B" => Some(PieceKind::Bishop),
-        "HI" | "R" => Some(PieceKind::Rook),
-        "OU" | "K" => Some(PieceKind::King),
-        _ => None,
-    }
-}
-
-pub fn piece_code(kind: PieceKind) -> &'static str {
-    match kind {
-        PieceKind::Pawn => "FU",
-        PieceKind::Lance => "KY",
-        PieceKind::Knight => "KE",
-        PieceKind::Silver => "GI",
-        PieceKind::Gold => "KI",
-        PieceKind::Bishop => "KA",
-        PieceKind::Rook => "HI",
-        PieceKind::King => "OU",
-    }
-}
-
-pub fn piece_base_value(kind: PieceKind) -> i32 {
+pub fn piece_base_value(kind: &PieceKind) -> i32 {
     match kind {
         PieceKind::Pawn => 100,
         PieceKind::Lance => 300,
@@ -916,11 +924,12 @@ pub fn piece_base_value(kind: PieceKind) -> i32 {
         PieceKind::Bishop => 900,
         PieceKind::Rook => 1000,
         PieceKind::King => 10000,
+        PieceKind::Custom(_) => 700,
     }
 }
 
-pub fn piece_promotable(kind: PieceKind) -> bool {
-    !matches!(kind, PieceKind::Gold | PieceKind::King)
+pub fn piece_promotable(kind: &PieceKind) -> bool {
+    !matches!(kind, PieceKind::Gold | PieceKind::King | PieceKind::Custom(_))
 }
 
 pub fn is_promotion_zone(side: Side, row: usize) -> bool {
@@ -931,7 +940,7 @@ pub fn is_promotion_zone(side: Side, row: usize) -> bool {
 }
 
 pub fn must_promote(piece: Piece, to_row: usize) -> bool {
-    match (piece.side, piece.kind) {
+    match (piece.side, &piece.kind) {
         (Side::Black, PieceKind::Pawn | PieceKind::Lance) => to_row == 0,
         (Side::White, PieceKind::Pawn | PieceKind::Lance) => to_row == 8,
         (Side::Black, PieceKind::Knight) => to_row <= 1,
@@ -947,7 +956,7 @@ pub fn side_index(side: Side) -> usize {
     }
 }
 
-pub fn hand_index(kind: PieceKind) -> Option<usize> {
+pub fn hand_index(kind: &PieceKind) -> Option<usize> {
     match kind {
         PieceKind::Pawn => Some(0),
         PieceKind::Lance => Some(1),
@@ -956,12 +965,12 @@ pub fn hand_index(kind: PieceKind) -> Option<usize> {
         PieceKind::Gold => Some(4),
         PieceKind::Bishop => Some(5),
         PieceKind::Rook => Some(6),
-        PieceKind::King => None,
+        PieceKind::King | PieceKind::Custom(_) => None,
     }
 }
 
-fn parse_sfen_hands(hands: &str) -> Result<[[u8; 7]; 2], String> {
-    let mut out = [[0u8; 7]; 2];
+fn parse_sfen_hands(hands: &str) -> Result<HandsState, String> {
+    let mut out = HandsState::default();
     if hands == "-" {
         return Ok(out);
     }
@@ -980,13 +989,19 @@ fn parse_sfen_hands(hands: &str) -> Result<[[u8; 7]; 2], String> {
         } else {
             Side::White
         };
-        let kind = piece_kind_from_char(ch).ok_or("invalid hand piece")?;
+        let kind = piece_kind_from_sfen_char(ch, false).ok_or("invalid hand piece")?;
         if kind == PieceKind::King {
             return Err("king cannot be in hand".to_string());
         }
 
-        let idx = hand_index(kind).ok_or("invalid hand kind")?;
-        out[side_index(side)][idx] = out[side_index(side)][idx].saturating_add(n as u8);
+        if let Some(idx) = hand_index(&kind) {
+            out.standard[side_index(side)][idx] =
+                out.standard[side_index(side)][idx].saturating_add(n as u8);
+        } else {
+            let code = piece_code(&kind).to_string();
+            let entry = out.custom[side_index(side)].entry(code).or_insert(0);
+            *entry = entry.saturating_add(n as u8);
+        }
     }
 
     Ok(out)
@@ -1011,21 +1026,9 @@ fn parse_u8(value: Option<&serde_json::Value>) -> Option<u8> {
         .map(|value| value as u8)
 }
 
-fn piece_kind_to_sfen_char(kind: PieceKind) -> char {
-    match kind {
-        PieceKind::Pawn => 'P',
-        PieceKind::Lance => 'L',
-        PieceKind::Knight => 'N',
-        PieceKind::Silver => 'S',
-        PieceKind::Gold => 'G',
-        PieceKind::Bishop => 'B',
-        PieceKind::Rook => 'R',
-        PieceKind::King => 'K',
-    }
-}
-
-fn hands_json_for_side(counts: &[u8; 7]) -> serde_json::Value {
+fn hands_json_for_side(hands: &HandsState, side: Side) -> serde_json::Value {
     let mut out = serde_json::Map::new();
+    let counts = &hands.standard[side_index(side)];
     for (code, idx) in [
         ("FU", 0usize),
         ("KY", 1usize),
@@ -1040,7 +1043,43 @@ fn hands_json_for_side(counts: &[u8; 7]) -> serde_json::Value {
             out.insert(code.to_string(), serde_json::json!(count));
         }
     }
+    let mut custom_entries = hands.custom[side_index(side)]
+        .iter()
+        .collect::<Vec<_>>();
+    custom_entries.sort_by(|lhs, rhs| lhs.0.cmp(rhs.0));
+    for (code, count) in custom_entries {
+        if *count > 0 {
+            out.insert(code.clone(), serde_json::json!(*count));
+        }
+    }
     serde_json::Value::Object(out)
+}
+
+fn append_custom_sfen_hands(
+    chunks: &mut Vec<String>,
+    counts: &HashMap<String, u8>,
+    is_black: bool,
+) {
+    let mut entries = counts.iter().collect::<Vec<_>>();
+    entries.sort_by(|lhs, rhs| {
+        let left = piece_kind_from_code(lhs.0)
+            .and_then(|kind| sfen_char_from_piece_kind(&kind))
+            .unwrap_or('Z');
+        let right = piece_kind_from_code(rhs.0)
+            .and_then(|kind| sfen_char_from_piece_kind(&kind))
+            .unwrap_or('Z');
+        left.cmp(&right)
+    });
+    for (code, count) in entries {
+        let Some(mut sfen) = piece_kind_from_code(code)
+            .and_then(|kind| sfen_char_from_piece_kind(&kind)) else {
+            continue;
+        };
+        if !is_black {
+            sfen = sfen.to_ascii_lowercase();
+        }
+        chunks.push(format!("{}{}", count_prefix(*count), sfen));
+    }
 }
 
 fn count_prefix(count: u8) -> String {

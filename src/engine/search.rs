@@ -2,8 +2,9 @@ use crate::engine::config::EngineConfig;
 use crate::engine::types::EngineMove;
 use crate::engine::types::{
     hand_index, is_promotion_zone, must_promote, piece_base_value, piece_code, piece_promotable,
-    side_index, GenMove, Piece, PieceKind, RuntimeRules, SearchState, Side,
+    side_index, CaptureMode, GenMove, Piece, PieceKind, RuntimeRules, SearchState, Side,
 };
+use crate::engine::piece_mapping::sfen_char_from_piece_kind;
 use std::time::Instant;
 
 pub fn search_with_iterative_deepening(
@@ -118,7 +119,7 @@ pub(crate) fn evaluate_state(state: &SearchState, cfg: &EngineConfig, rules: &Ru
     for row in 0..9 {
         for col in 0..9 {
             if let Some(p) = state.board[row * 9 + col] {
-                let v = piece_base_value(p.kind) as f64 + if p.promoted { 80.0 } else { 0.0 };
+                let v = piece_base_value(&p.kind) as f64 + if p.promoted { 80.0 } else { 0.0 };
                 let s = if p.side == state.side_to_move {
                     1.0
                 } else {
@@ -127,7 +128,7 @@ pub(crate) fn evaluate_state(state: &SearchState, cfg: &EngineConfig, rules: &Ru
                 material += v * s;
                 let bonus = rules
                     .eval_bonus_by_piece
-                    .get(piece_code(p.kind))
+                    .get(piece_code(&p.kind))
                     .copied()
                     .unwrap_or(0) as f64;
                 material += bonus * s;
@@ -324,11 +325,84 @@ fn gen_piece_moves(
                 push_step(dr, dc, false);
             }
         }
+        PieceKind::Custom(_) => {}
     }
 
-    if let Some(extra) = rules.extra_vectors_by_piece.get(piece_code(piece.kind)) {
+    // Normal capture_mode の extra_vectors を push_step クロージャで処理する。
+    if let Some(extra) = rules.extra_vectors_by_piece.get(piece_code(&piece.kind)) {
         for v in extra {
-            push_step(v.dr, v.dc, v.slide);
+            if v.capture_mode == CaptureMode::Normal {
+                push_step(v.dr, v.dc, v.slide);
+            }
+        }
+    }
+    // push_step クロージャが out を借用しているため、LeapOverOne を処理する前に解放する。
+    drop(push_step);
+
+    // LeapOverOne（砲型）の extra_vectors を処理する。
+    // 非取り移動：砲台の手前まで通常スライド。
+    // 取り：砲台を1つ跨いだ先の最初の敵駒のみ。
+    if let Some(extra) = rules.extra_vectors_by_piece.get(piece_code(&piece.kind)) {
+        for v in extra {
+            if v.capture_mode != CaptureMode::LeapOverOne {
+                continue;
+            }
+            let mut r = row as i32 + v.dr;
+            let mut c = col as i32 + v.dc;
+            // フェーズ1：砲台の手前まで非取り移動を生成。
+            let mut platform_found = false;
+            while (0..=8).contains(&r) && (0..=8).contains(&c) {
+                if state.has_board_hazard(r as usize, c as usize, piece.side) {
+                    break;
+                }
+                let tidx = r as usize * 9 + c as usize;
+                if state.board[tidx].is_some() {
+                    // 最初に当たった駒が砲台。ここには移動不可・取り不可。
+                    platform_found = true;
+                    r += v.dr;
+                    c += v.dc;
+                    break;
+                }
+                push_promote_variants(
+                    out,
+                    make_gen_move((row, col), (r as usize, c as usize), piece, None),
+                );
+                r += v.dr;
+                c += v.dc;
+            }
+            if !platform_found {
+                continue;
+            }
+            // フェーズ2：砲台の先で最初に当たった敵駒を取る手を生成。
+            while (0..=8).contains(&r) && (0..=8).contains(&c) {
+                if state.has_board_hazard(r as usize, c as usize, piece.side) {
+                    break;
+                }
+                let tidx = r as usize * 9 + c as usize;
+                if let Some(tp) = state.board[tidx] {
+                    if tp.side != piece.side
+                        && !state.capture_blocked_by_piece_defense(
+                            r as usize,
+                            c as usize,
+                            tp.side,
+                        )
+                    {
+                        push_promote_variants(
+                            out,
+                            make_gen_move(
+                                (row, col),
+                                (r as usize, c as usize),
+                                piece,
+                                Some(tp),
+                            ),
+                        );
+                    }
+                    // 味方駒でも敵駒でもここで止まる。
+                    break;
+                }
+                r += v.dr;
+                c += v.dc;
+            }
         }
     }
 }
@@ -339,7 +413,7 @@ fn make_gen_move(
     piece: Piece,
     capture: Option<Piece>,
 ) -> GenMove {
-    let can_promote = piece_promotable(piece.kind)
+    let can_promote = piece_promotable(&piece.kind)
         && !piece.promoted
         && (is_promotion_zone(piece.side, from.0) || is_promotion_zone(piece.side, to.0));
     GenMove {
@@ -362,10 +436,7 @@ pub(crate) fn apply_move(state: &SearchState, mv: &GenMove) -> SearchState {
         next.board[from_idx] = None;
         if let Some(cap) = next.board[to_idx] {
             if cap.kind != PieceKind::King {
-                if let Some(hidx) = hand_index(cap.kind) {
-                    next.hands[side_index(piece.side)][hidx] =
-                        next.hands[side_index(piece.side)][hidx].saturating_add(1);
-                }
+                next.hands.add_piece(piece.side, &cap.kind, 1);
             }
         }
         if mv.promote {
@@ -378,11 +449,9 @@ pub(crate) fn apply_move(state: &SearchState, mv: &GenMove) -> SearchState {
             side: state.side_to_move,
             kind,
             promoted: false,
+            sfen_char: sfen_char_from_piece_kind(&kind).expect("drop piece must have sfen"),
         });
-        if let Some(hidx) = hand_index(kind) {
-            next.hands[side_index(state.side_to_move)][hidx] =
-                next.hands[side_index(state.side_to_move)][hidx].saturating_sub(1);
-        }
+        next.hands.remove_piece(state.side_to_move, &kind, 1);
     }
     next.finish_turn_for(state.side_to_move);
     next.side_to_move = state.side_to_move.opposite();
@@ -397,17 +466,17 @@ fn to_move_input(mv: &GenMove) -> EngineMove {
         from_col: mv.from.map(|(_, c)| c as i32),
         to_row: mv.to.0 as i32,
         to_col: mv.to.1 as i32,
-        piece_code: piece_code(mv.piece.kind).to_string(),
+        piece_code: piece_code(&mv.piece.kind).to_string(),
         promote: mv.promote,
-        drop_piece_code: mv.drop.map(|k| piece_code(k).to_string()),
-        captured_piece_code: mv.capture.map(|p| piece_code(p.kind).to_string()),
+        drop_piece_code: mv.drop.as_ref().map(|k| piece_code(k).to_string()),
+        captured_piece_code: mv.capture.map(|p| piece_code(&p.kind).to_string()),
         notation: None,
     }
 }
 
 fn push_promote_variants(out: &mut Vec<GenMove>, base: GenMove) {
     let mut pushed = false;
-    if base.from.is_some() && piece_promotable(base.piece.kind) && !base.piece.promoted {
+    if base.from.is_some() && piece_promotable(&base.piece.kind) && !base.piece.promoted {
         if let Some((fr, _)) = base.from {
             if is_promotion_zone(base.piece.side, fr)
                 || is_promotion_zone(base.piece.side, base.to.0)
@@ -430,7 +499,7 @@ fn push_promote_variants(out: &mut Vec<GenMove>, base: GenMove) {
 }
 
 fn gen_drop_moves(state: &SearchState, out: &mut Vec<GenMove>) {
-    let h = &state.hands[side_index(state.side_to_move)];
+    let h = &state.hands.standard[side_index(state.side_to_move)];
     for kind in [
         PieceKind::Pawn,
         PieceKind::Lance,
@@ -440,7 +509,7 @@ fn gen_drop_moves(state: &SearchState, out: &mut Vec<GenMove>) {
         PieceKind::Bishop,
         PieceKind::Rook,
     ] {
-        let Some(hidx) = hand_index(kind) else {
+        let Some(hidx) = hand_index(&kind) else {
             continue;
         };
         if h[hidx] == 0 {
@@ -465,6 +534,47 @@ fn gen_drop_moves(state: &SearchState, out: &mut Vec<GenMove>) {
                         side: state.side_to_move,
                         kind,
                         promoted: false,
+                        sfen_char: sfen_char_from_piece_kind(&kind)
+                            .expect("standard drop piece must have sfen"),
+                    },
+                    promote: false,
+                    capture: None,
+                    drop: Some(kind),
+                });
+            }
+        }
+    }
+
+    let custom_hands = &state.hands.custom[side_index(state.side_to_move)];
+    let mut custom_codes = custom_hands.keys().cloned().collect::<Vec<_>>();
+    custom_codes.sort();
+    for code in custom_codes {
+        if custom_hands.get(&code).copied().unwrap_or(0) == 0 {
+            continue;
+        }
+        let Some(kind) = crate::engine::piece_mapping::piece_kind_from_code(&code) else {
+            continue;
+        };
+        let Some(sfen_char) = sfen_char_from_piece_kind(&kind) else {
+            continue;
+        };
+        for row in 0..9 {
+            for col in 0..9 {
+                let idx = row * 9 + col;
+                if state.board[idx].is_some() {
+                    continue;
+                }
+                if state.has_board_hazard(row, col, state.side_to_move) {
+                    continue;
+                }
+                out.push(GenMove {
+                    from: None,
+                    to: (row, col),
+                    piece: Piece {
+                        side: state.side_to_move,
+                        kind,
+                        promoted: false,
+                        sfen_char,
                     },
                     promote: false,
                     capture: None,
@@ -483,7 +593,7 @@ fn drop_allowed(state: &SearchState, kind: PieceKind, row: usize, col: usize) ->
         (Side::White, PieceKind::Knight) if row >= 7 => return false,
         _ => {}
     }
-    if kind == PieceKind::Pawn && has_pawn_on_file(state, state.side_to_move, col) {
+    if matches!(kind, PieceKind::Pawn) && has_pawn_on_file(state, state.side_to_move, col) {
         return false;
     }
     true
