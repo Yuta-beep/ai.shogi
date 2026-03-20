@@ -109,7 +109,9 @@ fn merge_board_state(
 
 #[cfg(test)]
 mod tests {
-    use super::merge_board_state;
+    use super::{apply_canonical_move, merge_board_state, ApplyMoveCommand};
+    use crate::api::dto::PositionInput;
+    use crate::engine::types::EngineMove;
     use serde_json::json;
 
     #[test]
@@ -131,6 +133,54 @@ mod tests {
         assert!(merged.get("board_pieces").is_none());
         assert_eq!(merged.get("custom_move_vectors"), Some(&json!({ "FU": [{ "dr": -1, "dc": 0 }] })));
         assert_eq!(merged.get("skill_state"), Some(&json!({ "after": true })));
+    }
+
+    #[test]
+    fn apply_canonical_move_returns_sfen_position_without_visual_piece_caches() {
+        let result = apply_canonical_move(ApplyMoveCommand {
+            position: PositionInput {
+                side_to_move: "player".to_string(),
+                turn_number: 1,
+                move_count: 0,
+                sfen: Some("4k4/9/9/9/9/9/4P4/9/4K4 b - 1".to_string()),
+                state_hash: None,
+                board_state: json!({
+                    "pieces": [{ "row": 6, "col": 4, "pieceCode": "FU" }],
+                    "placements": [{ "row": 6, "col": 4, "pieceCode": "FU" }],
+                    "boardPieces": [{ "row": 6, "col": 4, "pieceCode": "FU" }],
+                    "board_pieces": [{ "row": 6, "col": 4, "pieceCode": "FU" }],
+                    "custom_move_vectors": { "FU": [{ "dr": -1, "dc": 0 }] }
+                }),
+                hands: json!({ "player": {}, "enemy": {} }),
+                legal_moves: vec![],
+            },
+            selected_move: EngineMove {
+                from_row: Some(6),
+                from_col: Some(4),
+                to_row: 5,
+                to_col: 4,
+                piece_code: "FU".to_string(),
+                promote: false,
+                drop_piece_code: None,
+                captured_piece_code: None,
+                notation: None,
+            },
+        })
+        .expect("move must apply");
+
+        assert_eq!(result.position.side_to_move, "enemy");
+        assert_eq!(result.position.turn_number, 2);
+        assert_eq!(result.position.move_count, 1);
+        assert_eq!(result.position.sfen, Some("4k4/9/9/9/9/4P4/9/9/4K4 w - 2".to_string()));
+        assert!(result.position.board_state.get("pieces").is_none());
+        assert!(result.position.board_state.get("placements").is_none());
+        assert!(result.position.board_state.get("boardPieces").is_none());
+        assert!(result.position.board_state.get("board_pieces").is_none());
+        assert_eq!(
+            result.position.board_state.get("custom_move_vectors"),
+            Some(&json!({ "FU": [{ "dr": -1, "dc": 0 }] }))
+        );
+        assert_eq!(result.position.hands, json!({ "player": {}, "enemy": {} }));
     }
 }
 
