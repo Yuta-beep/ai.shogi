@@ -1,3 +1,9 @@
+use crate::engine::constants::{
+    DEFAULT_BLUNDER_MAX_LOSS_CP, DEFAULT_BLUNDER_RATE, DEFAULT_EVAL_KING_SAFETY_WEIGHT,
+    DEFAULT_EVAL_MATERIAL_WEIGHT, DEFAULT_EVAL_MOBILITY_WEIGHT, DEFAULT_EVAL_POSITION_WEIGHT,
+    DEFAULT_MAX_DEPTH, DEFAULT_MAX_NODES, DEFAULT_MAX_REPEAT_DRAW_BIAS, DEFAULT_RANDOM_TOPK,
+    DEFAULT_TEMPERATURE, DEFAULT_TIME_LIMIT_MS,
+};
 use serde::Serialize;
 use thiserror::Error;
 
@@ -44,21 +50,21 @@ pub struct EngineConfigPatch {
 impl Default for EngineConfig {
     fn default() -> Self {
         Self {
-            max_depth: 3,
-            max_nodes: 20_000,
-            time_limit_ms: 300,
+            max_depth: DEFAULT_MAX_DEPTH,
+            max_nodes: DEFAULT_MAX_NODES,
+            time_limit_ms: DEFAULT_TIME_LIMIT_MS,
             quiescence_enabled: true,
-            eval_material_weight: 1.0,
-            eval_position_weight: 0.35,
-            eval_king_safety_weight: 0.25,
-            eval_mobility_weight: 0.2,
-            blunder_rate: 0.0,
-            blunder_max_loss_cp: 0,
-            random_topk: 1,
-            temperature: 0.0,
+            eval_material_weight: DEFAULT_EVAL_MATERIAL_WEIGHT,
+            eval_position_weight: DEFAULT_EVAL_POSITION_WEIGHT,
+            eval_king_safety_weight: DEFAULT_EVAL_KING_SAFETY_WEIGHT,
+            eval_mobility_weight: DEFAULT_EVAL_MOBILITY_WEIGHT,
+            blunder_rate: DEFAULT_BLUNDER_RATE,
+            blunder_max_loss_cp: DEFAULT_BLUNDER_MAX_LOSS_CP,
+            random_topk: DEFAULT_RANDOM_TOPK,
+            temperature: DEFAULT_TEMPERATURE,
             always_legal_move: true,
             mate_avoidance: true,
-            max_repeat_draw_bias: 0.0,
+            max_repeat_draw_bias: DEFAULT_MAX_REPEAT_DRAW_BIAS,
             random_seed: None,
         }
     }

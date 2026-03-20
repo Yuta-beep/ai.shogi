@@ -1,4 +1,5 @@
 pub mod config;
+pub mod constants;
 pub mod heuristic;
 pub mod piece_mapping;
 pub mod rules;

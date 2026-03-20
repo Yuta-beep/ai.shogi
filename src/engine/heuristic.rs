@@ -1,4 +1,8 @@
 use crate::engine::config::EngineConfig;
+use crate::engine::constants::{
+    CENTER_DIST_MAX, HEURISTIC_CENTER_WEIGHT, HEURISTIC_KING_SAFETY_BASE_CP,
+    HEURISTIC_MOBILITY_BASE_CP, HEURISTIC_PROMOTE_BONUS_CP,
+};
 use crate::engine::types::EngineMove;
 
 pub fn evaluate_move(mv: &EngineMove, side_to_move: &str, cfg: &EngineConfig) -> i32 {
@@ -8,17 +12,17 @@ pub fn evaluate_move(mv: &EngineMove, side_to_move: &str, cfg: &EngineConfig) ->
         .map(piece_capture_cp)
         .unwrap_or(0) as f64;
 
-    let promote_bonus = if mv.promote { 60.0 } else { 0.0 };
+    let promote_bonus = if mv.promote { HEURISTIC_PROMOTE_BONUS_CP } else { 0.0 };
 
     let center_dist = ((mv.to_row - 4).abs() + (mv.to_col - 4).abs()) as f64;
-    let center_bonus = 8.0 - center_dist;
+    let center_bonus = CENTER_DIST_MAX - center_dist;
 
     let side_bias = if side_to_move == "enemy" { 1.0 } else { -1.0 };
 
-    let positional = (promote_bonus + center_bonus * 3.0) * cfg.eval_position_weight;
+    let positional = (promote_bonus + center_bonus * HEURISTIC_CENTER_WEIGHT) * cfg.eval_position_weight;
     let material = capture_value * cfg.eval_material_weight;
-    let mobility = 5.0 * cfg.eval_mobility_weight;
-    let king_safety = 2.0 * cfg.eval_king_safety_weight;
+    let mobility = HEURISTIC_MOBILITY_BASE_CP * cfg.eval_mobility_weight;
+    let king_safety = HEURISTIC_KING_SAFETY_BASE_CP * cfg.eval_king_safety_weight;
 
     ((material + positional + mobility + king_safety) * side_bias) as i32
 }

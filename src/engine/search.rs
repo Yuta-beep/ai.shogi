@@ -1,10 +1,13 @@
 use crate::engine::config::EngineConfig;
+use crate::engine::constants::{
+    CENTER_DIST_MAX, PROMOTION_BONUS_CP, SCORE_CHECKMATE_BASE, SCORE_INF,
+};
+use crate::engine::piece_mapping::sfen_char_from_piece_kind;
 use crate::engine::types::EngineMove;
 use crate::engine::types::{
     hand_index, is_promotion_zone, must_promote, piece_base_value, piece_code, piece_promotable,
     side_index, CaptureMode, GenMove, Piece, PieceKind, RuntimeRules, SearchState, Side,
 };
-use crate::engine::piece_mapping::sfen_char_from_piece_kind;
 use std::time::Instant;
 
 pub fn search_with_iterative_deepening(
@@ -45,8 +48,8 @@ pub fn search_with_iterative_deepening(
             let score = -negamax(
                 &next,
                 depth - 1,
-                -30000,
-                30000,
+                -SCORE_INF,
+                SCORE_INF,
                 cfg,
                 rules,
                 start,
@@ -91,10 +94,10 @@ fn negamax(
 
     let moves = generate_legal_moves(state, rules, true);
     if moves.is_empty() {
-        return -29000 + depth as i32;
+        return -SCORE_CHECKMATE_BASE + depth as i32;
     }
 
-    let mut best = -30000;
+    let mut best = -SCORE_INF;
     for mv in &moves {
         let next = apply_move(state, mv);
         let score = -negamax(&next, depth - 1, -beta, -alpha, cfg, rules, start, nodes);
@@ -119,7 +122,7 @@ pub(crate) fn evaluate_state(state: &SearchState, cfg: &EngineConfig, rules: &Ru
     for row in 0..9 {
         for col in 0..9 {
             if let Some(p) = state.board[row * 9 + col] {
-                let v = piece_base_value(&p.kind) as f64 + if p.promoted { 80.0 } else { 0.0 };
+                let v = piece_base_value(&p.kind) as f64 + if p.promoted { PROMOTION_BONUS_CP } else { 0.0 };
                 let s = if p.side == state.side_to_move {
                     1.0
                 } else {
@@ -136,7 +139,7 @@ pub(crate) fn evaluate_state(state: &SearchState, cfg: &EngineConfig, rules: &Ru
                 material -= state.movement_modifier_penalty(row, col, p.side) as f64 * s;
                 material -= state.board_hazard_penalty(row, col, p.side) as f64 * s;
                 material += state.piece_defense_bonus(row, col, p.side) as f64 * s;
-                center += (8.0 - ((row as i32 - 4).abs() + (col as i32 - 4).abs()) as f64) * s;
+                center += (CENTER_DIST_MAX - ((row as i32 - 4).abs() + (col as i32 - 4).abs()) as f64) * s;
             }
         }
     }
