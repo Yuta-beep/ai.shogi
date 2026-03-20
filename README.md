@@ -65,9 +65,9 @@ AI の手を1手返します。
     ]
   },
   "engine_config": {
-    "max_depth": 3,
-    "max_nodes": 20000,
-    "time_limit_ms": 300
+    "max_depth": 4,
+    "max_nodes": 50000,
+    "time_limit_ms": 500
   }
 }
 ```
@@ -101,9 +101,9 @@ AI の手を1手返します。
 
 | パラメータ | デフォルト | 範囲 | 説明 |
 |---|---|---|---|
-| `max_depth` | 3 | 1–12 | 最大探索深さ |
-| `max_nodes` | 20000 | 100–5000000 | ノード数上限 |
-| `time_limit_ms` | 300 | 10–60000 | 思考時間上限 (ms) |
+| `max_depth` | 4 | 1–12 | 最大探索深さ |
+| `max_nodes` | 50000 | 100–5000000 | ノード数上限 |
+| `time_limit_ms` | 500 | 10–60000 | 思考時間上限 (ms) |
 | `quiescence_enabled` | true | — | 静止探索 (現時点で未接続) |
 | `eval_material_weight` | 1.0 | 0–10 | 駒得評価の重み |
 | `eval_position_weight` | 0.35 | 0–10 | 位置評価の重み |

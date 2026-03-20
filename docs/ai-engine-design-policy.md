@@ -1,6 +1,6 @@
 # Shogi AI Engine 設計方針
 
-最終更新: 2026-03-09
+最終更新: 2026-03-20
 
 ## 1. スコープ
 
@@ -41,9 +41,9 @@
 
 ```json
 {
-  "max_depth": 3,
-  "max_nodes": 20000,
-  "time_limit_ms": 300,
+  "max_depth": 4,
+  "max_nodes": 50000,
+  "time_limit_ms": 500,
   "quiescence_enabled": true,
   "eval_material_weight": 1.0,
   "eval_position_weight": 0.35,
@@ -66,17 +66,17 @@
   - 型: integer
   - 必須: 任意
   - 範囲: `1..=12`
-  - デフォルト: `3`
+  - デフォルト: `4`
 - `max_nodes`
   - 型: integer
   - 必須: 任意
   - 範囲: `100..=5_000_000`
-  - デフォルト: `20_000`
+  - デフォルト: `50_000`
 - `time_limit_ms`
   - 型: integer
   - 必須: 任意
   - 範囲: `10..=60_000`
-  - デフォルト: `300`
+  - デフォルト: `500`
 - `quiescence_enabled`
   - 型: boolean
   - 必須: 任意
