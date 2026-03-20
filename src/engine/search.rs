@@ -250,8 +250,8 @@ fn gen_piece_moves(
     if let Some(movement_rule) = state.movement_rule_for_piece(row, col, piece.side) {
         match movement_rule {
             "vertical_step_only" => {
-                push_step(-1, 0, false);
-                push_step(1, 0, false);
+                push_step(fwd, 0, false);
+                push_step(-fwd, 0, false);
                 return;
             }
             "diagonal_step_only" => {

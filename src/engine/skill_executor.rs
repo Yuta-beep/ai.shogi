@@ -356,6 +356,11 @@ fn execute_modify_movement(state: &mut SearchState, mv: &EngineMove, effect: &Sk
                     if piece.side != state.side_to_move {
                         continue;
                     }
+                    // 標準駒（カスタム駒以外）には移動制限を付与しない。
+                    // 香車・歩兵など方向が固定された駒に付与すると逆方向への移動が生成されるため。
+                    if !matches!(piece.kind, PieceKind::Custom(_)) {
+                        continue;
+                    }
                     state.add_movement_modifier(
                         nr as usize,
                         nc as usize,
